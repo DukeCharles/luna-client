@@ -60,10 +60,10 @@ public class Projectile extends Entity {
 			class50_sub1_sub4_sub4_1.anIntArrayArray1678 = null;
 		}
 		if (spotAnimation.anInt561 != 128 || spotAnimation.anInt562 != 128)
-			class50_sub1_sub4_sub4_1.method593(spotAnimation.anInt562, spotAnimation.anInt561, 9,
-					spotAnimation.anInt561);
-		class50_sub1_sub4_sub4_1.method589(anInt1563, 341);
-		class50_sub1_sub4_sub4_1.method594(64 + spotAnimation.anInt564, 850 + spotAnimation.anInt565, -30, -50, -30,
+			class50_sub1_sub4_sub4_1.resizeModel(spotAnimation.anInt561, spotAnimation.anInt562, spotAnimation.anInt561
+            );
+		class50_sub1_sub4_sub4_1.rotateX(anInt1563);
+		class50_sub1_sub4_sub4_1.initLighting(64 + spotAnimation.anInt564, 850 + spotAnimation.anInt565, -30, -50, -30,
 				true);
 		return class50_sub1_sub4_sub4_1;
 	}

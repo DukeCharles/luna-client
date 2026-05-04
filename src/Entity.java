@@ -20,7 +20,7 @@ public class Entity extends QueueNode {
 		height = 1000;
 	}
 
-	public VertexNormal normals[];
+	public VertexNormal[] normals;
 	public int height;
 
 }

@@ -4,6 +4,68 @@
 
 public class ObjectDefinition {
 
+    public ObjectDefinition() {
+        anInt768 = -992;
+        id = -1;
+        aBoolean774 = true;
+        name = "null";
+        aBoolean786 = true;
+        aByte793 = -113;
+    }
+
+    public static int indices[];
+    public boolean aBoolean759;
+    public int anInt760;
+    public int anInt761;
+    public static LruHashTable aClass33_762 = new LruHashTable(40);
+    public int anIntArray763[];
+    public int anInt764;
+    public boolean aBoolean765;
+    public int anInt766;
+    public static JagBuffer buf;
+    public int anInt768;
+    public boolean aBoolean769;
+    public static client aClient770;
+    public static Model[] aClass50_Sub1_Sub4_Sub4Array771 = new Model[4];
+    public static boolean lowMemory;
+    public int id;
+    public boolean aBoolean774;
+    public int anInt775;
+    public String name;
+    public static int cachePos;
+    public int varbitId;
+    public static LruHashTable lruHashTable = new LruHashTable(500);
+    public int anInt780;
+    public int anInt781;
+    public static ObjectDefinition[] cache;
+    public byte[] description;
+    public byte aByte784;
+    public int anInt785;
+    public boolean aBoolean786;
+    public byte aByte787;
+    public int anInt788;
+    public int anIntArray789[];
+    public String options[];
+    public boolean aBoolean791;
+    public int originalModelColors[];
+    public byte aByte793;
+    public int anInt794;
+    public int anInt795;
+    public int anInt796;
+    public boolean aBoolean797;
+    public boolean aBoolean798;
+    public int modifiedModelColors[];
+    public int anInt801;
+    public int anInt802;
+    public int animationId;
+    public boolean aBoolean804;
+    public int anIntArray805[];
+    public int anInt806;
+    public boolean aBoolean807;
+    public static int count;
+    public boolean aBoolean809;
+    public boolean aBoolean810;
+
     public static ObjectDefinition forId(int id) {
         for (int j = 0; j < 20; j++)
             if (cache[j].id == id)
@@ -71,7 +133,7 @@ public class ObjectDefinition {
     }
 
     public Model method427(int i, int j, int k, int l) {
-        Model class50_sub1_sub4_sub4 = null;
+        Model model = null;
         long l1;
         if (anIntArray789 == null) {
             if (l != 10)
@@ -88,21 +150,21 @@ public class ObjectDefinition {
                 int l2 = anIntArray763[i2];
                 if (flag1)
                     l2 += 0x10000;
-                class50_sub1_sub4_sub4 = (Model) aClass33_779.get(l2);
-                if (class50_sub1_sub4_sub4 == null) {
-                    class50_sub1_sub4_sub4 = Model.forId(l2 & 0xffff);
-                    if (class50_sub1_sub4_sub4 == null)
+                model = (Model) lruHashTable.get(l2);
+                if (model == null) {
+                    model = Model.forId(l2 & 0xffff);
+                    if (model == null)
                         return null;
                     if (flag1)
-                        class50_sub1_sub4_sub4.method592(0);
-                    aClass33_779.put(class50_sub1_sub4_sub4, l2);
+                        model.mirrorZ();
+                    lruHashTable.put(model, l2);
                 }
                 if (k1 > 1)
-                    aClass50_Sub1_Sub4_Sub4Array771[i2] = class50_sub1_sub4_sub4;
+                    aClass50_Sub1_Sub4_Sub4Array771[i2] = model;
             }
 
             if (k1 > 1)
-                class50_sub1_sub4_sub4 = new Model(k1, aClass50_Sub1_Sub4_Sub4Array771);
+                model = new Model(k1, aClass50_Sub1_Sub4_Sub4Array771);
         } else {
             int i1 = -1;
             for (int j1 = 0; j1 < anIntArray789.length; j1++) {
@@ -122,14 +184,14 @@ public class ObjectDefinition {
             boolean flag3 = aBoolean798 ^ (i > 3);
             if (flag3)
                 j2 += 0x10000;
-            class50_sub1_sub4_sub4 = (Model) aClass33_779.get(j2);
-            if (class50_sub1_sub4_sub4 == null) {
-                class50_sub1_sub4_sub4 = Model.forId(j2 & 0xffff);
-                if (class50_sub1_sub4_sub4 == null)
+            model = (Model) lruHashTable.get(j2);
+            if (model == null) {
+                model = Model.forId(j2 & 0xffff);
+                if (model == null)
                     return null;
                 if (flag3)
-                    class50_sub1_sub4_sub4.method592(0);
-                aClass33_779.put(class50_sub1_sub4_sub4, j2);
+                    model.mirrorZ();
+                lruHashTable.put(model, j2);
             }
         }
         boolean flag;
@@ -143,7 +205,7 @@ public class ObjectDefinition {
         else
             flag2 = false;
         Model class50_sub1_sub4_sub4_3 = new Model(i == 0 && j == -1 && !flag
-                && !flag2, false, modifiedModelColors == null, class50_sub1_sub4_sub4, Class21.method239(j));
+                && !flag2, false, modifiedModelColors == null, model, Class21.method239(j));
         if (k != 0)
             anInt768 = 487;
         if (j != -1) {
@@ -153,17 +215,17 @@ public class ObjectDefinition {
             class50_sub1_sub4_sub4_3.anIntArrayArray1678 = null;
         }
         while (i-- > 0)
-            class50_sub1_sub4_sub4_3.method588(true);
+            class50_sub1_sub4_sub4_3.rotate90Y();
         if (modifiedModelColors != null) {
             for (int k2 = 0; k2 < modifiedModelColors.length; k2++)
                 class50_sub1_sub4_sub4_3.replaceColor(modifiedModelColors[k2], originalModelColors[k2]);
 
         }
         if (flag)
-            class50_sub1_sub4_sub4_3.method593(anInt760, anInt796, 9, anInt780);
+            class50_sub1_sub4_sub4_3.resizeModel(anInt780, anInt760, anInt796);
         if (flag2)
-            class50_sub1_sub4_sub4_3.method590(anInt761, anInt766, false, anInt785);
-        class50_sub1_sub4_sub4_3.method594(64 + aByte784, 768 + aByte787 * 5, -50, -10, -50, !aBoolean804);
+            class50_sub1_sub4_sub4_3.translate(anInt761, anInt785, anInt766);
+        class50_sub1_sub4_sub4_3.initLighting(64 + aByte784, 768 + aByte787 * 5, -50, -10, -50, !aBoolean804);
         if (anInt794 == 1)
             class50_sub1_sub4_sub4_3.anInt1675 = ((Entity) (class50_sub1_sub4_sub4_3)).height;
         aClass33_762.put(class50_sub1_sub4_sub4_3, l1);
@@ -367,25 +429,25 @@ public class ObjectDefinition {
     }
 
     public Model method431(int i, int j, int k, int l, int i1, int j1, int k1) {
-        Model class50_sub1_sub4_sub4 = method427(j, k1, 0, i);
-        if (class50_sub1_sub4_sub4 == null)
+        Model model = method427(j, k1, 0, i);
+        if (model == null)
             return null;
         if (aBoolean769 || aBoolean804)
-            class50_sub1_sub4_sub4 = new Model(aBoolean769, aBoolean804, 0, class50_sub1_sub4_sub4);
+            model = new Model(aBoolean769, aBoolean804, 0, model);
         if (aBoolean769) {
             int l1 = (k + l + i1 + j1) / 4;
-            for (int i2 = 0; i2 < class50_sub1_sub4_sub4.anInt1648; i2++) {
-                int j2 = class50_sub1_sub4_sub4.anIntArray1649[i2];
-                int k2 = class50_sub1_sub4_sub4.anIntArray1651[i2];
+            for (int i2 = 0; i2 < model.verticesCount; i2++) {
+                int j2 = model.verticesX[i2];
+                int k2 = model.verticesZ[i2];
                 int l2 = k + ((l - k) * (j2 + 64)) / 128;
                 int i3 = j1 + ((i1 - j1) * (j2 + 64)) / 128;
                 int j3 = l2 + ((i3 - l2) * (k2 + 64)) / 128;
-                class50_sub1_sub4_sub4.anIntArray1650[i2] += j3 - l1;
+                model.verticesY[i2] += j3 - l1;
             }
 
-            class50_sub1_sub4_sub4.method582(6);
+            model.method582(6);
         }
-        return class50_sub1_sub4_sub4;
+        return model;
     }
 
     public boolean method432(int i, int j) {
@@ -410,7 +472,7 @@ public class ObjectDefinition {
     }
 
     public static void method433(boolean flag) {
-        aClass33_779 = null;
+        lruHashTable = null;
         aClass33_762 = null;
         indices = null;
         if (flag) {
@@ -419,67 +481,5 @@ public class ObjectDefinition {
         cache = null;
         buf = null;
     }
-
-    public ObjectDefinition() {
-        anInt768 = -992;
-        id = -1;
-        aBoolean774 = true;
-        name = "null";
-        aBoolean786 = true;
-        aByte793 = -113;
-    }
-
-    public static int indices[];
-    public boolean aBoolean759;
-    public int anInt760;
-    public int anInt761;
-    public static LruHashTable aClass33_762 = new LruHashTable(40);
-    public int anIntArray763[];
-    public int anInt764;
-    public boolean aBoolean765;
-    public int anInt766;
-    public static JagBuffer buf;
-    public int anInt768;
-    public boolean aBoolean769;
-    public static client aClient770;
-    public static Model aClass50_Sub1_Sub4_Sub4Array771[] = new Model[4];
-    public static boolean lowMemory;
-    public int id;
-    public boolean aBoolean774;
-    public int anInt775;
-    public String name;
-    public static int cachePos;
-    public int varbitId;
-    public static LruHashTable aClass33_779 = new LruHashTable(500);
-    public int anInt780;
-    public int anInt781;
-    public static ObjectDefinition cache[];
-    public byte description[];
-    public byte aByte784;
-    public int anInt785;
-    public boolean aBoolean786;
-    public byte aByte787;
-    public int anInt788;
-    public int anIntArray789[];
-    public String options[];
-    public boolean aBoolean791;
-    public int originalModelColors[];
-    public byte aByte793;
-    public int anInt794;
-    public int anInt795;
-    public int anInt796;
-    public boolean aBoolean797;
-    public boolean aBoolean798;
-    public int modifiedModelColors[];
-    public int anInt801;
-    public int anInt802;
-    public int animationId;
-    public boolean aBoolean804;
-    public int anIntArray805[];
-    public int anInt806;
-    public boolean aBoolean807;
-    public static int count;
-    public boolean aBoolean809;
-    public boolean aBoolean810;
 
 }

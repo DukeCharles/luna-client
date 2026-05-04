@@ -3405,7 +3405,7 @@ public class client extends JagApplet {
     }
 
     public void method49(int i) {
-        ObjectDefinition.aClass33_779.clear();
+        ObjectDefinition.lruHashTable.clear();
         ObjectDefinition.aClass33_762.clear();
         if (i <= 0) {
             for (int j = 1; j > 0; j++) ;
@@ -3685,8 +3685,8 @@ public class client extends JagApplet {
             opcode = -1;
         if (l > 4225 && l < 0x15f90) {
             int i1 = anInt1252 + anInt916 & 0x7ff;
-            int j1 = Model.anIntArray1710[i1];
-            int k1 = Model.anIntArray1711[i1];
+            int j1 = Model.sineTable[i1];
+            int k1 = Model.cosineTable[i1];
             j1 = (j1 * 256) / (anInt1233 + 256);
             k1 = (k1 * 256) / (anInt1233 + 256);
             int l1 = i * j1 + k * k1 >> 16;
@@ -4659,7 +4659,7 @@ public class client extends JagApplet {
             ChatFilter.unpack(chatArchive);
             mouseRecorder = new MouseRecorder(this);
             startThread(mouseRecorder, 10);
-            Class50_Sub1_Sub4_Sub5.aClient1723 = this;
+            Class50_Sub1_Sub4_Sub5.client = this;
             ObjectDefinition.aClient770 = this;
             NpcDefinition.aClient629 = this;
             return;
@@ -4676,7 +4676,7 @@ public class client extends JagApplet {
             for (int k = 0; k < anIntArray1290.length; k++) {
                 int l = anIntArray1290[k];
                 if (ThreeDimensionalCanvas.anIntArray1546[l] >= i) {
-                    IndexedSprite class50_sub1_sub1_sub3 = ThreeDimensionalCanvas.aClass50_Sub1_Sub1_Sub3Array1540[l];
+                    IndexedSprite class50_sub1_sub1_sub3 = ThreeDimensionalCanvas.indexedSprites[l];
                     int i1 = class50_sub1_sub1_sub3.anInt1518 * class50_sub1_sub1_sub3.anInt1519 - 1;
                     int j1 = class50_sub1_sub1_sub3.anInt1518 * anInt951 * 2;
                     byte abyte0[] = class50_sub1_sub1_sub3.aByteArray1516;
@@ -6912,7 +6912,7 @@ public class client extends JagApplet {
             method18((byte) 3);
         } catch (Exception exception) {
         }
-        ObjectDefinition.aClass33_779.clear();
+        ObjectDefinition.lruHashTable.clear();
         if (super.frame != null) {
             outBuffer.putOpcode(78);
             outBuffer.putInt(0x3f008edd);
@@ -6963,15 +6963,15 @@ public class client extends JagApplet {
         int j2 = 0;
         int k2 = l;
         if (k1 != 0) {
-            int l2 = Model.anIntArray1710[k1];
-            int j3 = Model.anIntArray1711[k1];
+            int l2 = Model.sineTable[k1];
+            int j3 = Model.cosineTable[k1];
             int l3 = j2 * j3 - k2 * l2 >> 16;
             k2 = j2 * l2 + k2 * j3 >> 16;
             j2 = l3;
         }
         if (l1 != 0) {
-            int i3 = Model.anIntArray1710[l1];
-            int k3 = Model.anIntArray1711[l1];
+            int i3 = Model.sineTable[l1];
+            int k3 = Model.cosineTable[l1];
             int i4 = k2 * i3 + i2 * k3 >> 16;
             k2 = k2 * k3 - i2 * i3 >> 16;
             i2 = i4;
@@ -7366,7 +7366,7 @@ public class client extends JagApplet {
                 class50_sub1_sub4_sub4.method584(7);
                 class50_sub1_sub4_sub4.method585(
                         Animation.animations[((Actor) (thisPlayer)).anInt1634].anIntArray295[0], (byte) 6);
-                class50_sub1_sub4_sub4.method594(64, 850, -30, -50, -30, true);
+                class50_sub1_sub4_sub4.initLighting(64, 850, -30, -50, -30, true);
                 class13.anInt283 = 5;
                 class13.anInt284 = 0;
                 JagInterface.method201(5, class50_sub1_sub4_sub4, 0, 6);
@@ -9602,8 +9602,8 @@ public class client extends JagApplet {
         int l = j * j + i * i;
         if (l > 6400)
             return;
-        int i1 = Model.anIntArray1710[k];
-        int j1 = Model.anIntArray1711[k];
+        int i1 = Model.sineTable[k];
+        int j1 = Model.cosineTable[k];
         i1 = (i1 * 256) / (anInt1233 + 256);
         j1 = (j1 * 256) / (anInt1233 + 256);
         if (!flag)
@@ -9858,7 +9858,7 @@ public class client extends JagApplet {
                     if (k6 == 11)
                         k6 = 10;
                     if (class5 != null)
-                        class5.aClass50_Sub1_Sub4_117 = new Class50_Sub1_Sub4_Sub5(i1, i20, l20, j19, k6, (byte) 3,
+                        class5.entity = new Class50_Sub1_Sub4_Sub5(i1, i20, l20, j19, k6, (byte) 3,
                                 class5.anInt125 >> 14 & 0x7fff, false, l18, j9);
                 }
                 if (i12 == 3) {
@@ -10068,10 +10068,10 @@ public class client extends JagApplet {
         i -= anInt1216;
         i1 -= anInt1217;
         k -= anInt1218;
-        int j1 = Model.anIntArray1710[anInt1219];
-        int k1 = Model.anIntArray1711[anInt1219];
-        int l1 = Model.anIntArray1710[anInt1220];
-        int i2 = Model.anIntArray1711[anInt1220];
+        int j1 = Model.sineTable[anInt1219];
+        int k1 = Model.cosineTable[anInt1219];
+        int l1 = Model.sineTable[anInt1220];
+        int i2 = Model.cosineTable[anInt1220];
         int j2 = k * l1 + i * i2 >> 16;
         k = k * i2 - i * l1 >> 16;
         i = j2;
@@ -11682,7 +11682,7 @@ public class client extends JagApplet {
     public boolean aBoolean1211;
     public boolean aBoolean1212;
     public int anInt1213;
-    public static int BITFIELD_MAX_VALUES[];
+    public static int[] BITFIELD_MAX_VALUES;
     public int somethngLoginDays;
     public int anInt1216;
     public int anInt1217;

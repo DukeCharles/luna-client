@@ -33,14 +33,14 @@ public class Npc extends Actor {
 				int i = class27.animation.anIntArray295[super.anInt1615];
 				Model class50_sub1_sub4_sub4_2 = new Model(false, false, true,
 						class50_sub1_sub4_sub4_1, Class21.method239(i));
-				class50_sub1_sub4_sub4_2.method590(0, 0, false, -super.anInt1618);
+				class50_sub1_sub4_sub4_2.translate(0, -super.anInt1618, 0);
 				class50_sub1_sub4_sub4_2.method584(7);
 				class50_sub1_sub4_sub4_2.method585(i, (byte) 6);
 				class50_sub1_sub4_sub4_2.anIntArrayArray1679 = null;
 				class50_sub1_sub4_sub4_2.anIntArrayArray1678 = null;
 				if (class27.anInt561 != 128 || class27.anInt562 != 128)
-					class50_sub1_sub4_sub4_2.method593(class27.anInt562, class27.anInt561, 9, class27.anInt561);
-				class50_sub1_sub4_sub4_2.method594(64 + class27.anInt564, 850 + class27.anInt565, -30, -50, -30, true);
+					class50_sub1_sub4_sub4_2.resizeModel(class27.anInt561, class27.anInt562, class27.anInt561);
+				class50_sub1_sub4_sub4_2.initLighting(64 + class27.anInt564, 850 + class27.anInt565, -30, -50, -30, true);
 				Model aclass50_sub1_sub4_sub4[] = { class50_sub1_sub4_sub4, class50_sub1_sub4_sub4_2 };
 				class50_sub1_sub4_sub4 = new Model(2, true, 0, aclass50_sub1_sub4_sub4);
 			}

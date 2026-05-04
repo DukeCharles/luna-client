@@ -75,6 +75,49 @@ public class JagBuffer extends QueueNode {
         position = 0;
     }
 
+    // public boolean aBoolean1435;
+    // public int anInt1436;
+    // public boolean aBoolean1437;
+    // public boolean aBoolean1438;
+    // public byte aByte1439;
+    // public int anInt1440;
+    // public boolean aBoolean1441;
+    // public int anInt1442;
+    // public int anInt1443;
+    // public boolean aBoolean1444;
+    // public int anInt1445;
+    // public int anInt1446;
+    // public byte aByte1447;
+    // public byte aByte1448;
+    // public byte aByte1449;
+    // public boolean aBoolean1450;
+    // public static boolean aBoolean1451 = true;
+    // public int anInt1452;
+    public byte[] buffer;
+    public int position;
+    public int bitPosition;
+    public static int[] CRC32_TABLE;
+    public static final int[] BIT_MASKS = {0, 1, 3, 7, 15, 31, 63, 127, 255, 511, 1023, 2047, 4095, 8191, 16383,
+            32767, 65535, 0x1ffff, 0x3ffff, 0x7ffff, 0xfffff, 0x1fffff, 0x3fffff, 0x7fffff, 0xffffff, 0x1ffffff,
+            0x3ffffff, 0x7ffffff, 0xfffffff, 0x1fffffff, 0x3fffffff, 0x7fffffff, -1};
+    public IsaacRandom random;
+    public static int smallBufferCount;
+    public static int mediumBufferCount;
+    public static int largeBufferCount;
+    public static LinkedList smallBuffers = new LinkedList();
+    public static LinkedList mediumBuffers = new LinkedList();
+    public static LinkedList largeBuffers = new LinkedList();
+    // public static char aCharArray1465[] = {
+    // 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
+    // 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+    // 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd',
+    // 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+    // 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
+    // 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7',
+    // '8', '9', '+', '/'
+    // };
+    // public static boolean aBoolean1466;
+
     public void putOpcode(int opcode) {
         buffer[position++] = (byte) (opcode + random.nextInt());
     }
@@ -377,49 +420,6 @@ public class JagBuffer extends QueueNode {
         for (int pos = start; pos < start + len; pos++)
             bytes[pos] = (byte) (buffer[position++] - 128);
     }
-
-    // public boolean aBoolean1435;
-    // public int anInt1436;
-    // public boolean aBoolean1437;
-    // public boolean aBoolean1438;
-    // public byte aByte1439;
-    // public int anInt1440;
-    // public boolean aBoolean1441;
-    // public int anInt1442;
-    // public int anInt1443;
-    // public boolean aBoolean1444;
-    // public int anInt1445;
-    // public int anInt1446;
-    // public byte aByte1447;
-    // public byte aByte1448;
-    // public byte aByte1449;
-    // public boolean aBoolean1450;
-    // public static boolean aBoolean1451 = true;
-    // public int anInt1452;
-    public byte buffer[];
-    public int position;
-    public int bitPosition;
-    public static int CRC32_TABLE[];
-    public static final int BIT_MASKS[] = {0, 1, 3, 7, 15, 31, 63, 127, 255, 511, 1023, 2047, 4095, 8191, 16383,
-            32767, 65535, 0x1ffff, 0x3ffff, 0x7ffff, 0xfffff, 0x1fffff, 0x3fffff, 0x7fffff, 0xffffff, 0x1ffffff,
-            0x3ffffff, 0x7ffffff, 0xfffffff, 0x1fffffff, 0x3fffffff, 0x7fffffff, -1};
-    public IsaacRandom random;
-    public static int smallBufferCount;
-    public static int mediumBufferCount;
-    public static int largeBufferCount;
-    public static LinkedList smallBuffers = new LinkedList();
-    public static LinkedList mediumBuffers = new LinkedList();
-    public static LinkedList largeBuffers = new LinkedList();
-    // public static char aCharArray1465[] = {
-    // 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
-    // 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
-    // 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd',
-    // 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
-    // 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
-    // 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7',
-    // '8', '9', '+', '/'
-    // };
-    // public static boolean aBoolean1466;
 
     static {
         CRC32_TABLE = new int[256];

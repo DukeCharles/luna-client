@@ -5,10 +5,9 @@
 public class NpcDefinition {
 
 	public void init(byte byte0, JagBuffer class50_sub1_sub2) {
-		if (byte0 == 6)
-			byte0 = 0;
-		else
+		if(byte0 != 6)
 			throw new NullPointerException();
+
 		do {
 			int i = class50_sub1_sub2.getByte();
 			if (i == 0)
@@ -211,10 +210,10 @@ public class NpcDefinition {
 
 			}
 			class50_sub1_sub4_sub4.method584(7);
-			class50_sub1_sub4_sub4.method594(64 + anInt663, 850 + anInt658, -30, -50, -30, true);
+			class50_sub1_sub4_sub4.initLighting(64 + anInt663, 850 + anInt658, -30, -50, -30, true);
 			aClass33_635.put(class50_sub1_sub4_sub4, id);
 		}
-		Model class50_sub1_sub4_sub4_1 = Model.aClass50_Sub1_Sub4_Sub4_1643;
+		Model class50_sub1_sub4_sub4_1 = Model.anotherModel;
 		if (k != 0)
 			aBoolean647 = !aBoolean647;
 		class50_sub1_sub4_sub4_1.method579(Class21.method239(i) & Class21.method239(j),
@@ -224,7 +223,7 @@ public class NpcDefinition {
 		else if (i != -1)
 			class50_sub1_sub4_sub4_1.method585(i, (byte) 6);
 		if (anInt632 != 128 || anInt630 != 128)
-			class50_sub1_sub4_sub4_1.method593(anInt630, anInt632, 9, anInt632);
+			class50_sub1_sub4_sub4_1.resizeModel(anInt632, anInt630, anInt632);
 		class50_sub1_sub4_sub4_1.method581(anInt624);
 		class50_sub1_sub4_sub4_1.anIntArrayArray1679 = null;
 		class50_sub1_sub4_sub4_1.anIntArrayArray1678 = null;

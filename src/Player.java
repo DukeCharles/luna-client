@@ -4,6 +4,49 @@
 
 public class Player extends Actor {
 
+	public int anInt1743;
+	public int anInt1744;
+	public int anInt1745;
+	public Model aClass50_Sub1_Sub4_Sub4_1746;
+	public int prayerIcon;
+	public long aLong1749;
+	public int anInt1750;
+	public String username;
+	public int equipment[];
+	public int anInt1753;
+	public long appearanceHash;
+	public int gender;
+	public int skullIcon;
+	public NpcDefinition npc;
+	public boolean visible;
+	public int anInt1759;
+	public int colors[];
+	public static LruHashTable aClass33_1761 = new LruHashTable(260);
+	public boolean aBoolean1762;
+	public boolean aBoolean1763;
+	public int anInt1764;
+	public int anInt1765;
+	public int team;
+	public boolean aBoolean1767;
+	public int anInt1768;
+	public int anInt1769;
+	public int anInt1770;
+	public int anInt1771;
+	public int anInt1772;
+
+	public Player() {
+		prayerIcon = -1;
+		aLong1749 = -1L;
+		equipment = new int[12];
+		skullIcon = -1;
+		visible = false;
+		colors = new int[5];
+		aBoolean1762 = true;
+		aBoolean1763 = false;
+		aBoolean1767 = false;
+		anInt1772 = 932;
+	}
+
 	public Model getHeadModel() {
 		if (!visible)
 			return null;
@@ -20,7 +63,7 @@ public class Player extends Actor {
 
 		if (flag1)
 			return null;
-		Model subModels[] = new Model[12];
+		Model[] subModels = new Model[12];
 		int k = 0;
 		for (int l = 0; l < 12; l++) {
 			int i1 = equipment[l];
@@ -135,13 +178,13 @@ public class Player extends Actor {
 				}
 
 			class50_sub1_sub4_sub4_1.method584(7);
-			class50_sub1_sub4_sub4_1.method594(64, 850, -30, -50, -30, true);
+			class50_sub1_sub4_sub4_1.initLighting(64, 850, -30, -50, -30, true);
 			aClass33_1761.put(class50_sub1_sub4_sub4_1, l);
 			aLong1749 = l;
 		}
 		if (aBoolean1763)
 			return class50_sub1_sub4_sub4_1;
-		Model class50_sub1_sub4_sub4_2 = Model.aClass50_Sub1_Sub4_Sub4_1643;
+		Model class50_sub1_sub4_sub4_2 = Model.anotherModel;
 		class50_sub1_sub4_sub4_2.method579(Class21.method239(j) & Class21.method239(k),
 				class50_sub1_sub4_sub4_1, 1244);
 		if (j != -1 && k != -1)
@@ -176,14 +219,14 @@ public class Player extends Actor {
 			if (class50_sub1_sub4_sub4_2 != null) {
 				Model class50_sub1_sub4_sub4_3 = new Model(false, false, true,
 						class50_sub1_sub4_sub4_2, Class21.method239(super.anInt1615));
-				class50_sub1_sub4_sub4_3.method590(0, 0, false, -super.anInt1618);
+				class50_sub1_sub4_sub4_3.translate(0, -super.anInt1618, 0);
 				class50_sub1_sub4_sub4_3.method584(7);
 				class50_sub1_sub4_sub4_3.method585(class27.animation.anIntArray295[super.anInt1615], (byte) 6);
 				class50_sub1_sub4_sub4_3.anIntArrayArray1679 = null;
 				class50_sub1_sub4_sub4_3.anIntArrayArray1678 = null;
 				if (class27.anInt561 != 128 || class27.anInt562 != 128)
-					class50_sub1_sub4_sub4_3.method593(class27.anInt562, class27.anInt561, 9, class27.anInt561);
-				class50_sub1_sub4_sub4_3.method594(64 + class27.anInt564, 850 + class27.anInt565, -30, -50, -30, true);
+					class50_sub1_sub4_sub4_3.resizeModel(class27.anInt561, class27.anInt562, class27.anInt561);
+				class50_sub1_sub4_sub4_3.initLighting(64 + class27.anInt564, 850 + class27.anInt565, -30, -50, -30, true);
 				Model aclass50_sub1_sub4_sub4_1[] = { class50_sub1_sub4_sub4, class50_sub1_sub4_sub4_3 };
 				class50_sub1_sub4_sub4 = new Model(2, true, 0, aclass50_sub1_sub4_sub4_1);
 			}
@@ -193,31 +236,31 @@ public class Player extends Actor {
 				aClass50_Sub1_Sub4_Sub4_1746 = null;
 			if (client.pulseCycle >= anInt1764 && client.pulseCycle < anInt1765) {
 				Model class50_sub1_sub4_sub4_1 = aClass50_Sub1_Sub4_Sub4_1746;
-				class50_sub1_sub4_sub4_1.method590(anInt1743 - super.unitX, anInt1745 - super.unitY, false,
-						anInt1744 - anInt1750);
+				class50_sub1_sub4_sub4_1.translate(anInt1743 - super.unitX, anInt1744 - anInt1750, anInt1745 - super.unitY
+				);
 				if (super.anInt1584 == 512) {
-					class50_sub1_sub4_sub4_1.method588(true);
-					class50_sub1_sub4_sub4_1.method588(true);
-					class50_sub1_sub4_sub4_1.method588(true);
+					class50_sub1_sub4_sub4_1.rotate90Y();
+					class50_sub1_sub4_sub4_1.rotate90Y();
+					class50_sub1_sub4_sub4_1.rotate90Y();
 				} else if (super.anInt1584 == 1024) {
-					class50_sub1_sub4_sub4_1.method588(true);
-					class50_sub1_sub4_sub4_1.method588(true);
+					class50_sub1_sub4_sub4_1.rotate90Y();
+					class50_sub1_sub4_sub4_1.rotate90Y();
 				} else if (super.anInt1584 == 1536)
-					class50_sub1_sub4_sub4_1.method588(true);
+					class50_sub1_sub4_sub4_1.rotate90Y();
 				Model aclass50_sub1_sub4_sub4[] = { class50_sub1_sub4_sub4, class50_sub1_sub4_sub4_1 };
 				class50_sub1_sub4_sub4 = new Model(2, true, 0, aclass50_sub1_sub4_sub4);
 				if (super.anInt1584 == 512)
-					class50_sub1_sub4_sub4_1.method588(true);
+					class50_sub1_sub4_sub4_1.rotate90Y();
 				else if (super.anInt1584 == 1024) {
-					class50_sub1_sub4_sub4_1.method588(true);
-					class50_sub1_sub4_sub4_1.method588(true);
+					class50_sub1_sub4_sub4_1.rotate90Y();
+					class50_sub1_sub4_sub4_1.rotate90Y();
 				} else if (super.anInt1584 == 1536) {
-					class50_sub1_sub4_sub4_1.method588(true);
-					class50_sub1_sub4_sub4_1.method588(true);
-					class50_sub1_sub4_sub4_1.method588(true);
+					class50_sub1_sub4_sub4_1.rotate90Y();
+					class50_sub1_sub4_sub4_1.rotate90Y();
+					class50_sub1_sub4_sub4_1.rotate90Y();
 				}
-				class50_sub1_sub4_sub4_1.method590(super.unitX - anInt1743, super.unitY - anInt1745, false,
-						anInt1750 - anInt1744);
+				class50_sub1_sub4_sub4_1.translate(super.unitX - anInt1743, anInt1750 - anInt1744, super.unitY - anInt1745
+				);
 			}
 		}
 		class50_sub1_sub4_sub4.aBoolean1680 = true;
@@ -309,48 +352,5 @@ public class Player extends Actor {
 		appearanceHash <<= 1;
 		appearanceHash += gender;
 	}
-
-	public Player() {
-		prayerIcon = -1;
-		aLong1749 = -1L;
-		equipment = new int[12];
-		skullIcon = -1;
-		visible = false;
-		colors = new int[5];
-		aBoolean1762 = true;
-		aBoolean1763 = false;
-		aBoolean1767 = false;
-		anInt1772 = 932;
-	}
-
-	public int anInt1743;
-	public int anInt1744;
-	public int anInt1745;
-	public Model aClass50_Sub1_Sub4_Sub4_1746;
-	public int prayerIcon;
-	public long aLong1749;
-	public int anInt1750;
-	public String username;
-	public int equipment[];
-	public int anInt1753;
-	public long appearanceHash;
-	public int gender;
-	public int skullIcon;
-	public NpcDefinition npc;
-	public boolean visible;
-	public int anInt1759;
-	public int colors[];
-	public static LruHashTable aClass33_1761 = new LruHashTable(260);
-	public boolean aBoolean1762;
-	public boolean aBoolean1763;
-	public int anInt1764;
-	public int anInt1765;
-	public int team;
-	public boolean aBoolean1767;
-	public int anInt1768;
-	public int anInt1769;
-	public int anInt1770;
-	public int anInt1771;
-	public int anInt1772;
 
 }

@@ -11,7 +11,7 @@ public class Class5 {
 	public int anInt114;
 	public int anInt115;
 	public int anInt116;
-	public Entity aClass50_Sub1_Sub4_117;
+	public Entity entity;
 	public int anInt118;
 	public int anInt119;
 	public int anInt120;

@@ -4,6 +4,24 @@
 
 public class Varbit {
 
+	public Varbit() {
+		aBoolean829 = false;
+		anInt830 = -1;
+		aBoolean832 = true;
+	}
+
+	public int anInt822;
+	public static int count;
+	public static Varbit[] varbitTable;
+	public String aString825;
+	public int varpId;
+	public int leastSignificantBit;
+	public int mostSignificantBit;
+	public boolean aBoolean829;
+	public int anInt830;
+	public int anInt831;
+	public boolean aBoolean832;
+
 	public static void unpack(Archive archive) {
 		JagBuffer buf = new JagBuffer(archive.get("varbit.dat"));
 		count = buf.getShort();
@@ -46,22 +64,4 @@ public class Varbit {
 				System.out.println("Error unrecognised config code: " + attribute);
 		} while (true);
 	}
-
-	public Varbit() {
-		aBoolean829 = false;
-		anInt830 = -1;
-		aBoolean832 = true;
-	}
-
-	public int anInt822;
-	public static int count;
-	public static Varbit varbitTable[];
-	public String aString825;
-	public int varpId;
-	public int leastSignificantBit;
-	public int mostSignificantBit;
-	public boolean aBoolean829;
-	public int anInt830;
-	public int anInt831;
-	public boolean aBoolean832;
 }

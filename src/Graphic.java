@@ -10,11 +10,11 @@ public class Graphic extends Entity {
 			byte0 = 0;
 		else
 			return;
-		while (anInt1738 > aClass27_1739.animation.method205(0, anInt1737)) {
-			anInt1738 -= aClass27_1739.animation.method205(0, anInt1737);
+		while (anInt1738 > spotAnimation.animation.method205(0, anInt1737)) {
+			anInt1738 -= spotAnimation.animation.method205(0, anInt1737);
 			anInt1737++;
-			if (anInt1737 >= aClass27_1739.animation.anInt294
-					&& (anInt1737 < 0 || anInt1737 >= aClass27_1739.animation.anInt294)) {
+			if (anInt1737 >= spotAnimation.animation.anInt294
+					&& (anInt1737 < 0 || anInt1737 >= spotAnimation.animation.anInt294)) {
 				anInt1737 = 0;
 				aBoolean1736 = true;
 			}
@@ -24,7 +24,7 @@ public class Graphic extends Entity {
 	public Graphic(int i, int j, int k, int l, int i1, int j1, int k1, int l1) {
 		aBoolean1735 = true;
 		aBoolean1736 = false;
-		aClass27_1739 = SpotAnimation.spotAnimations[i1];
+		spotAnimation = SpotAnimation.spotAnimations[i1];
 		anInt1731 = j;
 		anInt1732 = i;
 		anInt1733 = k1;
@@ -38,10 +38,10 @@ public class Graphic extends Entity {
 
 	@Override
 	public Model getModel() {
-		Model class50_sub1_sub4_sub4 = aClass27_1739.getModel();
+		Model class50_sub1_sub4_sub4 = spotAnimation.getModel();
 		if (class50_sub1_sub4_sub4 == null)
 			return null;
-		int i = aClass27_1739.animation.anIntArray295[anInt1737];
+		int i = spotAnimation.animation.anIntArray295[anInt1737];
 		Model class50_sub1_sub4_sub4_1 = new Model(false, false, true,
 				class50_sub1_sub4_sub4, Class21.method239(i));
 		if (!aBoolean1736) {
@@ -50,23 +50,23 @@ public class Graphic extends Entity {
 			class50_sub1_sub4_sub4_1.anIntArrayArray1679 = null;
 			class50_sub1_sub4_sub4_1.anIntArrayArray1678 = null;
 		}
-		if (aClass27_1739.anInt561 != 128 || aClass27_1739.anInt562 != 128)
-			class50_sub1_sub4_sub4_1.method593(aClass27_1739.anInt562, aClass27_1739.anInt561, 9,
-					aClass27_1739.anInt561);
-		if (aClass27_1739.anInt563 != 0) {
-			if (aClass27_1739.anInt563 == 90)
-				class50_sub1_sub4_sub4_1.method588(true);
-			if (aClass27_1739.anInt563 == 180) {
-				class50_sub1_sub4_sub4_1.method588(true);
-				class50_sub1_sub4_sub4_1.method588(true);
+		if (spotAnimation.anInt561 != 128 || spotAnimation.anInt562 != 128)
+			class50_sub1_sub4_sub4_1.resizeModel(spotAnimation.anInt561, spotAnimation.anInt562, spotAnimation.anInt561
+            );
+		if (spotAnimation.anInt563 != 0) {
+			if (spotAnimation.anInt563 == 90)
+				class50_sub1_sub4_sub4_1.rotate90Y();
+			if (spotAnimation.anInt563 == 180) {
+				class50_sub1_sub4_sub4_1.rotate90Y();
+				class50_sub1_sub4_sub4_1.rotate90Y();
 			}
-			if (aClass27_1739.anInt563 == 270) {
-				class50_sub1_sub4_sub4_1.method588(true);
-				class50_sub1_sub4_sub4_1.method588(true);
-				class50_sub1_sub4_sub4_1.method588(true);
+			if (spotAnimation.anInt563 == 270) {
+				class50_sub1_sub4_sub4_1.rotate90Y();
+				class50_sub1_sub4_sub4_1.rotate90Y();
+				class50_sub1_sub4_sub4_1.rotate90Y();
 			}
 		}
-		class50_sub1_sub4_sub4_1.method594(64 + aClass27_1739.anInt564, 850 + aClass27_1739.anInt565, -30, -50, -30,
+		class50_sub1_sub4_sub4_1.initLighting(64 + spotAnimation.anInt564, 850 + spotAnimation.anInt565, -30, -50, -30,
 				true);
 		return class50_sub1_sub4_sub4_1;
 	}
@@ -79,6 +79,6 @@ public class Graphic extends Entity {
 	public boolean aBoolean1736;
 	public int anInt1737;
 	public int anInt1738;
-	public SpotAnimation aClass27_1739;
+	public SpotAnimation spotAnimation;
 	public int anInt1740;
 }

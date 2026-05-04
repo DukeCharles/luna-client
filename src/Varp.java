@@ -4,6 +4,32 @@
 
 public class Varp {
 
+	public Varp() {
+		aBoolean710 = false;
+		aBoolean711 = true;
+		aBoolean713 = false;
+		aBoolean716 = false;
+		anInt717 = -1;
+		aBoolean718 = true;
+	}
+
+	public static int count;
+	public static Varp varpTable[];
+	public static int anInt705;
+	public static int[] anIntArray706;
+	public String aString707;
+	public int anInt708;
+	public int anInt709;
+	public boolean aBoolean710;
+	public boolean aBoolean711;
+	public int type;
+	public boolean aBoolean713;
+	public int anInt714;
+	public int anInt715;
+	public boolean aBoolean716;
+	public int anInt717;
+	public boolean aBoolean718;
+
 	public static void unpack(Archive archive) {
 		JagBuffer buf = new JagBuffer(archive.get("varp.dat"));
 		anInt705 = 0;
@@ -63,30 +89,4 @@ public class Varp {
 				System.out.println("Error unrecognised config code: " + attribute);
 		} while (true);
 	}
-
-	public Varp() {
-		aBoolean710 = false;
-		aBoolean711 = true;
-		aBoolean713 = false;
-		aBoolean716 = false;
-		anInt717 = -1;
-		aBoolean718 = true;
-	}
-
-	public static int count;
-	public static Varp varpTable[];
-	public static int anInt705;
-	public static int anIntArray706[];
-	public String aString707;
-	public int anInt708;
-	public int anInt709;
-	public boolean aBoolean710;
-	public boolean aBoolean711;
-	public int type;
-	public boolean aBoolean713;
-	public int anInt714;
-	public int anInt715;
-	public boolean aBoolean716;
-	public int anInt717;
-	public boolean aBoolean718;
 }
