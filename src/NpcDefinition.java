@@ -209,26 +209,26 @@ public class NpcDefinition {
 					class50_sub1_sub4_sub4.replaceColor(anIntArray634[j1], anIntArray656[j1]);
 
 			}
-			class50_sub1_sub4_sub4.method584(7);
+			class50_sub1_sub4_sub4.groupIndicesByTransform();
 			class50_sub1_sub4_sub4.initLighting(64 + anInt663, 850 + anInt658, -30, -50, -30, true);
 			aClass33_635.put(class50_sub1_sub4_sub4, id);
 		}
 		Model class50_sub1_sub4_sub4_1 = Model.anotherModel;
 		if (k != 0)
 			aBoolean647 = !aBoolean647;
-		class50_sub1_sub4_sub4_1.method579(Class21.method239(i) & Class21.method239(j),
-				class50_sub1_sub4_sub4, 1244);
+		class50_sub1_sub4_sub4_1.copyFrom(Class21.method239(i) & Class21.method239(j),
+				class50_sub1_sub4_sub4);
 		if (i != -1 && j != -1)
 			class50_sub1_sub4_sub4_1.method586(j, 0, i, ai);
 		else if (i != -1)
 			class50_sub1_sub4_sub4_1.method585(i, (byte) 6);
 		if (anInt632 != 128 || anInt630 != 128)
 			class50_sub1_sub4_sub4_1.resizeModel(anInt632, anInt630, anInt632);
-		class50_sub1_sub4_sub4_1.method581(anInt624);
-		class50_sub1_sub4_sub4_1.anIntArrayArray1679 = null;
-		class50_sub1_sub4_sub4_1.anIntArrayArray1678 = null;
+		class50_sub1_sub4_sub4_1.calculateRadius();
+		class50_sub1_sub4_sub4_1.faceIndicesByBone = null;
+		class50_sub1_sub4_sub4_1.vertexIndicesByBone = null;
 		if (aByte642 == 1)
-			class50_sub1_sub4_sub4_1.aBoolean1680 = true;
+			class50_sub1_sub4_sub4_1.isPriorityPicking = true;
 		return class50_sub1_sub4_sub4_1;
 	}
 

@@ -2,9 +2,9 @@
 // Jad home page: http://www.kpdus.com/jad.html
 // Decompiler options: packimports(3) 
 
-public class Class26 {
+public class ModelHeader {
 
-	public Class26() {
+	public ModelHeader() {
 	}
 
 	public byte aByteArray533[];

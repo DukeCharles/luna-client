@@ -16,7 +16,7 @@ public class Drawable extends QueueNode {
 		anInt1427 = 0;
 		anInt1430 = width;
 		anInt1428 = height;
-		anInt1431 = anInt1430 - 1;
+		viewportRightBoundary = anInt1430 - 1;
 		anInt1432 = anInt1430 / 2;
 	}
 
@@ -36,7 +36,7 @@ public class Drawable extends QueueNode {
 		if (!flag) {
 			return;
 		} else {
-			anInt1431 = anInt1430 - 1;
+			viewportRightBoundary = anInt1430 - 1;
 			anInt1432 = anInt1430 / 2;
 			anInt1433 = anInt1428 / 2;
 			return;
@@ -235,7 +235,7 @@ public class Drawable extends QueueNode {
 	public static int anInt1428;
 	public static int anInt1429;
 	public static int anInt1430;
-	public static int anInt1431;
+	public static int viewportRightBoundary;
 	public static int anInt1432;
 	public static int anInt1433;
 	public static boolean aBoolean1434;

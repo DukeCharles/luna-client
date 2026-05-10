@@ -432,7 +432,7 @@ public class Region {
                                 }
                                 int i_98_ = 0;
                                 if (i_93_ != -1)
-                                    i_98_ = (ThreeDimensionalCanvas.anIntArray1548[method171(i_94_, 96)]);
+                                    i_98_ = (ThreeDimensionalCanvas.hslToRgbTable[method171(i_94_, 96)]);
                                 if (i_84_ == 0)
                                     class22.method246(i_50_, i_69_, i_80_, 0, 0, -1, i_85_, i_86_, i_87_, i_88_,
                                             method171(i_93_, i_89_), method171(i_93_, i_90_), method171(i_93_, i_91_),
@@ -450,10 +450,10 @@ public class Region {
                                     } else if (class15.anInt316 == 16711935) {
                                         i_102_ = -2;
                                         i_101_ = -1;
-                                        i_103_ = (ThreeDimensionalCanvas.anIntArray1548[method182(class15.anInt325, 96)]);
+                                        i_103_ = (ThreeDimensionalCanvas.hslToRgbTable[method182(class15.anInt325, 96)]);
                                     } else {
                                         i_102_ = method177(class15.anInt320, class15.anInt321, class15.anInt322);
-                                        i_103_ = (ThreeDimensionalCanvas.anIntArray1548[method182(class15.anInt325, 96)]);
+                                        i_103_ = (ThreeDimensionalCanvas.hslToRgbTable[method182(class15.anInt325, 96)]);
                                     }
                                     class22.method246(i_50_, i_69_, i_80_, i_99_, i_100_, i_101_, i_85_, i_86_, i_87_,
                                             i_88_, method171(i_93_, i_89_), method171(i_93_, i_90_), method171(i_93_,
@@ -792,7 +792,7 @@ public class Region {
                         if (class50_sub1_sub4_sub4 != null) {
                             for (int i_201_ = 0; i_201_ <= i_199_; i_201_++) {
                                 for (int i_202_ = 0; i_202_ <= i_200_; i_202_++) {
-                                    int i_203_ = class50_sub1_sub4_sub4.anInt1671 / 4;
+                                    int i_203_ = class50_sub1_sub4_sub4.modelRadius / 4;
                                     if (i_203_ > 30)
                                         i_203_ = 30;
                                     if (i_203_ > (aByteArrayArrayArray164[z][x + i_201_][y + i_202_]))

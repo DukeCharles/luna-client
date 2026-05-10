@@ -53,12 +53,12 @@ public class ChatFilter {
 		int j = class50_sub1_sub2.getInt();
 		aCharArrayArray743 = new char[j][];
 		method380(class50_sub1_sub2, aCharArrayArray743, -37125);
-		if (i != 20529)
-			anInt729 = 311;
+		if (i != 20529) //DUMMY METHOD, ALWAYS TRUE
+			dummyVar = 311;
 	}
 
 	public static void method378(JagBuffer class50_sub1_sub2, int i) {
-		if (i != 21901)
+		if (i != 21901) //DUMMY METHOD, ALWAYS TRUE
 			return;
 		anIntArray740 = new int[class50_sub1_sub2.getInt()];
 		for (int j = 0; j < anIntArray740.length; j++)
@@ -823,7 +823,7 @@ public class ChatFilter {
 
 	public static boolean method405(boolean flag, char c) {
 		if (!flag)
-			anInt729 = -367;
+			dummyVar = -367;
 		return c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z';
 	}
 
@@ -895,7 +895,7 @@ public class ChatFilter {
 	}
 
 	public static int anInt728 = 3;
-	public static int anInt729;
+	public static int dummyVar;
 	public static int anInt730 = -761;
 	public static boolean aBoolean731;
 	public static boolean aBoolean732;

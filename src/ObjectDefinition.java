@@ -209,10 +209,10 @@ public class ObjectDefinition {
         if (k != 0)
             anInt768 = 487;
         if (j != -1) {
-            class50_sub1_sub4_sub4_3.method584(7);
+            class50_sub1_sub4_sub4_3.groupIndicesByTransform();
             class50_sub1_sub4_sub4_3.method585(j, (byte) 6);
-            class50_sub1_sub4_sub4_3.anIntArrayArray1679 = null;
-            class50_sub1_sub4_sub4_3.anIntArrayArray1678 = null;
+            class50_sub1_sub4_sub4_3.faceIndicesByBone = null;
+            class50_sub1_sub4_sub4_3.vertexIndicesByBone = null;
         }
         while (i-- > 0)
             class50_sub1_sub4_sub4_3.rotate90Y();
@@ -445,7 +445,7 @@ public class ObjectDefinition {
                 model.verticesY[i2] += j3 - l1;
             }
 
-            model.method582(6);
+            model.updateVerticalBounds();
         }
         return model;
     }

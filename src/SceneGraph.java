@@ -822,16 +822,16 @@ public class SceneGraph {
 		int l = 0;
 		int ai[] = class50_sub1_sub4_sub4_1.verticesX;
 		int i1 = class50_sub1_sub4_sub4_1.verticesCount;
-		int j1 = class50_sub1_sub4_sub4_1.anInt1669 >> 16;
-		int k1 = (class50_sub1_sub4_sub4_1.anInt1669 << 16) >> 16;
-		int l1 = class50_sub1_sub4_sub4_1.anInt1670 >> 16;
-		int i2 = (class50_sub1_sub4_sub4_1.anInt1670 << 16) >> 16;
+		int j1 = class50_sub1_sub4_sub4_1.packedXBounds >> 16;
+		int k1 = (class50_sub1_sub4_sub4_1.packedXBounds << 16) >> 16;
+		int l1 = class50_sub1_sub4_sub4_1.packedZBounds >> 16;
+		int i2 = (class50_sub1_sub4_sub4_1.packedZBounds << 16) >> 16;
 		for (int j2 = 0; j2 < class50_sub1_sub4_sub4.verticesCount; j2++) {
 			VertexNormal class40 = ((Entity) (class50_sub1_sub4_sub4)).normals[j2];
 			VertexNormal class40_1 = class50_sub1_sub4_sub4.vertexNormalsTable[j2];
 			if (class40_1.magnitude != 0) {
 				int i3 = class50_sub1_sub4_sub4.verticesY[j2] - j;
-				if (i3 <= class50_sub1_sub4_sub4_1.anInt1672) {
+				if (i3 <= class50_sub1_sub4_sub4_1.maxBottomExtent) {
 					int j3 = class50_sub1_sub4_sub4.verticesX[j2] - i;
 					if (j3 >= j1 && j3 <= k1) {
 						int k3 = class50_sub1_sub4_sub4.verticesZ[j2] - k;
@@ -867,13 +867,13 @@ public class SceneGraph {
 			if (anIntArray501[class50_sub1_sub4_sub4.faceIndicesX[k2]] == anInt503
 					&& anIntArray501[class50_sub1_sub4_sub4.faceIndicesY[k2]] == anInt503
 					&& anIntArray501[class50_sub1_sub4_sub4.faceIndicesZ[k2]] == anInt503)
-				class50_sub1_sub4_sub4.anIntArray1659[k2] = -1;
+				class50_sub1_sub4_sub4.faceRenderTypes[k2] = -1;
 
 		for (int l2 = 0; l2 < class50_sub1_sub4_sub4_1.faceCount; l2++)
 			if (anIntArray502[class50_sub1_sub4_sub4_1.faceIndicesX[l2]] == anInt503
 					&& anIntArray502[class50_sub1_sub4_sub4_1.faceIndicesY[l2]] == anInt503
 					&& anIntArray502[class50_sub1_sub4_sub4_1.faceIndicesZ[l2]] == anInt503)
-				class50_sub1_sub4_sub4_1.anIntArray1659[l2] = -1;
+				class50_sub1_sub4_sub4_1.faceRenderTypes[l2] = -1;
 
 	}
 
@@ -1244,13 +1244,13 @@ public class SceneGraph {
 						method283(anInt474, anInt476, class50_sub3_7.class20, anInt473, j, i, anInt475, (byte) 3);
 					Class44 class44 = class50_sub3_7.aClass44_1403;
 					if (class44 != null)
-						class44.aClass50_Sub1_Sub4_724.method560(0, anInt473, anInt474, anInt475, anInt476,
+						class44.aClass50_Sub1_Sub4_724.render(0, anInt473, anInt474, anInt475, anInt476,
 								class44.anInt720 - anInt470, class44.anInt719 - anInt471, class44.anInt721 - anInt472,
 								class44.uid);
 					for (int i2 = 0; i2 < class50_sub3_7.anInt1407; i2++) {
 						Class5 class5 = class50_sub3_7.class5[i2];
 						if (class5 != null)
-							class5.entity.method560(class5.anInt118, anInt473, anInt474, anInt475,
+							class5.entity.render(class5.anInt118, anInt473, anInt474, anInt475,
 									anInt476, class5.anInt115 - anInt470, class5.anInt114 - anInt471, class5.anInt116
 											- anInt472, class5.anInt125);
 					}
@@ -1305,17 +1305,17 @@ public class SceneGraph {
 						newTile.anInt1415 = 0;
 					}
 					if ((class44_3.anInt722 & j2) != 0 && !method288(l, i, j, class44_3.anInt722))
-						class44_3.aClass50_Sub1_Sub4_724.method560(0, anInt473, anInt474, anInt475, anInt476,
+						class44_3.aClass50_Sub1_Sub4_724.render(0, anInt473, anInt474, anInt475, anInt476,
 								class44_3.anInt720 - anInt470, class44_3.anInt719 - anInt471, class44_3.anInt721
 										- anInt472, class44_3.uid);
 					if ((class44_3.anInt723 & j2) != 0 && !method288(l, i, j, class44_3.anInt723))
-						class44_3.aClass50_Sub1_Sub4_725.method560(0, anInt473, anInt474, anInt475, anInt476,
+						class44_3.aClass50_Sub1_Sub4_725.render(0, anInt473, anInt474, anInt475, anInt476,
 								class44_3.anInt720 - anInt470, class44_3.anInt719 - anInt471, class44_3.anInt721
 										- anInt472, class44_3.uid);
 				}
 				if (class35_1 != null && !method289(l, i, j, class35_1.aClass50_Sub1_Sub4_608.height))
 					if ((class35_1.anInt606 & j2) != 0)
-						class35_1.aClass50_Sub1_Sub4_608.method560(class35_1.anInt607, anInt473, anInt474, anInt475,
+						class35_1.aClass50_Sub1_Sub4_608.render(class35_1.anInt607, anInt473, anInt474, anInt475,
 								anInt476, class35_1.anInt604 - anInt470, class35_1.anInt603 - anInt471,
 								class35_1.anInt605 - anInt472, class35_1.anInt609);
 					else if ((class35_1.anInt606 & 0x300) != 0) {
@@ -1336,34 +1336,34 @@ public class SceneGraph {
 						if ((class35_1.anInt606 & 0x100) != 0 && k10 < k9) {
 							int i11 = j4 + anIntArray478[i8];
 							int k11 = k6 + anIntArray479[i8];
-							class35_1.aClass50_Sub1_Sub4_608.method560(i8 * 512 + 256, anInt473, anInt474, anInt475,
+							class35_1.aClass50_Sub1_Sub4_608.render(i8 * 512 + 256, anInt473, anInt474, anInt475,
 									anInt476, i11, l5, k11, class35_1.anInt609);
 						}
 						if ((class35_1.anInt606 & 0x200) != 0 && k10 > k9) {
 							int j11 = j4 + anIntArray480[i8];
 							int l11 = k6 + anIntArray481[i8];
-							class35_1.aClass50_Sub1_Sub4_608.method560(i8 * 512 + 1280 & 0x7ff, anInt473, anInt474,
+							class35_1.aClass50_Sub1_Sub4_608.render(i8 * 512 + 1280 & 0x7ff, anInt473, anInt474,
 									anInt475, anInt476, j11, l5, l11, class35_1.anInt609);
 						}
 					}
 				if (flag1) {
 					Class28 class28 = newTile.aClass28_1405;
 					if (class28 != null)
-						class28.aClass50_Sub1_Sub4_570.method560(0, anInt473, anInt474, anInt475, anInt476,
+						class28.aClass50_Sub1_Sub4_570.render(0, anInt473, anInt474, anInt475, anInt476,
 								class28.anInt568 - anInt470, class28.anInt567 - anInt471, class28.anInt569 - anInt472,
 								class28.anInt571);
 					Class10 class10_1 = newTile.aClass10_1406;
 					if (class10_1 != null && class10_1.anInt180 == 0) {
 						if (class10_1.aClass50_Sub1_Sub4_177 != null)
-							class10_1.aClass50_Sub1_Sub4_177.method560(0, anInt473, anInt474, anInt475, anInt476,
+							class10_1.aClass50_Sub1_Sub4_177.render(0, anInt473, anInt474, anInt475, anInt476,
 									class10_1.anInt174 - anInt470, class10_1.anInt173 - anInt471, class10_1.anInt175
 											- anInt472, class10_1.anInt179);
 						if (class10_1.aClass50_Sub1_Sub4_178 != null)
-							class10_1.aClass50_Sub1_Sub4_178.method560(0, anInt473, anInt474, anInt475, anInt476,
+							class10_1.aClass50_Sub1_Sub4_178.render(0, anInt473, anInt474, anInt475, anInt476,
 									class10_1.anInt174 - anInt470, class10_1.anInt173 - anInt471, class10_1.anInt175
 											- anInt472, class10_1.anInt179);
 						if (class10_1.aClass50_Sub1_Sub4_176 != null)
-							class10_1.aClass50_Sub1_Sub4_176.method560(0, anInt473, anInt474, anInt475, anInt476,
+							class10_1.aClass50_Sub1_Sub4_176.render(0, anInt473, anInt474, anInt475, anInt476,
 									class10_1.anInt174 - anInt470, class10_1.anInt173 - anInt471, class10_1.anInt175
 											- anInt472, class10_1.anInt179);
 					}
@@ -1405,7 +1405,7 @@ public class SceneGraph {
 				if (flag2) {
 					Class44 class44_1 = newTile.aClass44_1403;
 					if (!method288(l, i, j, class44_1.anInt722))
-						class44_1.aClass50_Sub1_Sub4_724.method560(0, anInt473, anInt474, anInt475, anInt476,
+						class44_1.aClass50_Sub1_Sub4_724.render(0, anInt473, anInt474, anInt475, anInt476,
 								class44_1.anInt720 - anInt470, class44_1.anInt719 - anInt471, class44_1.anInt721
 										- anInt472, class44_1.uid);
 					newTile.anInt1415 = 0;
@@ -1484,7 +1484,7 @@ public class SceneGraph {
 						class5_3.anInt124 = anInt463;
 						if (!method290(l, class5_3.anInt119, class5_3.anInt120, class5_3.anInt121, class5_3.anInt122,
 								class5_3.entity.height))
-							class5_3.entity.method560(class5_3.anInt118, anInt473, anInt474, anInt475,
+							class5_3.entity.render(class5_3.anInt118, anInt473, anInt474, anInt475,
 									anInt476, class5_3.anInt115 - anInt470, class5_3.anInt114 - anInt471,
 									class5_3.anInt116 - anInt472, class5_3.anInt125);
 						for (int k7 = class5_3.anInt119; k7 <= class5_3.anInt120; k7++) {
@@ -1531,15 +1531,15 @@ public class SceneGraph {
 			Class10 class10 = newTile.aClass10_1406;
 			if (class10 != null && class10.anInt180 != 0) {
 				if (class10.aClass50_Sub1_Sub4_177 != null)
-					class10.aClass50_Sub1_Sub4_177.method560(0, anInt473, anInt474, anInt475, anInt476,
+					class10.aClass50_Sub1_Sub4_177.render(0, anInt473, anInt474, anInt475, anInt476,
 							class10.anInt174 - anInt470, class10.anInt173 - anInt471 - class10.anInt180,
 							class10.anInt175 - anInt472, class10.anInt179);
 				if (class10.aClass50_Sub1_Sub4_178 != null)
-					class10.aClass50_Sub1_Sub4_178.method560(0, anInt473, anInt474, anInt475, anInt476,
+					class10.aClass50_Sub1_Sub4_178.render(0, anInt473, anInt474, anInt475, anInt476,
 							class10.anInt174 - anInt470, class10.anInt173 - anInt471 - class10.anInt180,
 							class10.anInt175 - anInt472, class10.anInt179);
 				if (class10.aClass50_Sub1_Sub4_176 != null)
-					class10.aClass50_Sub1_Sub4_176.method560(0, anInt473, anInt474, anInt475, anInt476,
+					class10.aClass50_Sub1_Sub4_176.render(0, anInt473, anInt474, anInt475, anInt476,
 							class10.anInt174 - anInt470, class10.anInt173 - anInt471 - class10.anInt180,
 							class10.anInt175 - anInt472, class10.anInt179);
 			}
@@ -1547,7 +1547,7 @@ public class SceneGraph {
 				Class35 class35 = newTile.aClass35_1404;
 				if (class35 != null && !method289(l, i, j, class35.aClass50_Sub1_Sub4_608.height))
 					if ((class35.anInt606 & newTile.anInt1418) != 0)
-						class35.aClass50_Sub1_Sub4_608.method560(class35.anInt607, anInt473, anInt474, anInt475,
+						class35.aClass50_Sub1_Sub4_608.render(class35.anInt607, anInt473, anInt474, anInt475,
 								anInt476, class35.anInt604 - anInt470, class35.anInt603 - anInt471, class35.anInt605
 										- anInt472, class35.anInt609);
 					else if ((class35.anInt606 & 0x300) != 0) {
@@ -1568,24 +1568,24 @@ public class SceneGraph {
 						if ((class35.anInt606 & 0x100) != 0 && l7 >= j6) {
 							int i9 = l2 + anIntArray478[k5];
 							int i10 = i4 + anIntArray479[k5];
-							class35.aClass50_Sub1_Sub4_608.method560(k5 * 512 + 256, anInt473, anInt474, anInt475,
+							class35.aClass50_Sub1_Sub4_608.render(k5 * 512 + 256, anInt473, anInt474, anInt475,
 									anInt476, i9, j3, i10, class35.anInt609);
 						}
 						if ((class35.anInt606 & 0x200) != 0 && l7 <= j6) {
 							int j9 = l2 + anIntArray480[k5];
 							int j10 = i4 + anIntArray481[k5];
-							class35.aClass50_Sub1_Sub4_608.method560(k5 * 512 + 1280 & 0x7ff, anInt473, anInt474,
+							class35.aClass50_Sub1_Sub4_608.render(k5 * 512 + 1280 & 0x7ff, anInt473, anInt474,
 									anInt475, anInt476, j9, j3, j10, class35.anInt609);
 						}
 					}
 				Class44 class44_2 = newTile.aClass44_1403;
 				if (class44_2 != null) {
 					if ((class44_2.anInt723 & newTile.anInt1418) != 0 && !method288(l, i, j, class44_2.anInt723))
-						class44_2.aClass50_Sub1_Sub4_725.method560(0, anInt473, anInt474, anInt475, anInt476,
+						class44_2.aClass50_Sub1_Sub4_725.render(0, anInt473, anInt474, anInt475, anInt476,
 								class44_2.anInt720 - anInt470, class44_2.anInt719 - anInt471, class44_2.anInt721
 										- anInt472, class44_2.uid);
 					if ((class44_2.anInt722 & newTile.anInt1418) != 0 && !method288(l, i, j, class44_2.anInt722))
-						class44_2.aClass50_Sub1_Sub4_724.method560(0, anInt473, anInt474, anInt475, anInt476,
+						class44_2.aClass50_Sub1_Sub4_724.render(0, anInt473, anInt474, anInt475, anInt476,
 								class44_2.anInt720 - anInt470, class44_2.anInt719 - anInt471, class44_2.anInt721
 										- anInt472, class44_2.uid);
 				}
@@ -1663,64 +1663,64 @@ public class SceneGraph {
 		k4 = l4;
 		if (j3 < 50)
 			return;
-		int i5 = ThreeDimensionalCanvas.anInt1532 + (i2 << 9) / k2;
-		int j5 = ThreeDimensionalCanvas.anInt1533 + (l3 << 9) / k2;
-		int k5 = ThreeDimensionalCanvas.anInt1532 + (i3 << 9) / j2;
-		int l5 = ThreeDimensionalCanvas.anInt1533 + (i4 << 9) / j2;
-		int i6 = ThreeDimensionalCanvas.anInt1532 + (l2 << 9) / k3;
-		int j6 = ThreeDimensionalCanvas.anInt1533 + (j4 << 9) / k3;
-		int k6 = ThreeDimensionalCanvas.anInt1532 + (l1 << 9) / j3;
-		int l6 = ThreeDimensionalCanvas.anInt1533 + (k4 << 9) / j3;
-		ThreeDimensionalCanvas.anInt1531 = 0;
+		int i5 = ThreeDimensionalCanvas.centerX + (i2 << 9) / k2;
+		int j5 = ThreeDimensionalCanvas.centerY + (l3 << 9) / k2;
+		int k5 = ThreeDimensionalCanvas.centerX + (i3 << 9) / j2;
+		int l5 = ThreeDimensionalCanvas.centerY + (i4 << 9) / j2;
+		int i6 = ThreeDimensionalCanvas.centerX + (l2 << 9) / k3;
+		int j6 = ThreeDimensionalCanvas.centerY + (j4 << 9) / k3;
+		int k6 = ThreeDimensionalCanvas.centerX + (l1 << 9) / j3;
+		int l6 = ThreeDimensionalCanvas.centerY + (k4 << 9) / j3;
+		ThreeDimensionalCanvas.currentFaceAlpha = 0;
 		if ((i6 - k6) * (l5 - l6) - (j6 - l6) * (k5 - k6) > 0) {
-			ThreeDimensionalCanvas.aBoolean1528 = false;
-			if (i6 < 0 || k6 < 0 || k5 < 0 || i6 > Drawable.anInt1431 || k6 > Drawable.anInt1431
-					|| k5 > Drawable.anInt1431)
-				ThreeDimensionalCanvas.aBoolean1528 = true;
+			ThreeDimensionalCanvas.requiresBoundsCheck = false;
+			if (i6 < 0 || k6 < 0 || k5 < 0 || i6 > Drawable.viewportRightBoundary || k6 > Drawable.viewportRightBoundary
+					|| k5 > Drawable.viewportRightBoundary)
+				ThreeDimensionalCanvas.requiresBoundsCheck = true;
 			if (aBoolean482 && method285(anInt483, anInt484, j6, l6, l5, i6, k6, k5)) {
 				anInt485 = j1;
 				anInt486 = k1;
 			}
 			if (class3.anInt99 == -1) {
 				if (class3.anInt97 != 0xbc614e)
-					ThreeDimensionalCanvas.method503(j6, l6, l5, i6, k6, k5, class3.anInt97, class3.anInt98,
+					ThreeDimensionalCanvas.drawGouraudTriangle(j6, l6, l5, i6, k6, k5, class3.anInt97, class3.anInt98,
 							class3.anInt96);
 			} else if (!lowMemory) {
 				if (class3.aBoolean100)
-					ThreeDimensionalCanvas.method507(j6, l6, l5, i6, k6, k5, class3.anInt97, class3.anInt98,
+					ThreeDimensionalCanvas.drawTexturedTriangle(j6, l6, l5, i6, k6, k5, class3.anInt97, class3.anInt98,
 							class3.anInt96, i2, i3, l1, l3, i4, k4, k2, j2, j3, class3.anInt99);
 				else
-					ThreeDimensionalCanvas.method507(j6, l6, l5, i6, k6, k5, class3.anInt97, class3.anInt98,
+					ThreeDimensionalCanvas.drawTexturedTriangle(j6, l6, l5, i6, k6, k5, class3.anInt97, class3.anInt98,
 							class3.anInt96, l2, l1, i3, j4, k4, i4, k3, j3, j2, class3.anInt99);
 			} else {
 				int i7 = anIntArray500[class3.anInt99];
-				ThreeDimensionalCanvas.method503(j6, l6, l5, i6, k6, k5, method284(class3.anInt97, i7, 0), method284(
+				ThreeDimensionalCanvas.drawGouraudTriangle(j6, l6, l5, i6, k6, k5, method284(class3.anInt97, i7, 0), method284(
 						class3.anInt98, i7, 0), method284(class3.anInt96, i7, 0));
 			}
 		}
 		if ((i5 - k5) * (l6 - l5) - (j5 - l5) * (k6 - k5) > 0) {
-			ThreeDimensionalCanvas.aBoolean1528 = false;
-			if (i5 < 0 || k5 < 0 || k6 < 0 || i5 > Drawable.anInt1431 || k5 > Drawable.anInt1431
-					|| k6 > Drawable.anInt1431)
-				ThreeDimensionalCanvas.aBoolean1528 = true;
+			ThreeDimensionalCanvas.requiresBoundsCheck = false;
+			if (i5 < 0 || k5 < 0 || k6 < 0 || i5 > Drawable.viewportRightBoundary || k5 > Drawable.viewportRightBoundary
+					|| k6 > Drawable.viewportRightBoundary)
+				ThreeDimensionalCanvas.requiresBoundsCheck = true;
 			if (aBoolean482 && method285(anInt483, anInt484, j5, l5, l6, i5, k5, k6)) {
 				anInt485 = j1;
 				anInt486 = k1;
 			}
 			if (class3.anInt99 == -1) {
 				if (class3.anInt95 != 0xbc614e) {
-					ThreeDimensionalCanvas.method503(j5, l5, l6, i5, k5, k6, class3.anInt95, class3.anInt96,
+					ThreeDimensionalCanvas.drawGouraudTriangle(j5, l5, l6, i5, k5, k6, class3.anInt95, class3.anInt96,
 							class3.anInt98);
 					return;
 				}
 			} else {
 				if (!lowMemory) {
-					ThreeDimensionalCanvas.method507(j5, l5, l6, i5, k5, k6, class3.anInt95, class3.anInt96,
+					ThreeDimensionalCanvas.drawTexturedTriangle(j5, l5, l6, i5, k5, k6, class3.anInt95, class3.anInt96,
 							class3.anInt98, i2, i3, l1, l3, i4, k4, k2, j2, j3, class3.anInt99);
 					return;
 				}
 				int j7 = anIntArray500[class3.anInt99];
-				ThreeDimensionalCanvas.method503(j5, l5, l6, i5, k5, k6, method284(class3.anInt95, j7, 0), method284(
+				ThreeDimensionalCanvas.drawGouraudTriangle(j5, l5, l6, i5, k5, k6, method284(class3.anInt95, j7, 0), method284(
 						class3.anInt96, j7, 0), method284(class3.anInt98, j7, 0));
 			}
 		}
@@ -1745,11 +1745,11 @@ public class SceneGraph {
 				Class20.anIntArray421[l1] = k2;
 				Class20.anIntArray422[l1] = i3;
 			}
-			Class20.anIntArray418[l1] = ThreeDimensionalCanvas.anInt1532 + (i2 << 9) / i3;
-			Class20.anIntArray419[l1] = ThreeDimensionalCanvas.anInt1533 + (k2 << 9) / i3;
+			Class20.anIntArray418[l1] = ThreeDimensionalCanvas.centerX + (i2 << 9) / i3;
+			Class20.anIntArray419[l1] = ThreeDimensionalCanvas.centerY + (k2 << 9) / i3;
 		}
 
-		ThreeDimensionalCanvas.anInt1531 = 0;
+		ThreeDimensionalCanvas.currentFaceAlpha = 0;
 		k1 = class20.anIntArray409.length;
 		if (byte0 != 3)
 			return;
@@ -1764,34 +1764,34 @@ public class SceneGraph {
 			int i5 = Class20.anIntArray419[j3];
 			int j5 = Class20.anIntArray419[l3];
 			if ((i4 - j4) * (j5 - i5) - (l4 - i5) * (k4 - j4) > 0) {
-				ThreeDimensionalCanvas.aBoolean1528 = false;
-				if (i4 < 0 || j4 < 0 || k4 < 0 || i4 > Drawable.anInt1431 || j4 > Drawable.anInt1431
-						|| k4 > Drawable.anInt1431)
-					ThreeDimensionalCanvas.aBoolean1528 = true;
+				ThreeDimensionalCanvas.requiresBoundsCheck = false;
+				if (i4 < 0 || j4 < 0 || k4 < 0 || i4 > Drawable.viewportRightBoundary || j4 > Drawable.viewportRightBoundary
+						|| k4 > Drawable.viewportRightBoundary)
+					ThreeDimensionalCanvas.requiresBoundsCheck = true;
 				if (aBoolean482 && method285(anInt483, anInt484, l4, i5, j5, i4, j4, k4)) {
 					anInt485 = i1;
 					anInt486 = l;
 				}
 				if (class20.anIntArray412 == null || class20.anIntArray412[j2] == -1) {
 					if (class20.anIntArray406[j2] != 0xbc614e)
-						ThreeDimensionalCanvas.method503(l4, i5, j5, i4, j4, k4, class20.anIntArray406[j2],
+						ThreeDimensionalCanvas.drawGouraudTriangle(l4, i5, j5, i4, j4, k4, class20.anIntArray406[j2],
 								class20.anIntArray407[j2], class20.anIntArray408[j2]);
 				} else if (!lowMemory) {
 					if (class20.aBoolean413)
-						ThreeDimensionalCanvas.method507(l4, i5, j5, i4, j4, k4, class20.anIntArray406[j2],
+						ThreeDimensionalCanvas.drawTexturedTriangle(l4, i5, j5, i4, j4, k4, class20.anIntArray406[j2],
 								class20.anIntArray407[j2], class20.anIntArray408[j2], Class20.anIntArray420[0],
 								Class20.anIntArray420[1], Class20.anIntArray420[3], Class20.anIntArray421[0],
 								Class20.anIntArray421[1], Class20.anIntArray421[3], Class20.anIntArray422[0],
 								Class20.anIntArray422[1], Class20.anIntArray422[3], class20.anIntArray412[j2]);
 					else
-						ThreeDimensionalCanvas.method507(l4, i5, j5, i4, j4, k4, class20.anIntArray406[j2],
+						ThreeDimensionalCanvas.drawTexturedTriangle(l4, i5, j5, i4, j4, k4, class20.anIntArray406[j2],
 								class20.anIntArray407[j2], class20.anIntArray408[j2], Class20.anIntArray420[l2],
 								Class20.anIntArray420[j3], Class20.anIntArray420[l3], Class20.anIntArray421[l2],
 								Class20.anIntArray421[j3], Class20.anIntArray421[l3], Class20.anIntArray422[l2],
 								Class20.anIntArray422[j3], Class20.anIntArray422[l3], class20.anIntArray412[j2]);
 				} else {
 					int k5 = anIntArray500[class20.anIntArray412[j2]];
-					ThreeDimensionalCanvas.method503(l4, i5, j5, i4, j4, k4,
+					ThreeDimensionalCanvas.drawGouraudTriangle(l4, i5, j5, i4, j4, k4,
 							method284(class20.anIntArray406[j2], k5, 0), method284(class20.anIntArray407[j2], k5, 0),
 							method284(class20.anIntArray408[j2], k5, 0));
 				}

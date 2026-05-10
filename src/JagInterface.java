@@ -338,7 +338,7 @@ public class JagInterface {
 		if (k != 0)
 			aBoolean271 = !aBoolean271;
 		if (i != -1 || j != -1)
-			class50_sub1_sub4_sub4_1.method584(7);
+			class50_sub1_sub4_sub4_1.groupIndicesByTransform();
 		if (i != -1)
 			class50_sub1_sub4_sub4_1.method585(i, (byte) 6);
 		if (j != -1)

@@ -365,7 +365,7 @@ public class client extends JagApplet {
         Player.aClass33_1761 = null;
         ThreeDimensionalCanvas.method492(false);
         SceneGraph.method240(false);
-        Model.method573(false);
+        Model.dispose(false);
         Class21.method237(false);
         System.gc();
     }
@@ -3062,8 +3062,8 @@ public class client extends JagApplet {
         int i = -1;
         if (byte0 != 7)
             opcode = -1;
-        for (int j = 0; j < Model.anInt1708; j++) {
-            int k = Model.anIntArray1709[j];
+        for (int j = 0; j < Model.hoveredCount; j++) {
+            int k = Model.hoveredModels[j];
             int x = k & 0x7f;
             int y = k >> 7 & 0x7f;
             int j1 = k >> 29 & 3;
@@ -4350,7 +4350,7 @@ public class client extends JagApplet {
             fileFetcher = new OnDemandFetcher();
             fileFetcher.init(versionListArchive, this);
             Class21.method235(fileFetcher.method343(553));
-            Model.method574(fileFetcher.method340(0, -31140), fileFetcher);
+            Model.init(fileFetcher.method340(0, -31140), fileFetcher);
             if (!lowMemory) {
                 anInt1270 = 0;
                 aBoolean1271 = true;
@@ -6922,7 +6922,7 @@ public class client extends JagApplet {
             for (int j1 = 0; j1 < k; j1++) {
                 int i2 = fileFetcher.method325(j1, -493);
                 if ((i2 & 0x79) == 0)
-                    Model.method576(j1, 1);
+                    Model.unloadModelHeader(j1);
             }
 
         }
@@ -7363,7 +7363,7 @@ public class client extends JagApplet {
                             class50_sub1_sub4_sub4.replaceColor(anIntArray1268[0], anIntArray1268[anIntArray1099[i3]]);
                     }
 
-                class50_sub1_sub4_sub4.method584(7);
+                class50_sub1_sub4_sub4.groupIndicesByTransform();
                 class50_sub1_sub4_sub4.method585(
                         Animation.animations[((Actor) (thisPlayer)).anInt1634].anIntArray295[0], (byte) 6);
                 class50_sub1_sub4_sub4.initLighting(64, 850, -30, -50, -30, true);
@@ -10081,8 +10081,8 @@ public class client extends JagApplet {
             opcode = -1;
         i1 = j2;
         if (k >= 50) {
-            anInt932 = ThreeDimensionalCanvas.anInt1532 + (i << 9) / k;
-            anInt933 = ThreeDimensionalCanvas.anInt1533 + (i1 << 9) / k;
+            anInt932 = ThreeDimensionalCanvas.centerX + (i << 9) / k;
+            anInt933 = ThreeDimensionalCanvas.centerY + (i1 << 9) / k;
             return;
         } else {
             anInt932 = -1;
@@ -10487,10 +10487,10 @@ public class client extends JagApplet {
                     if (class50_sub1_sub1_sub1 != null)
                         class50_sub1_sub1_sub1.method461(l2, k2, -488);
                 } else if (class13_1.anInt236 == 6) {
-                    int k3 = ThreeDimensionalCanvas.anInt1532;
-                    int k4 = ThreeDimensionalCanvas.anInt1533;
-                    ThreeDimensionalCanvas.anInt1532 = k2 + class13_1.anInt241 / 2;
-                    ThreeDimensionalCanvas.anInt1533 = l2 + class13_1.anInt238 / 2;
+                    int k3 = ThreeDimensionalCanvas.centerX;
+                    int k4 = ThreeDimensionalCanvas.centerY;
+                    ThreeDimensionalCanvas.centerX = k2 + class13_1.anInt241 / 2;
+                    ThreeDimensionalCanvas.centerY = l2 + class13_1.anInt238 / 2;
                     int k5 = ThreeDimensionalCanvas.sineTable[class13_1.anInt252] * class13_1.anInt251 >> 16;
                     int j6 = ThreeDimensionalCanvas.cosineTable[class13_1.anInt252] * class13_1.anInt251 >> 16;
                     boolean flag2 = method95(class13_1, -693);
@@ -10508,9 +10508,9 @@ public class client extends JagApplet {
                                 class14.anIntArray296[class13_1.anInt235], 0, flag2);
                     }
                     if (class50_sub1_sub4_sub4 != null)
-                        class50_sub1_sub4_sub4.method598(0, class13_1.anInt253, 0, class13_1.anInt252, 0, k5, j6);
-                    ThreeDimensionalCanvas.anInt1532 = k3;
-                    ThreeDimensionalCanvas.anInt1533 = k4;
+                        class50_sub1_sub4_sub4.viewportTransform(0, class13_1.anInt253, 0, class13_1.anInt252, 0, k5, j6);
+                    ThreeDimensionalCanvas.centerX = k3;
+                    ThreeDimensionalCanvas.centerY = k4;
                 } else {
                     if (class13_1.anInt236 == 7) {
                         JagFont class50_sub1_sub1_sub2_1 = class13_1.aClass50_Sub1_Sub1_Sub2_237;
@@ -11029,10 +11029,10 @@ public class client extends JagApplet {
             }
 
         int l2 = ThreeDimensionalCanvas.anInt1547;
-        Model.aBoolean1705 = true;
-        Model.anInt1708 = 0;
-        Model.anInt1706 = super.mouseX - 4;
-        Model.anInt1707 = super.mouseY - 4;
+        Model.isPickingEnabled = true;
+        Model.hoveredCount = 0;
+        Model.mouseX = super.mouseX - 4;
+        Model.mouseY = super.mouseY - 4;
         Drawable.method447(4);
         aClass22_1164.method280(anInt1216, k, 0, anInt1217, anInt1218, anInt1220, anInt1219);
         aClass22_1164.method255(anInt897);

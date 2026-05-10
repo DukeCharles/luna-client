@@ -177,7 +177,7 @@ public class Player extends Actor {
 						class50_sub1_sub4_sub4_1.replaceColor(client.anIntArray1268[0], client.anIntArray1268[colors[l2]]);
 				}
 
-			class50_sub1_sub4_sub4_1.method584(7);
+			class50_sub1_sub4_sub4_1.groupIndicesByTransform();
 			class50_sub1_sub4_sub4_1.initLighting(64, 850, -30, -50, -30, true);
 			aClass33_1761.put(class50_sub1_sub4_sub4_1, l);
 			aLong1749 = l;
@@ -185,15 +185,15 @@ public class Player extends Actor {
 		if (aBoolean1763)
 			return class50_sub1_sub4_sub4_1;
 		Model class50_sub1_sub4_sub4_2 = Model.anotherModel;
-		class50_sub1_sub4_sub4_2.method579(Class21.method239(j) & Class21.method239(k),
-				class50_sub1_sub4_sub4_1, 1244);
+		class50_sub1_sub4_sub4_2.copyFrom(Class21.method239(j) & Class21.method239(k),
+				class50_sub1_sub4_sub4_1);
 		if (j != -1 && k != -1)
 			class50_sub1_sub4_sub4_2.method586(k, 0, j, Animation.animations[super.currentAnimation].anIntArray299);
 		else if (j != -1)
 			class50_sub1_sub4_sub4_2.method585(j, (byte) 6);
-		class50_sub1_sub4_sub4_2.method581(anInt1772);
-		class50_sub1_sub4_sub4_2.anIntArrayArray1679 = null;
-		class50_sub1_sub4_sub4_2.anIntArrayArray1678 = null;
+		class50_sub1_sub4_sub4_2.calculateRadius();
+		class50_sub1_sub4_sub4_2.faceIndicesByBone = null;
+		class50_sub1_sub4_sub4_2.vertexIndicesByBone = null;
 		return class50_sub1_sub4_sub4_2;
 	}
 
@@ -210,7 +210,7 @@ public class Player extends Actor {
 		if (class50_sub1_sub4_sub4 == null)
 			return null;
 		super.anInt1594 = ((Entity) (class50_sub1_sub4_sub4)).height;
-		class50_sub1_sub4_sub4.aBoolean1680 = true;
+		class50_sub1_sub4_sub4.isPriorityPicking = true;
 		if (aBoolean1763)
 			return class50_sub1_sub4_sub4;
 		if (super.anInt1614 != -1 && super.anInt1615 != -1) {
@@ -220,10 +220,10 @@ public class Player extends Actor {
 				Model class50_sub1_sub4_sub4_3 = new Model(false, false, true,
 						class50_sub1_sub4_sub4_2, Class21.method239(super.anInt1615));
 				class50_sub1_sub4_sub4_3.translate(0, -super.anInt1618, 0);
-				class50_sub1_sub4_sub4_3.method584(7);
+				class50_sub1_sub4_sub4_3.groupIndicesByTransform();
 				class50_sub1_sub4_sub4_3.method585(class27.animation.anIntArray295[super.anInt1615], (byte) 6);
-				class50_sub1_sub4_sub4_3.anIntArrayArray1679 = null;
-				class50_sub1_sub4_sub4_3.anIntArrayArray1678 = null;
+				class50_sub1_sub4_sub4_3.faceIndicesByBone = null;
+				class50_sub1_sub4_sub4_3.vertexIndicesByBone = null;
 				if (class27.anInt561 != 128 || class27.anInt562 != 128)
 					class50_sub1_sub4_sub4_3.resizeModel(class27.anInt561, class27.anInt562, class27.anInt561);
 				class50_sub1_sub4_sub4_3.initLighting(64 + class27.anInt564, 850 + class27.anInt565, -30, -50, -30, true);
@@ -263,7 +263,7 @@ public class Player extends Actor {
 				);
 			}
 		}
-		class50_sub1_sub4_sub4.aBoolean1680 = true;
+		class50_sub1_sub4_sub4.isPriorityPicking = true;
 		return class50_sub1_sub4_sub4;
 	}
 
