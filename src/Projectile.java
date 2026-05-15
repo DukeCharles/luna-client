@@ -52,7 +52,7 @@ public class Projectile extends Entity {
 		if (spotAnimation.animation != null)
 			i = spotAnimation.animation.anIntArray295[anInt1567];
 		Model class50_sub1_sub4_sub4_1 = new Model(false, false, true,
-				class50_sub1_sub4_sub4, Class21.method239(i));
+				class50_sub1_sub4_sub4, AnimationFrame.isFrameTransparent(i));
 		if (i != -1) {
 			class50_sub1_sub4_sub4_1.groupIndicesByTransform();
 			class50_sub1_sub4_sub4_1.method585(i, (byte) 6);

@@ -334,7 +334,7 @@ public class JagInterface {
 		if (i == -1 && j == -1 && model.colors == null)
 			return model;
 		Model class50_sub1_sub4_sub4_1 = new Model(false, false, true,
-				model, Class21.method239(i) & Class21.method239(j));
+				model, AnimationFrame.isFrameTransparent(i) & AnimationFrame.isFrameTransparent(j));
 		if (k != 0)
 			aBoolean271 = !aBoolean271;
 		if (i != -1 || j != -1)

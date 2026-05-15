@@ -216,7 +216,7 @@ public class NpcDefinition {
 		Model class50_sub1_sub4_sub4_1 = Model.anotherModel;
 		if (k != 0)
 			aBoolean647 = !aBoolean647;
-		class50_sub1_sub4_sub4_1.copyFrom(Class21.method239(i) & Class21.method239(j),
+		class50_sub1_sub4_sub4_1.copyFrom(AnimationFrame.isFrameTransparent(i) & AnimationFrame.isFrameTransparent(j),
 				class50_sub1_sub4_sub4);
 		if (i != -1 && j != -1)
 			class50_sub1_sub4_sub4_1.method586(j, 0, i, ai);

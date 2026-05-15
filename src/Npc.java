@@ -32,7 +32,7 @@ public class Npc extends Actor {
 			if (class50_sub1_sub4_sub4_1 != null) {
 				int i = class27.animation.anIntArray295[super.anInt1615];
 				Model class50_sub1_sub4_sub4_2 = new Model(false, false, true,
-						class50_sub1_sub4_sub4_1, Class21.method239(i));
+						class50_sub1_sub4_sub4_1, AnimationFrame.isFrameTransparent(i));
 				class50_sub1_sub4_sub4_2.translate(0, -super.anInt1618, 0);
 				class50_sub1_sub4_sub4_2.groupIndicesByTransform();
 				class50_sub1_sub4_sub4_2.method585(i, (byte) 6);

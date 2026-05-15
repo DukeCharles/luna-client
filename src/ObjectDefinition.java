@@ -205,7 +205,7 @@ public class ObjectDefinition {
         else
             flag2 = false;
         Model class50_sub1_sub4_sub4_3 = new Model(i == 0 && j == -1 && !flag
-                && !flag2, false, modifiedModelColors == null, model, Class21.method239(j));
+                && !flag2, false, modifiedModelColors == null, model, AnimationFrame.isFrameTransparent(j));
         if (k != 0)
             anInt768 = 487;
         if (j != -1) {

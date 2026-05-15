@@ -366,7 +366,7 @@ public class client extends JagApplet {
         ThreeDimensionalCanvas.method492(false);
         SceneGraph.method240(false);
         Model.dispose(false);
-        Class21.method237(false);
+        AnimationFrame.clearFrames(false);
         System.gc();
     }
 
@@ -4349,7 +4349,7 @@ public class client extends JagApplet {
             drawLoadingText(60, "Connecting to update server");
             fileFetcher = new OnDemandFetcher();
             fileFetcher.init(versionListArchive, this);
-            Class21.method235(fileFetcher.method343(553));
+            AnimationFrame.initFrames(fileFetcher.method343(553));
             Model.init(fileFetcher.method340(0, -31140), fileFetcher);
             if (!lowMemory) {
                 anInt1270 = 0;
@@ -5569,7 +5569,7 @@ public class client extends JagApplet {
                     }
                 }
                 if (class50_sub1_sub3.type == 1 && class50_sub1_sub3.buf != null)
-                    Class21.method236(class50_sub1_sub3.buf, true);
+                    AnimationFrame.unpackFrames(class50_sub1_sub3.buf, true);
                 if (class50_sub1_sub3.type == 2 && class50_sub1_sub3.id == anInt1270 && class50_sub1_sub3.buf != null)
                     method24(aBoolean1271, class50_sub1_sub3.buf, 659);
                 if (class50_sub1_sub3.type == 3 && loadingStage == 1) {

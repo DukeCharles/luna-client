@@ -43,7 +43,7 @@ public class Graphic extends Entity {
 			return null;
 		int i = spotAnimation.animation.anIntArray295[anInt1737];
 		Model class50_sub1_sub4_sub4_1 = new Model(false, false, true,
-				class50_sub1_sub4_sub4, Class21.method239(i));
+				class50_sub1_sub4_sub4, AnimationFrame.isFrameTransparent(i));
 		if (!aBoolean1736) {
 			class50_sub1_sub4_sub4_1.groupIndicesByTransform();
 			class50_sub1_sub4_sub4_1.method585(i, (byte) 6);

@@ -185,7 +185,7 @@ public class Player extends Actor {
 		if (aBoolean1763)
 			return class50_sub1_sub4_sub4_1;
 		Model class50_sub1_sub4_sub4_2 = Model.anotherModel;
-		class50_sub1_sub4_sub4_2.copyFrom(Class21.method239(j) & Class21.method239(k),
+		class50_sub1_sub4_sub4_2.copyFrom(AnimationFrame.isFrameTransparent(j) & AnimationFrame.isFrameTransparent(k),
 				class50_sub1_sub4_sub4_1);
 		if (j != -1 && k != -1)
 			class50_sub1_sub4_sub4_2.method586(k, 0, j, Animation.animations[super.currentAnimation].anIntArray299);
@@ -218,7 +218,7 @@ public class Player extends Actor {
 			Model class50_sub1_sub4_sub4_2 = class27.getModel();
 			if (class50_sub1_sub4_sub4_2 != null) {
 				Model class50_sub1_sub4_sub4_3 = new Model(false, false, true,
-						class50_sub1_sub4_sub4_2, Class21.method239(super.anInt1615));
+						class50_sub1_sub4_sub4_2, AnimationFrame.isFrameTransparent(super.anInt1615));
 				class50_sub1_sub4_sub4_3.translate(0, -super.anInt1618, 0);
 				class50_sub1_sub4_sub4_3.groupIndicesByTransform();
 				class50_sub1_sub4_sub4_3.method585(class27.animation.anIntArray295[super.anInt1615], (byte) 6);

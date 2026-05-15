@@ -1135,10 +1135,10 @@ public class Model extends Entity {
 			return;
 		if (i == -1)
 			return;
-		Class21 class21 = Class21.method238(i);
+		AnimationFrame class21 = AnimationFrame.forId(i);
 		if (class21 == null)
 			return;
-		Skeleton skeleton = class21.aSkeleton_432;
+		Skeleton skeleton = class21.skeleton;
 		if (byte0 == 6)
 			byte0 = 0;
 		else
@@ -1146,10 +1146,10 @@ public class Model extends Entity {
 		transformationPivotX = 0;
 		transformationPivotY = 0;
 		transformationPivotZ = 0;
-		for (int j = 0; j < class21.anInt433; j++) {
-			int k = class21.anIntArray434[j];
-			method587(skeleton.opcodes[k], skeleton.boneGroups[k], class21.anIntArray435[j],
-					class21.anIntArray436[j], class21.anIntArray437[j]);
+		for (int j = 0; j < class21.instructionCount; j++) {
+			int k = class21.instructionIndices[j];
+			method587(skeleton.opcodes[k], skeleton.boneGroups[k], class21.transformationX[j],
+					class21.transformationY[j], class21.transformationZ[j]);
 		}
 
 	}
@@ -1161,15 +1161,15 @@ public class Model extends Entity {
 			method585(k, (byte) 6);
 			return;
 		}
-		Class21 class21 = Class21.method238(k);
+		AnimationFrame class21 = AnimationFrame.forId(k);
 		if (class21 == null)
 			return;
-		Class21 class21_1 = Class21.method238(i);
+		AnimationFrame class21_1 = AnimationFrame.forId(i);
 		if (class21_1 == null) {
 			method585(k, (byte) 6);
 			return;
 		}
-		Skeleton skeleton = class21.aSkeleton_432;
+		Skeleton skeleton = class21.skeleton;
 		transformationPivotX = 0;
 		if (j != 0)
 			aBoolean1641 = !aBoolean1641;
@@ -1177,12 +1177,12 @@ public class Model extends Entity {
 		transformationPivotZ = 0;
 		int l = 0;
 		int i1 = ai[l++];
-		for (int j1 = 0; j1 < class21.anInt433; j1++) {
+		for (int j1 = 0; j1 < class21.instructionCount; j1++) {
 			int k1;
-			for (k1 = class21.anIntArray434[j1]; k1 > i1; i1 = ai[l++]);
+			for (k1 = class21.instructionIndices[j1]; k1 > i1; i1 = ai[l++]);
 			if (k1 != i1 || skeleton.opcodes[k1] == 0)
-				method587(skeleton.opcodes[k1], skeleton.boneGroups[k1], class21.anIntArray435[j1],
-						class21.anIntArray436[j1], class21.anIntArray437[j1]);
+				method587(skeleton.opcodes[k1], skeleton.boneGroups[k1], class21.transformationX[j1],
+						class21.transformationY[j1], class21.transformationZ[j1]);
 		}
 
 		transformationPivotX = 0;
@@ -1190,12 +1190,12 @@ public class Model extends Entity {
 		transformationPivotZ = 0;
 		l = 0;
 		i1 = ai[l++];
-		for (int l1 = 0; l1 < class21_1.anInt433; l1++) {
+		for (int l1 = 0; l1 < class21_1.instructionCount; l1++) {
 			int i2;
-			for (i2 = class21_1.anIntArray434[l1]; i2 > i1; i1 = ai[l++]);
+			for (i2 = class21_1.instructionIndices[l1]; i2 > i1; i1 = ai[l++]);
 			if (i2 == i1 || skeleton.opcodes[i2] == 0)
-				method587(skeleton.opcodes[i2], skeleton.boneGroups[i2], class21_1.anIntArray435[l1],
-						class21_1.anIntArray436[l1], class21_1.anIntArray437[l1]);
+				method587(skeleton.opcodes[i2], skeleton.boneGroups[i2], class21_1.transformationX[l1],
+						class21_1.transformationY[l1], class21_1.transformationZ[l1]);
 		}
 
 	}
