@@ -646,9 +646,9 @@ public class Model extends Entity {
 	public static int[] clippedProjectedX = new int[10];
 	public static int[] clippedProjectedY = new int[10];
 	public static int[] clippedVertexColors = new int[10];
-	public static int anInt1702;
-	public static int anInt1703;
-	public static int anInt1704;
+	public static int transformationPivotX;
+	public static int transformationPivotY;
+	public static int transformationPivotZ;
 	public static boolean isPickingEnabled;
 	public static int mouseX;
 	public static int mouseY;
@@ -1143,9 +1143,9 @@ public class Model extends Entity {
 			byte0 = 0;
 		else
 			return;
-		anInt1702 = 0;
-		anInt1703 = 0;
-		anInt1704 = 0;
+		transformationPivotX = 0;
+		transformationPivotY = 0;
+		transformationPivotZ = 0;
 		for (int j = 0; j < class21.anInt433; j++) {
 			int k = class21.anIntArray434[j];
 			method587(class41.anIntArray698[k], class41.anIntArrayArray699[k], class21.anIntArray435[j],
@@ -1170,11 +1170,11 @@ public class Model extends Entity {
 			return;
 		}
 		Class41 class41 = class21.aClass41_432;
-		anInt1702 = 0;
+		transformationPivotX = 0;
 		if (j != 0)
 			aBoolean1641 = !aBoolean1641;
-		anInt1703 = 0;
-		anInt1704 = 0;
+		transformationPivotY = 0;
+		transformationPivotZ = 0;
 		int l = 0;
 		int i1 = ai[l++];
 		for (int j1 = 0; j1 < class21.anInt433; j1++) {
@@ -1185,9 +1185,9 @@ public class Model extends Entity {
 						class21.anIntArray436[j1], class21.anIntArray437[j1]);
 		}
 
-		anInt1702 = 0;
-		anInt1703 = 0;
-		anInt1704 = 0;
+		transformationPivotX = 0;
+		transformationPivotY = 0;
+		transformationPivotZ = 0;
 		l = 0;
 		i1 = ai[l++];
 		for (int l1 = 0; l1 < class21_1.anInt433; l1++) {
@@ -1204,18 +1204,18 @@ public class Model extends Entity {
 		int i1 = ai.length;
 		if (i == 0) {
 			int j1 = 0;
-			anInt1702 = 0;
-			anInt1703 = 0;
-			anInt1704 = 0;
+			transformationPivotX = 0;
+			transformationPivotY = 0;
+			transformationPivotZ = 0;
 			for (int k2 = 0; k2 < i1; k2++) {
 				int l3 = ai[k2];
 				if (l3 < vertexIndicesByBone.length) {
 					int ai5[] = vertexIndicesByBone[l3];
 					for (int i5 = 0; i5 < ai5.length; i5++) {
 						int j6 = ai5[i5];
-						anInt1702 += verticesX[j6];
-						anInt1703 += verticesY[j6];
-						anInt1704 += verticesZ[j6];
+						transformationPivotX += verticesX[j6];
+						transformationPivotY += verticesY[j6];
+						transformationPivotZ += verticesZ[j6];
 						j1++;
 					}
 
@@ -1223,14 +1223,14 @@ public class Model extends Entity {
 			}
 
 			if (j1 > 0) {
-				anInt1702 = anInt1702 / j1 + j;
-				anInt1703 = anInt1703 / j1 + k;
-				anInt1704 = anInt1704 / j1 + l;
+				transformationPivotX = transformationPivotX / j1 + j;
+				transformationPivotY = transformationPivotY / j1 + k;
+				transformationPivotZ = transformationPivotZ / j1 + l;
 				return;
 			} else {
-				anInt1702 = j;
-				anInt1703 = k;
-				anInt1704 = l;
+				transformationPivotX = j;
+				transformationPivotY = k;
+				transformationPivotZ = l;
 				return;
 			}
 		}
@@ -1258,9 +1258,9 @@ public class Model extends Entity {
 					int ai2[] = vertexIndicesByBone[i3];
 					for (int j4 = 0; j4 < ai2.length; j4++) {
 						int k5 = ai2[j4];
-						verticesX[k5] -= anInt1702;
-						verticesY[k5] -= anInt1703;
-						verticesZ[k5] -= anInt1704;
+						verticesX[k5] -= transformationPivotX;
+						verticesY[k5] -= transformationPivotY;
+						verticesZ[k5] -= transformationPivotZ;
 						int k6 = (j & 0xff) * 8;
 						int l6 = (k & 0xff) * 8;
 						int i7 = (l & 0xff) * 8;
@@ -1285,9 +1285,9 @@ public class Model extends Entity {
 							verticesZ[k5] = verticesZ[k5] * k8 - verticesX[k5] * l7 >> 16;
 							verticesX[k5] = j9;
 						}
-						verticesX[k5] += anInt1702;
-						verticesY[k5] += anInt1703;
-						verticesZ[k5] += anInt1704;
+						verticesX[k5] += transformationPivotX;
+						verticesY[k5] += transformationPivotY;
+						verticesZ[k5] += transformationPivotZ;
 					}
 
 				}
@@ -1302,15 +1302,15 @@ public class Model extends Entity {
 					int ai3[] = vertexIndicesByBone[j3];
 					for (int k4 = 0; k4 < ai3.length; k4++) {
 						int l5 = ai3[k4];
-						verticesX[l5] -= anInt1702;
-						verticesY[l5] -= anInt1703;
-						verticesZ[l5] -= anInt1704;
+						verticesX[l5] -= transformationPivotX;
+						verticesY[l5] -= transformationPivotY;
+						verticesZ[l5] -= transformationPivotZ;
 						verticesX[l5] = (verticesX[l5] * j) / 128;
 						verticesY[l5] = (verticesY[l5] * k) / 128;
 						verticesZ[l5] = (verticesZ[l5] * l) / 128;
-						verticesX[l5] += anInt1702;
-						verticesY[l5] += anInt1703;
-						verticesZ[l5] += anInt1704;
+						verticesX[l5] += transformationPivotX;
+						verticesY[l5] += transformationPivotY;
+						verticesZ[l5] += transformationPivotZ;
 					}
 
 				}
