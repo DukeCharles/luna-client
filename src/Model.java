@@ -39,9 +39,9 @@ public class Model extends Entity {
 		anInt1642++;
 
 		ModelHeader modelHeader = Model.modelHeaders[i];
-		verticesCount = modelHeader.anInt534;
-		faceCount = modelHeader.anInt535;
-		textureVertexCount = modelHeader.anInt536;
+		verticesCount = modelHeader.vertexCount;
+		faceCount = modelHeader.faceCount;
+		textureVertexCount = modelHeader.textureVertexCount;
 		verticesX = new int[verticesCount];
 		verticesY = new int[verticesCount];
 		verticesZ = new int[verticesCount];
@@ -51,33 +51,33 @@ public class Model extends Entity {
 		textureVertexIndicesA = new int[textureVertexCount];
 		textureVertexIndicesB = new int[textureVertexCount];
 		textureVertexIndicesC = new int[textureVertexCount];
-		if (modelHeader.anInt541 >= 0)
+		if (modelHeader.vertexBoneOffset >= 0)
 			vertexBoneIds = new int[verticesCount];
-		if (modelHeader.anInt545 >= 0)
+		if (modelHeader.faceRenderTypeOffset >= 0)
 			faceRenderTypes = new int[faceCount];
-		if (modelHeader.anInt546 >= 0)
+		if (modelHeader.facePriorityOffset >= 0)
 			facePriorities = new int[faceCount];
 		else
-			defaultPriority = -modelHeader.anInt546 - 1;
-		if (modelHeader.anInt547 >= 0)
+			defaultPriority = -modelHeader.facePriorityOffset - 1;
+		if (modelHeader.faceTransparencyOffset >= 0)
 			faceTransparency = new int[faceCount];
-		if (modelHeader.anInt548 >= 0)
+		if (modelHeader.faceBoneOffset >= 0)
 			faceBoneIds = new int[faceCount];
 		colors = new int[faceCount];
-		JagBuffer class50_sub1_sub2 = new JagBuffer(modelHeader.aByteArray533);
-		class50_sub1_sub2.position = modelHeader.anInt537;
-		JagBuffer class50_sub1_sub2_1 = new JagBuffer(modelHeader.aByteArray533);
-		class50_sub1_sub2_1.position = modelHeader.anInt538;
-		JagBuffer class50_sub1_sub2_2 = new JagBuffer(modelHeader.aByteArray533);
-		class50_sub1_sub2_2.position = modelHeader.anInt539;
+		JagBuffer class50_sub1_sub2 = new JagBuffer(modelHeader.rawModelData);
+		class50_sub1_sub2.position = modelHeader.vertexFlagsOffset;
+		JagBuffer class50_sub1_sub2_1 = new JagBuffer(modelHeader.rawModelData);
+		class50_sub1_sub2_1.position = modelHeader.vertexXOffset;
+		JagBuffer class50_sub1_sub2_2 = new JagBuffer(modelHeader.rawModelData);
+		class50_sub1_sub2_2.position = modelHeader.vertexYOffset;
 
 
 		if (j >= 0)
 			aBoolean1641 = !aBoolean1641;
-		JagBuffer class50_sub1_sub2_3 = new JagBuffer(modelHeader.aByteArray533);
-		class50_sub1_sub2_3.position = modelHeader.anInt540;
-		JagBuffer class50_sub1_sub2_4 = new JagBuffer(modelHeader.aByteArray533);
-		class50_sub1_sub2_4.position = modelHeader.anInt541;
+		JagBuffer class50_sub1_sub2_3 = new JagBuffer(modelHeader.rawModelData);
+		class50_sub1_sub2_3.position = modelHeader.vertexZOffset;
+		JagBuffer class50_sub1_sub2_4 = new JagBuffer(modelHeader.rawModelData);
+		class50_sub1_sub2_4.position = modelHeader.vertexBoneOffset;
 		int k = 0;
 		int l = 0;
 		int i1 = 0;
@@ -102,11 +102,11 @@ public class Model extends Entity {
 				vertexBoneIds[j1] = class50_sub1_sub2_4.getByte();
 		}
 
-		class50_sub1_sub2.position = modelHeader.anInt544;
-		class50_sub1_sub2_1.position = modelHeader.anInt545;
-		class50_sub1_sub2_2.position = modelHeader.anInt546;
-		class50_sub1_sub2_3.position = modelHeader.anInt547;
-		class50_sub1_sub2_4.position = modelHeader.anInt548;
+		class50_sub1_sub2.position = modelHeader.faceColorOffset;
+		class50_sub1_sub2_1.position = modelHeader.faceRenderTypeOffset;
+		class50_sub1_sub2_2.position = modelHeader.facePriorityOffset;
+		class50_sub1_sub2_3.position = modelHeader.faceTransparencyOffset;
+		class50_sub1_sub2_4.position = modelHeader.faceBoneOffset;
 		for (int l1 = 0; l1 < faceCount; l1++) {
 			colors[l1] = class50_sub1_sub2.getShort();
 			if (faceRenderTypes != null)
@@ -119,8 +119,8 @@ public class Model extends Entity {
 				faceBoneIds[l1] = class50_sub1_sub2_4.getByte();
 		}
 
-		class50_sub1_sub2.position = modelHeader.anInt542;
-		class50_sub1_sub2_1.position = modelHeader.anInt543;
+		class50_sub1_sub2.position = modelHeader.faceIndicesOffset;
+		class50_sub1_sub2_1.position = modelHeader.faceTypeOffset;
 		int j2 = 0;
 		int l2 = 0;
 		int j3 = 0;
@@ -166,7 +166,7 @@ public class Model extends Entity {
 			}
 		}
 
-		class50_sub1_sub2.position = modelHeader.anInt549;
+		class50_sub1_sub2.position = modelHeader.textureMappingOffset;
 		for (int j4 = 0; j4 < textureVertexCount; j4++) {
 			textureVertexIndicesA[j4] = class50_sub1_sub2.getShort();
 			textureVertexIndicesB[j4] = class50_sub1_sub2.getShort();
@@ -719,18 +719,18 @@ public class Model extends Entity {
 			return;
 		if (abyte0 == null) {
 			ModelHeader modelHeader = Model.modelHeaders[i] = new ModelHeader();
-			modelHeader.anInt534 = 0;
-			modelHeader.anInt535 = 0;
-			modelHeader.anInt536 = 0;
+			modelHeader.vertexCount = 0;
+			modelHeader.faceCount = 0;
+			modelHeader.textureVertexCount = 0;
 			return;
 		}
 		JagBuffer class50_sub1_sub2 = new JagBuffer(abyte0);
 		class50_sub1_sub2.position = abyte0.length - 18;
 		ModelHeader modelHeader_1 = modelHeaders[i] = new ModelHeader();
-		modelHeader_1.aByteArray533 = abyte0;
-		modelHeader_1.anInt534 = class50_sub1_sub2.getShort();
-		modelHeader_1.anInt535 = class50_sub1_sub2.getShort();
-		modelHeader_1.anInt536 = class50_sub1_sub2.getByte();
+		modelHeader_1.rawModelData = abyte0;
+		modelHeader_1.vertexCount = class50_sub1_sub2.getShort();
+		modelHeader_1.faceCount = class50_sub1_sub2.getShort();
+		modelHeader_1.textureVertexCount = class50_sub1_sub2.getByte();
 		int j = class50_sub1_sub2.getByte();
 		int k = class50_sub1_sub2.getByte();
 		int l = class50_sub1_sub2.getByte();
@@ -741,46 +741,46 @@ public class Model extends Entity {
 		int i2 = class50_sub1_sub2.getShort();
 		int j2 = class50_sub1_sub2.getShort();
 		int k2 = 0;
-		modelHeader_1.anInt537 = k2;
-		k2 += modelHeader_1.anInt534;
-		modelHeader_1.anInt543 = k2;
-		k2 += modelHeader_1.anInt535;
-		modelHeader_1.anInt546 = k2;
+		modelHeader_1.vertexFlagsOffset = k2;
+		k2 += modelHeader_1.vertexCount;
+		modelHeader_1.faceTypeOffset = k2;
+		k2 += modelHeader_1.faceCount;
+		modelHeader_1.facePriorityOffset = k2;
 		if (k == 255)
-			k2 += modelHeader_1.anInt535;
+			k2 += modelHeader_1.faceCount;
 		else
-			modelHeader_1.anInt546 = -k - 1;
-		modelHeader_1.anInt548 = k2;
+			modelHeader_1.facePriorityOffset = -k - 1;
+		modelHeader_1.faceBoneOffset = k2;
 		if (i1 == 1)
-			k2 += modelHeader_1.anInt535;
+			k2 += modelHeader_1.faceCount;
 		else
-			modelHeader_1.anInt548 = -1;
-		modelHeader_1.anInt545 = k2;
+			modelHeader_1.faceBoneOffset = -1;
+		modelHeader_1.faceRenderTypeOffset = k2;
 		if (j == 1)
-			k2 += modelHeader_1.anInt535;
+			k2 += modelHeader_1.faceCount;
 		else
-			modelHeader_1.anInt545 = -1;
-		modelHeader_1.anInt541 = k2;
+			modelHeader_1.faceRenderTypeOffset = -1;
+		modelHeader_1.vertexBoneOffset = k2;
 		if (j1 == 1)
-			k2 += modelHeader_1.anInt534;
+			k2 += modelHeader_1.vertexCount;
 		else
-			modelHeader_1.anInt541 = -1;
-		modelHeader_1.anInt547 = k2;
+			modelHeader_1.vertexBoneOffset = -1;
+		modelHeader_1.faceTransparencyOffset = k2;
 		if (l == 1)
-			k2 += modelHeader_1.anInt535;
+			k2 += modelHeader_1.faceCount;
 		else
-			modelHeader_1.anInt547 = -1;
-		modelHeader_1.anInt542 = k2;
+			modelHeader_1.faceTransparencyOffset = -1;
+		modelHeader_1.faceIndicesOffset = k2;
 		k2 += j2;
-		modelHeader_1.anInt544 = k2;
-		k2 += modelHeader_1.anInt535 * 2;
-		modelHeader_1.anInt549 = k2;
-		k2 += modelHeader_1.anInt536 * 6;
-		modelHeader_1.anInt538 = k2;
+		modelHeader_1.faceColorOffset = k2;
+		k2 += modelHeader_1.faceCount * 2;
+		modelHeader_1.textureMappingOffset = k2;
+		k2 += modelHeader_1.textureVertexCount * 6;
+		modelHeader_1.vertexXOffset = k2;
 		k2 += k1;
-		modelHeader_1.anInt539 = k2;
+		modelHeader_1.vertexYOffset = k2;
 		k2 += l1;
-		modelHeader_1.anInt540 = k2;
+		modelHeader_1.vertexZOffset = k2;
 		k2 += i2;
 	}
 
