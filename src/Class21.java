@@ -36,7 +36,7 @@ public class Class21 {
 		i1 += l;
 		JagBuffer class50_sub1_sub2_5 = new JagBuffer(abyte0);
 		class50_sub1_sub2_5.position = i1;
-		Class41 class41 = new Class41(class50_sub1_sub2_5, 0);
+		Skeleton skeleton = new Skeleton(class50_sub1_sub2_5, 0);
 		int j1 = class50_sub1_sub2_1.getShort();
 		int ai[] = new int[500];
 		int ai1[] = new int[500];
@@ -46,16 +46,16 @@ public class Class21 {
 			int l1 = class50_sub1_sub2_1.getShort();
 			Class21 class21 = aClass21Array430[l1] = new Class21();
 			class21.anInt431 = class50_sub1_sub2_4.getByte();
-			class21.aClass41_432 = class41;
+			class21.aSkeleton_432 = skeleton;
 			int i2 = class50_sub1_sub2_1.getByte();
 			int j2 = -1;
 			int k2 = 0;
 			for (int l2 = 0; l2 < i2; l2++) {
 				int i3 = class50_sub1_sub2_2.getByte();
 				if (i3 > 0) {
-					if (class41.anIntArray698[l2] != 0) {
+					if (skeleton.opcodes[l2] != 0) {
 						for (int k3 = l2 - 1; k3 > j2; k3--) {
-							if (class41.anIntArray698[k3] != 0)
+							if (skeleton.opcodes[k3] != 0)
 								continue;
 							ai[k2] = k3;
 							ai1[k2] = 0;
@@ -68,7 +68,7 @@ public class Class21 {
 					}
 					ai[k2] = l2;
 					char c = '\0';
-					if (class41.anIntArray698[l2] == 3)
+					if (skeleton.opcodes[l2] == 3)
 						c = '\200';
 					if ((i3 & 1) != 0)
 						ai1[k2] = class50_sub1_sub2_3.getSignedSmart();
@@ -84,7 +84,7 @@ public class Class21 {
 						ai3[k2] = c;
 					j2 = l2;
 					k2++;
-					if (class41.anIntArray698[l2] == 5)
+					if (skeleton.opcodes[l2] == 5)
 						aBooleanArray438[l1] = false;
 				}
 			}
@@ -129,7 +129,7 @@ public class Class21 {
 	public static boolean aBoolean429;
 	public static Class21 aClass21Array430[];
 	public int anInt431;
-	public Class41 aClass41_432;
+	public Skeleton aSkeleton_432;
 	public int anInt433;
 	public int anIntArray434[];
 	public int anIntArray435[];

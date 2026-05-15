@@ -1138,7 +1138,7 @@ public class Model extends Entity {
 		Class21 class21 = Class21.method238(i);
 		if (class21 == null)
 			return;
-		Class41 class41 = class21.aClass41_432;
+		Skeleton skeleton = class21.aSkeleton_432;
 		if (byte0 == 6)
 			byte0 = 0;
 		else
@@ -1148,7 +1148,7 @@ public class Model extends Entity {
 		transformationPivotZ = 0;
 		for (int j = 0; j < class21.anInt433; j++) {
 			int k = class21.anIntArray434[j];
-			method587(class41.anIntArray698[k], class41.anIntArrayArray699[k], class21.anIntArray435[j],
+			method587(skeleton.opcodes[k], skeleton.boneGroups[k], class21.anIntArray435[j],
 					class21.anIntArray436[j], class21.anIntArray437[j]);
 		}
 
@@ -1169,7 +1169,7 @@ public class Model extends Entity {
 			method585(k, (byte) 6);
 			return;
 		}
-		Class41 class41 = class21.aClass41_432;
+		Skeleton skeleton = class21.aSkeleton_432;
 		transformationPivotX = 0;
 		if (j != 0)
 			aBoolean1641 = !aBoolean1641;
@@ -1180,8 +1180,8 @@ public class Model extends Entity {
 		for (int j1 = 0; j1 < class21.anInt433; j1++) {
 			int k1;
 			for (k1 = class21.anIntArray434[j1]; k1 > i1; i1 = ai[l++]);
-			if (k1 != i1 || class41.anIntArray698[k1] == 0)
-				method587(class41.anIntArray698[k1], class41.anIntArrayArray699[k1], class21.anIntArray435[j1],
+			if (k1 != i1 || skeleton.opcodes[k1] == 0)
+				method587(skeleton.opcodes[k1], skeleton.boneGroups[k1], class21.anIntArray435[j1],
 						class21.anIntArray436[j1], class21.anIntArray437[j1]);
 		}
 
@@ -1193,8 +1193,8 @@ public class Model extends Entity {
 		for (int l1 = 0; l1 < class21_1.anInt433; l1++) {
 			int i2;
 			for (i2 = class21_1.anIntArray434[l1]; i2 > i1; i1 = ai[l++]);
-			if (i2 == i1 || class41.anIntArray698[i2] == 0)
-				method587(class41.anIntArray698[i2], class41.anIntArrayArray699[i2], class21_1.anIntArray435[l1],
+			if (i2 == i1 || skeleton.opcodes[i2] == 0)
+				method587(skeleton.opcodes[i2], skeleton.boneGroups[i2], class21_1.anIntArray435[l1],
 						class21_1.anIntArray436[l1], class21_1.anIntArray437[l1]);
 		}
 
