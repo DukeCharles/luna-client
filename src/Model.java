@@ -1891,7 +1891,7 @@ public class Model extends Entity {
 	 * @param isMouseOver     True if the mouse is within the model's broad bounding box.
 	 * @param modelId         The unique ID for interaction events.
 	 */
-	public void processFaces(boolean needsClipping, boolean isMouseOver, int modelId) {
+	public void processFaces(boolean needsClipping, boolean isMouseOver, int modelId) { //TODO split this method into smaller methods for each stage of the pipeline (culling, picking, sorting, rendering)
 		// Clear the depth bin counters
 		for (int i = 0; i < totalDepthSortingRange; i++) {
 			faceDepthCounts[i] = 0;
@@ -1943,127 +1943,150 @@ public class Model extends Entity {
 			}
 		}
 
+		// --- CASE 1: Rendering without priority layers ---
 		if (facePriorities == null) {
-			for (int i1 = totalDepthSortingRange - 1; i1 >= 0; i1--) {
-				int l1 = faceDepthCounts[i1];
-				if (l1 > 0) {
-					int ai[] = faceDepthBins[i1];
-					for (int j3 = 0; j3 < l1; j3++)
-						drawFace(ai[j3]);
-
+			for (int depth = totalDepthSortingRange - 1; depth >= 0; depth--) {
+				int countAtDepth = faceDepthCounts[depth];
+				if (countAtDepth > 0) {
+					int[] facesAtDepth = faceDepthBins[depth];
+					for (int faceIndex = 0; faceIndex < countAtDepth; faceIndex++)
+						drawFace(facesAtDepth[faceIndex]);
 				}
 			}
-
 			return;
 		}
-		for (int j1 = 0; j1 < 12; j1++) {
-			priorityCounts[j1] = 0;
-			priorityAverages[j1] = 0;
+
+		// --- CASE 2: Rendering with 12 priority layers ---
+		for (int priority = 0; priority < 12; priority++) {
+			priorityCounts[priority] = 0;
+			priorityAverages[priority] = 0;
 		}
 
-		for (int i2 = totalDepthSortingRange - 1; i2 >= 0; i2--) {
-			int k2 = faceDepthCounts[i2];
-			if (k2 > 0) {
-				int ai1[] = faceDepthBins[i2];
-				for (int i4 = 0; i4 < k2; i4++) {
-					int l4 = ai1[i4];
-					int l5 = facePriorities[l4];
-					int j6 = priorityCounts[l5]++;
-					priorityBins[l5][j6] = l4;
-					if (l5 < 10)
-						priorityAverages[l5] += i2;
-					else if (l5 == 10)
-						priorityDepthX[j6] = i2;
+		// Sort depth bins into priority bins
+		for (int depth = totalDepthSortingRange - 1; depth >= 0; depth--) {
+			int countAtDepth = faceDepthCounts[depth];
+			if (countAtDepth > 0) {
+				int[] facesAtDepth = faceDepthBins[depth];
+				for (int faceIndex = 0; faceIndex < countAtDepth; faceIndex++) {
+					int faceId = facesAtDepth[faceIndex];
+					int priority = facePriorities[faceId];
+					int priorityBinIndex = priorityCounts[priority]++;
+					priorityBins[priority][priorityBinIndex] = faceId;
+
+					// Track depth averages for specific tiers to determine intersection points
+					if (priority < 10)
+						priorityAverages[priority] += depth;
+					else if (priority == 10)
+						priorityDepthX[priorityBinIndex] = depth;
 					else
-						priorityDepthY[j6] = i2;
+						priorityDepthY[priorityBinIndex] = depth;
 				}
 
 			}
 		}
 
-		int l2 = 0;
-		if (priorityCounts[1] > 0 || priorityCounts[2] > 0)
-			l2 = (priorityAverages[1] + priorityAverages[2]) / (priorityCounts[1] + priorityCounts[2]);
-		int k3 = 0;
-		if (priorityCounts[3] > 0 || priorityCounts[4] > 0)
-			k3 = (priorityAverages[3] + priorityAverages[4]) / (priorityCounts[3] + priorityCounts[4]);
-		int j4 = 0;
-		if (priorityCounts[6] > 0 || priorityCounts[8] > 0)
-			j4 = (priorityAverages[6] + priorityAverages[8]) / (priorityCounts[6] + priorityCounts[8]);
-		int i6 = 0;
-		int k6 = priorityCounts[10];
-		int ai2[] = priorityBins[10];
-		int ai3[] = priorityDepthX;
-		if (i6 == k6) {
-			i6 = 0;
-			k6 = priorityCounts[11];
-			ai2 = priorityBins[11];
-			ai3 = priorityDepthY;
-		}
-		int i5;
-		if (i6 < k6)
-			i5 = ai3[i6];
-		else
-			i5 = -1000;
-		for (int l6 = 0; l6 < 10; l6++) {
-			while (l6 == 0 && i5 > l2) {
-				drawFace(ai2[i6++]);
-				if (i6 == k6 && ai2 != priorityBins[11]) {
-					i6 = 0;
-					k6 = priorityCounts[11];
-					ai2 = priorityBins[11];
-					ai3 = priorityDepthY;
-				}
-				if (i6 < k6)
-					i5 = ai3[i6];
-				else
-					i5 = -1000;
-			}
-			while (l6 == 3 && i5 > k3) {
-				drawFace(ai2[i6++]);
-				if (i6 == k6 && ai2 != priorityBins[11]) {
-					i6 = 0;
-					k6 = priorityCounts[11];
-					ai2 = priorityBins[11];
-					ai3 = priorityDepthY;
-				}
-				if (i6 < k6)
-					i5 = ai3[i6];
-				else
-					i5 = -1000;
-			}
-			while (l6 == 5 && i5 > j4) {
-				drawFace(ai2[i6++]);
-				if (i6 == k6 && ai2 != priorityBins[11]) {
-					i6 = 0;
-					k6 = priorityCounts[11];
-					ai2 = priorityBins[11];
-					ai3 = priorityDepthY;
-				}
-				if (i6 < k6)
-					i5 = ai3[i6];
-				else
-					i5 = -1000;
-			}
-			int i7 = priorityCounts[l6];
-			int ai4[] = priorityBins[l6];
-			for (int j7 = 0; j7 < i7; j7++)
-				drawFace(ai4[j7]);
-
+		// Calculate depth thresholds for specific priority tiers
+		int avgDepthTier1and2 = 0;
+		if (priorityCounts[1] > 0 || priorityCounts[2] > 0) {
+			avgDepthTier1and2 = (priorityAverages[1] + priorityAverages[2]) / (priorityCounts[1] + priorityCounts[2]);
 		}
 
-		while (i5 != -1000) {
-			drawFace(ai2[i6++]);
-			if (i6 == k6 && ai2 != priorityBins[11]) {
-				i6 = 0;
-				ai2 = priorityBins[11];
-				k6 = priorityCounts[11];
-				ai3 = priorityDepthY;
+		int avgDepthTier3and4 = 0;
+		if (priorityCounts[3] > 0 || priorityCounts[4] > 0) {
+			avgDepthTier3and4 = (priorityAverages[3] + priorityAverages[4]) / (priorityCounts[3] + priorityCounts[4]);
+		}
+
+		int avgDepthTier6and8 = 0;
+		if (priorityCounts[6] > 0 || priorityCounts[8] > 0) {
+			avgDepthTier6and8 = (priorityAverages[6] + priorityAverages[8]) / (priorityCounts[6] + priorityCounts[8]);
+		}
+
+		// Initialize pointers for high-priority (tier 10/11) rendering
+		int highPriorityPointer = 0;
+		int highPriorityLimit = priorityCounts[10];
+		int[] highPriorityFaceBin = priorityBins[10];
+		int[] highPriorityDepthBin = priorityDepthX;
+		// If Priority 10 is empty, move immediately to Priority 11
+		if (highPriorityPointer == highPriorityLimit) {
+			highPriorityPointer = 0;
+			highPriorityLimit = priorityCounts[11];
+			highPriorityFaceBin = priorityBins[11];
+			highPriorityDepthBin = priorityDepthY;
+		}
+
+		int currentHighPriorityDepth;
+		if (highPriorityPointer < highPriorityLimit) {
+			currentHighPriorityDepth = highPriorityDepthBin[highPriorityPointer];
+		}
+		else {
+			currentHighPriorityDepth = -1000;
+		}
+
+		// Main Rendering Loop: Priority Levels 0-9
+		for (int priorityLevel = 0; priorityLevel < 10; priorityLevel++) {
+			while (priorityLevel == 0 && currentHighPriorityDepth > avgDepthTier1and2) {
+				drawFace(highPriorityFaceBin[highPriorityPointer++]);
+				if (highPriorityPointer == highPriorityLimit && highPriorityFaceBin != priorityBins[11]) {
+					highPriorityPointer = 0;
+					highPriorityLimit = priorityCounts[11];
+					highPriorityFaceBin = priorityBins[11];
+					highPriorityDepthBin = priorityDepthY;
+				}
+				if (highPriorityPointer < highPriorityLimit)
+					currentHighPriorityDepth = highPriorityDepthBin[highPriorityPointer];
+				else
+					currentHighPriorityDepth = -1000;
 			}
-			if (i6 < k6)
-				i5 = ai3[i6];
+
+			while (priorityLevel == 3 && currentHighPriorityDepth > avgDepthTier3and4) {
+				drawFace(highPriorityFaceBin[highPriorityPointer++]);
+				if (highPriorityPointer == highPriorityLimit && highPriorityFaceBin != priorityBins[11]) {
+					highPriorityPointer = 0;
+					highPriorityLimit = priorityCounts[11];
+					highPriorityFaceBin = priorityBins[11];
+					highPriorityDepthBin = priorityDepthY;
+				}
+				if (highPriorityPointer < highPriorityLimit)
+					currentHighPriorityDepth = highPriorityDepthBin[highPriorityPointer];
+				else
+					currentHighPriorityDepth = -1000;
+			}
+
+			while (priorityLevel == 5 && currentHighPriorityDepth > avgDepthTier6and8) {
+				drawFace(highPriorityFaceBin[highPriorityPointer++]);
+				if (highPriorityPointer == highPriorityLimit && highPriorityFaceBin != priorityBins[11]) {
+					highPriorityPointer = 0;
+					highPriorityLimit = priorityCounts[11];
+					highPriorityFaceBin = priorityBins[11];
+					highPriorityDepthBin = priorityDepthY;
+				}
+				if (highPriorityPointer < highPriorityLimit)
+					currentHighPriorityDepth = highPriorityDepthBin[highPriorityPointer];
+				else
+					currentHighPriorityDepth = -1000;
+			}
+
+			// Draw faces for the current standard priority level (0-9)
+			int facesInLevelCount = priorityCounts[priorityLevel];
+			int[] facesInLevel = priorityBins[priorityLevel];
+			for (int i = 0; i < facesInLevelCount; i++) {
+				drawFace(facesInLevel[i]);
+			}
+		}
+
+		// Flush remaining high-priority faces (10 and 11)
+		while (currentHighPriorityDepth != -1000) {
+			drawFace(highPriorityFaceBin[highPriorityPointer++]);
+			if (highPriorityPointer == highPriorityLimit && highPriorityFaceBin != priorityBins[11]) {
+				highPriorityPointer = 0;
+				highPriorityFaceBin = priorityBins[11];
+				highPriorityLimit = priorityCounts[11];
+				highPriorityDepthBin = priorityDepthY;
+			}
+			if (highPriorityPointer < highPriorityLimit)
+				currentHighPriorityDepth = highPriorityDepthBin[highPriorityPointer];
 			else
-				i5 = -1000;
+				currentHighPriorityDepth = -1000;
 		}
 	}
 
