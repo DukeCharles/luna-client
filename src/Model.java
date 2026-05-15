@@ -1891,7 +1891,8 @@ public class Model extends Entity {
 	 * @param isMouseOver     True if the mouse is within the model's broad bounding box.
 	 * @param modelId         The unique ID for interaction events.
 	 */
-	public void processFaces(boolean needsClipping, boolean isMouseOver, int modelId) { //TODO split this method into smaller methods for each stage of the pipeline (culling, picking, sorting, rendering)
+	public void processFaces(boolean needsClipping, boolean isMouseOver, int modelId) {
+		//TODO split this method into smaller methods for each stage of the pipeline (culling, picking, sorting, rendering)
 		// Clear the depth bin counters
 		for (int i = 0; i < totalDepthSortingRange; i++) {
 			faceDepthCounts[i] = 0;
