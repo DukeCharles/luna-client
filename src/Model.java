@@ -646,9 +646,9 @@ public class Model extends Entity {
 	public static int[] clippedProjectedX = new int[10];
 	public static int[] clippedProjectedY = new int[10];
 	public static int[] clippedVertexColors = new int[10];
-	public static int anInt1702;
-	public static int anInt1703;
-	public static int anInt1704;
+	public static int transformationPivotX;
+	public static int transformationPivotY;
+	public static int transformationPivotZ;
 	public static boolean isPickingEnabled;
 	public static int mouseX;
 	public static int mouseY;
