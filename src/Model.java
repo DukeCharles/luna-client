@@ -27,7 +27,7 @@ public class Model extends Entity {
 			dummyMagicNumber = -110;
 	}
 
-	public Model(int i, int j) {
+	public Model(int modelId, int dummyInt) {
 		dummyVar = 932;
 		dummVar2 = 426;
 
@@ -38,139 +38,170 @@ public class Model extends Entity {
 		isPriorityPicking = false;
 		instanceCount++;
 
-		ModelHeader modelHeader = Model.modelHeaders[i];
+		ModelHeader modelHeader = Model.modelHeaders[modelId];
 		verticesCount = modelHeader.vertexCount;
 		faceCount = modelHeader.faceCount;
 		textureVertexCount = modelHeader.textureVertexCount;
+
+		// Allocate coordinate arrays
 		verticesX = new int[verticesCount];
 		verticesY = new int[verticesCount];
 		verticesZ = new int[verticesCount];
+
+		// Allocate face indexing arrays
 		faceIndicesX = new int[faceCount];
 		faceIndicesY = new int[faceCount];
 		faceIndicesZ = new int[faceCount];
+
+		// Allocate texture mapping arrays
 		textureVertexIndicesA = new int[textureVertexCount];
 		textureVertexIndicesB = new int[textureVertexCount];
 		textureVertexIndicesC = new int[textureVertexCount];
-		if (modelHeader.vertexBoneOffset >= 0)
-			vertexBoneIds = new int[verticesCount];
-		if (modelHeader.faceRenderTypeOffset >= 0)
-			faceRenderTypes = new int[faceCount];
-		if (modelHeader.facePriorityOffset >= 0)
-			facePriorities = new int[faceCount];
-		else
+
+		// Optional attribute allocation based on header offsets
+		if (modelHeader.vertexBoneOffset >= 0) vertexBoneIds = new int[verticesCount];
+		if (modelHeader.faceRenderTypeOffset >= 0) faceRenderTypes = new int[faceCount];
+		if (modelHeader.facePriorityOffset >= 0) facePriorities = new int[faceCount];
+		else {
 			defaultPriority = -modelHeader.facePriorityOffset - 1;
-		if (modelHeader.faceTransparencyOffset >= 0)
-			faceTransparency = new int[faceCount];
-		if (modelHeader.faceBoneOffset >= 0)
-			faceBoneIds = new int[faceCount];
+		}
+
+		if (modelHeader.faceTransparencyOffset >= 0) faceTransparency = new int[faceCount];
+		if (modelHeader.faceBoneOffset >= 0) faceBoneIds = new int[faceCount];
+
 		colors = new int[faceCount];
-		JagBuffer class50_sub1_sub2 = new JagBuffer(modelHeader.rawModelData);
-		class50_sub1_sub2.position = modelHeader.vertexFlagsOffset;
-		JagBuffer class50_sub1_sub2_1 = new JagBuffer(modelHeader.rawModelData);
-		class50_sub1_sub2_1.position = modelHeader.vertexXOffset;
-		JagBuffer class50_sub1_sub2_2 = new JagBuffer(modelHeader.rawModelData);
-		class50_sub1_sub2_2.position = modelHeader.vertexYOffset;
+
+		// Initialize buffers for vertex data
+		JagBuffer vertexFlagsBuffer = new JagBuffer(modelHeader.rawModelData);
+		vertexFlagsBuffer.position = modelHeader.vertexFlagsOffset;
+
+		JagBuffer vertexXBuffer = new JagBuffer(modelHeader.rawModelData);
+		vertexXBuffer.position = modelHeader.vertexXOffset;
+
+		JagBuffer vertexYBuffer = new JagBuffer(modelHeader.rawModelData);
+		vertexYBuffer.position = modelHeader.vertexYOffset;
 
 
-		if (j >= 0)
+		if (dummyInt >= 0) //TODO REMOVE DUMMY, ITS USELESS
 			isModified = !isModified;
-		JagBuffer class50_sub1_sub2_3 = new JagBuffer(modelHeader.rawModelData);
-		class50_sub1_sub2_3.position = modelHeader.vertexZOffset;
-		JagBuffer class50_sub1_sub2_4 = new JagBuffer(modelHeader.rawModelData);
-		class50_sub1_sub2_4.position = modelHeader.vertexBoneOffset;
-		int k = 0;
-		int l = 0;
-		int i1 = 0;
-		for (int j1 = 0; j1 < verticesCount; j1++) {
-			int k1 = class50_sub1_sub2.getByte();
-			int i2 = 0;
-			if ((k1 & 1) != 0)
-				i2 = class50_sub1_sub2_1.getSignedSmart();
-			int k2 = 0;
-			if ((k1 & 2) != 0)
-				k2 = class50_sub1_sub2_2.getSignedSmart();
-			int i3 = 0;
-			if ((k1 & 4) != 0)
-				i3 = class50_sub1_sub2_3.getSignedSmart();
-			verticesX[j1] = k + i2;
-			verticesY[j1] = l + k2;
-			verticesZ[j1] = i1 + i3;
-			k = verticesX[j1];
-			l = verticesY[j1];
-			i1 = verticesZ[j1];
-			if (vertexBoneIds != null)
-				vertexBoneIds[j1] = class50_sub1_sub2_4.getByte();
+
+		JagBuffer vertexZBuffer = new JagBuffer(modelHeader.rawModelData);
+		vertexZBuffer.position = modelHeader.vertexZOffset;
+
+		JagBuffer vertexBoneBuffer = new JagBuffer(modelHeader.rawModelData);
+		vertexBoneBuffer.position = modelHeader.vertexBoneOffset;
+
+		// --- Vertex Decoding (Delta Encoding) ---
+		int lastX = 0;
+		int lastY = 0;
+		int lastZ = 0;
+
+		for (int V = 0; V < verticesCount; V++) {
+
+			int flag = vertexFlagsBuffer.getByte();
+
+			int deltaX = 0;
+			if ((flag & 1) != 0) {
+				deltaX = vertexXBuffer.getSignedSmart();
+			}
+
+			int deltaY = 0;
+			if ((flag & 2) != 0) {
+				deltaY = vertexYBuffer.getSignedSmart();
+			}
+
+			int deltaZ = 0;
+			if ((flag & 4) != 0) {
+				deltaZ = vertexZBuffer.getSignedSmart();
+			}
+
+			verticesX[V] = lastX + deltaX;
+			verticesY[V] = lastY + deltaY;
+			verticesZ[V] = lastZ + deltaZ;
+
+			lastX = verticesX[V];
+			lastY = verticesY[V];
+			lastZ = verticesZ[V];
+
+			if (vertexBoneIds != null) {
+				vertexBoneIds[V] = vertexBoneBuffer.getByte();
+				}
 		}
 
-		class50_sub1_sub2.position = modelHeader.faceColorOffset;
-		class50_sub1_sub2_1.position = modelHeader.faceRenderTypeOffset;
-		class50_sub1_sub2_2.position = modelHeader.facePriorityOffset;
-		class50_sub1_sub2_3.position = modelHeader.faceTransparencyOffset;
-		class50_sub1_sub2_4.position = modelHeader.faceBoneOffset;
-		for (int l1 = 0; l1 < faceCount; l1++) {
-			colors[l1] = class50_sub1_sub2.getShort();
-			if (faceRenderTypes != null)
-				faceRenderTypes[l1] = class50_sub1_sub2_1.getByte();
-			if (facePriorities != null)
-				facePriorities[l1] = class50_sub1_sub2_2.getByte();
-			if (faceTransparency != null)
-				faceTransparency[l1] = class50_sub1_sub2_3.getByte();
-			if (faceBoneIds != null)
-				faceBoneIds[l1] = class50_sub1_sub2_4.getByte();
+		// These buffers were used for vertices, now they are being pointed to face data blocks
+		vertexFlagsBuffer.position = modelHeader.faceColorOffset;
+		vertexXBuffer.position = modelHeader.faceRenderTypeOffset;
+		vertexYBuffer.position = modelHeader.facePriorityOffset;
+		vertexZBuffer.position = modelHeader.faceTransparencyOffset;
+		vertexBoneBuffer.position = modelHeader.faceBoneOffset;
+
+		for (int f = 0; f < faceCount; f++) {
+			// vertexFlagsBuffer is now acting as the faceColorBuffer
+			colors[f] = vertexFlagsBuffer.getShort();
+
+			if (faceRenderTypes != null) faceRenderTypes[f] = vertexXBuffer.getByte();
+			if (facePriorities != null) facePriorities[f] = vertexYBuffer.getByte();
+			if (faceTransparency != null) faceTransparency[f] = vertexZBuffer.getByte();
+			if (faceBoneIds != null) faceBoneIds[f] = vertexBoneBuffer.getByte();
+
 		}
 
-		class50_sub1_sub2.position = modelHeader.faceIndicesOffset;
-		class50_sub1_sub2_1.position = modelHeader.faceTypeOffset;
-		int j2 = 0;
-		int l2 = 0;
-		int j3 = 0;
-		int k3 = 0;
-		for (int l3 = 0; l3 < faceCount; l3++) {
-			int i4 = class50_sub1_sub2_1.getByte();
-			if (i4 == 1) {
-				j2 = class50_sub1_sub2.getSignedSmart() + k3;
-				k3 = j2;
-				l2 = class50_sub1_sub2.getSignedSmart() + k3;
-				k3 = l2;
-				j3 = class50_sub1_sub2.getSignedSmart() + k3;
-				k3 = j3;
-				faceIndicesX[l3] = j2;
-				faceIndicesY[l3] = l2;
-				faceIndicesZ[l3] = j3;
+		vertexFlagsBuffer.position = modelHeader.faceIndicesOffset;
+		vertexXBuffer.position = modelHeader.faceTypeOffset;
+
+		int indexA = 0;
+		int indexB = 0;
+		int indexC = 0;
+		int lastIndex = 0;
+
+		for (int f = 0; f < faceCount; f++) {
+			int topologyType = vertexXBuffer.getByte();
+			if (topologyType == 1) { // New triangle
+				indexA = vertexFlagsBuffer.getSignedSmart() + lastIndex;
+				lastIndex = indexA;
+				indexB = vertexFlagsBuffer.getSignedSmart() + lastIndex;
+				lastIndex = indexB;
+				indexC = vertexFlagsBuffer.getSignedSmart() + lastIndex;
+				lastIndex = indexC;
+
+				faceIndicesX[f] = indexA;
+				faceIndicesY[f] = indexB;
+				faceIndicesZ[f] = indexC;
 			}
-			if (i4 == 2) {
-				l2 = j3;
-				j3 = class50_sub1_sub2.getSignedSmart() + k3;
-				k3 = j3;
-				faceIndicesX[l3] = j2;
-				faceIndicesY[l3] = l2;
-				faceIndicesZ[l3] = j3;
+			if (topologyType == 2) { // Triangle Strip
+				indexB = indexC;
+				indexC = vertexFlagsBuffer.getSignedSmart() + lastIndex;
+				lastIndex = indexC;
+				faceIndicesX[f] = indexA;
+				faceIndicesY[f] = indexB;
+				faceIndicesZ[f] = indexC;
 			}
-			if (i4 == 3) {
-				j2 = j3;
-				j3 = class50_sub1_sub2.getSignedSmart() + k3;
-				k3 = j3;
-				faceIndicesX[l3] = j2;
-				faceIndicesY[l3] = l2;
-				faceIndicesZ[l3] = j3;
+			if (topologyType == 3) { // Triangle Fan
+				indexA = indexC;
+				indexC = vertexFlagsBuffer.getSignedSmart() + lastIndex;
+				lastIndex = indexC;
+				faceIndicesX[f] = indexA;
+				faceIndicesY[f] = indexB;
+				faceIndicesZ[f] = indexC;
 			}
-			if (i4 == 4) {
-				int k4 = j2;
-				j2 = l2;
-				l2 = k4;
-				j3 = class50_sub1_sub2.getSignedSmart() + k3;
-				k3 = j3;
-				faceIndicesX[l3] = j2;
-				faceIndicesY[l3] = l2;
-				faceIndicesZ[l3] = j3;
+			if (topologyType == 4) { // Swapped/Mirrored Triangle
+				int k4 = indexA;
+				indexA = indexB;
+				indexB = k4;
+				indexC = vertexFlagsBuffer.getSignedSmart() + lastIndex;
+				lastIndex = indexC;
+				faceIndicesX[f] = indexA;
+				faceIndicesY[f] = indexB;
+				faceIndicesZ[f] = indexC;
 			}
 		}
 
-		class50_sub1_sub2.position = modelHeader.textureMappingOffset;
-		for (int j4 = 0; j4 < textureVertexCount; j4++) {
-			textureVertexIndicesA[j4] = class50_sub1_sub2.getShort();
-			textureVertexIndicesB[j4] = class50_sub1_sub2.getShort();
-			textureVertexIndicesC[j4] = class50_sub1_sub2.getShort();
+		// --- Texture Mapping Decoding ---
+		vertexFlagsBuffer.position = modelHeader.textureMappingOffset;
+		for (int t = 0; t < textureVertexCount; t++) {
+			textureVertexIndicesA[t] = vertexFlagsBuffer.getShort();
+			textureVertexIndicesB[t] = vertexFlagsBuffer.getShort();
+			textureVertexIndicesC[t] = vertexFlagsBuffer.getShort();
 		}
 
 	}
