@@ -405,71 +405,93 @@ public class Model extends Entity {
 		calculateRadius();
 	}
 
-	public Model(boolean flag, boolean flag1, boolean flag2,
-				 Model model, boolean flag3) {
-		dummyVar = 932;
-		dummVar2 = 426;
+	/**
+	 * Creates a new model derived from a source model, allowing for specific
+	 * data arrays to be either shared by reference or deep-copied.
+	 *
+	 * @param shareVertices     If true, vertex coordinates are shared; if false, they are deep-copied.
+	 * @param isStatic          If true, sets a specific sentinel value (498) often used for non-animated objects. MIGHT BE A DUMMY
+	 * @param shareColors       If true, face colors are shared; if false, they are deep-copied.
+	 * @param source            The template model to derive data from.
+	 * @param shareTransparency If true, transparency values are shared; if false, they are deep-copied.
+	 */
+	public Model(boolean shareVertices, boolean isStatic, boolean shareColors,
+				 Model source, boolean shareTransparency) {
+		dummyVar = 932; //TODO REMOVE DUMMY
+		dummVar2 = 426; //TODO REMOVE DUMMY
 		isClickable = false;
 		shadingEnabled = true;
-		dummyMagicNumber = -252;
+		dummyMagicNumber = -252; //TODO REMOVE DUMMY
 		isModified = false;
 		isPriorityPicking = false;
 		instanceCount++;
-		verticesCount = model.verticesCount;
-		faceCount = model.faceCount;
-		textureVertexCount = model.textureVertexCount;
+
+		verticesCount = source.verticesCount;
+		faceCount = source.faceCount;
+		textureVertexCount = source.textureVertexCount;
 
 
-		if (flag1)
+		if (isStatic) {
 			dummyMagicNumber = 498;
-		if (flag) {
-			verticesX = model.verticesX;
-			verticesY = model.verticesY;
-			verticesZ = model.verticesZ;
+		}
+
+		// --- Vertex Handling ---
+		if (shareVertices) {
+			verticesX = source.verticesX;
+			verticesY = source.verticesY;
+			verticesZ = source.verticesZ;
 		} else {
 			verticesX = new int[verticesCount];
 			verticesY = new int[verticesCount];
 			verticesZ = new int[verticesCount];
-			for (int i = 0; i < verticesCount; i++) {
-				verticesX[i] = model.verticesX[i];
-				verticesY[i] = model.verticesY[i];
-				verticesZ[i] = model.verticesZ[i];
+			for (int v = 0; v < verticesCount; v++) {
+				verticesX[v] = source.verticesX[v];
+				verticesY[v] = source.verticesY[v];
+				verticesZ[v] = source.verticesZ[v];
 			}
-
 		}
-		if (flag2) {
-			colors = model.colors;
+
+		// --- Color Handling ---
+		if (shareColors) {
+			colors = source.colors;
 		} else {
 			colors = new int[faceCount];
-			for (int j = 0; j < faceCount; j++)
-				colors[j] = model.colors[j];
-
-		}
-		if (flag3) {
-			faceTransparency = model.faceTransparency;
-		} else {
-			faceTransparency = new int[faceCount];
-			if (model.faceTransparency == null) {
-				for (int k = 0; k < faceCount; k++)
-					faceTransparency[k] = 0;
-
-			} else {
-				for (int l = 0; l < faceCount; l++)
-					faceTransparency[l] = model.faceTransparency[l];
-
+			for (int f = 0; f < faceCount; f++) {
+				colors[f] = source.colors[f];
 			}
 		}
-		vertexBoneIds = model.vertexBoneIds;
-		faceBoneIds = model.faceBoneIds;
-		faceRenderTypes = model.faceRenderTypes;
-		faceIndicesX = model.faceIndicesX;
-		faceIndicesY = model.faceIndicesY;
-		faceIndicesZ = model.faceIndicesZ;
-		facePriorities = model.facePriorities;
-		defaultPriority = model.defaultPriority;
-		textureVertexIndicesA = model.textureVertexIndicesA;
-		textureVertexIndicesB = model.textureVertexIndicesB;
-		textureVertexIndicesC = model.textureVertexIndicesC;
+
+		// --- Transparency Handling ---
+		if (shareTransparency) {
+			faceTransparency = source.faceTransparency;
+		} else {
+			faceTransparency = new int[faceCount];
+			if (source.faceTransparency == null) {
+				for (int f = 0; f < faceCount; f++) {
+					faceTransparency[f] = 0;
+					}
+
+			} else {
+				for (int f = 0; f < faceCount; f++) {
+					faceTransparency[f] = source.faceTransparency[f];
+				}
+			}
+		}
+
+		// --- Constant/Shared Attributes ---
+		// These are typically indices or bone definitions that aren't
+		// modified at runtime, so they are safe to share by reference.
+		vertexBoneIds = source.vertexBoneIds;
+		faceBoneIds = source.faceBoneIds;
+		faceRenderTypes = source.faceRenderTypes;
+		faceIndicesX = source.faceIndicesX;
+		faceIndicesY = source.faceIndicesY;
+		faceIndicesZ = source.faceIndicesZ;
+		facePriorities = source.facePriorities;
+		defaultPriority = source.defaultPriority;
+		textureVertexIndicesA = source.textureVertexIndicesA;
+		textureVertexIndicesB = source.textureVertexIndicesB;
+		textureVertexIndicesC = source.textureVertexIndicesC;
 	}
 
 	public Model(boolean flag, boolean flag1, int i, Model model) {
