@@ -227,7 +227,7 @@ public class ObjectDefinition {
             class50_sub1_sub4_sub4_3.translate(anInt761, anInt785, anInt766);
         class50_sub1_sub4_sub4_3.initLighting(64 + aByte784, 768 + aByte787 * 5, -50, -10, -50, !aBoolean804);
         if (anInt794 == 1)
-            class50_sub1_sub4_sub4_3.anInt1675 = ((Entity) (class50_sub1_sub4_sub4_3)).height;
+            class50_sub1_sub4_sub4_3.modelHeight = ((Entity) (class50_sub1_sub4_sub4_3)).height;
         aClass33_762.put(class50_sub1_sub4_sub4_3, l1);
         return class50_sub1_sub4_sub4_3;
     }

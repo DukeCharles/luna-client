@@ -289,7 +289,7 @@ public class SceneGraph {
 		if (class50_sub3 != null) {
 			for (int l1 = 0; l1 < class50_sub3.anInt1407; l1++)
 				if (class50_sub3.class5[l1].entity instanceof Model) {
-					int i2 = ((Model) class50_sub3.class5[l1].entity).anInt1675;
+					int i2 = ((Model) class50_sub3.class5[l1].entity).modelHeight;
 					if (i2 > k1)
 						k1 = i2;
 				}

@@ -20,11 +20,11 @@ public class Model extends Entity {
 		dummVar2 = 426;
 		isClickable = false;
 		shadingEnabled = true;
-		modelHeight = -252;
+		dummyMagicNumber = -252;
 		isModified = false;
 		isPriorityPicking = false;
 		if (id <= 0)
-			modelHeight = -110;
+			dummyMagicNumber = -110;
 	}
 
 	public Model(int i, int j) {
@@ -33,7 +33,7 @@ public class Model extends Entity {
 
 		isClickable = false;
 		shadingEnabled = true;
-		modelHeight = -252;
+		dummyMagicNumber = -252;
 		isModified = false;
 		isPriorityPicking = false;
 		instanceCount++;
@@ -180,7 +180,7 @@ public class Model extends Entity {
 		dummVar2 = 426;
 		isClickable = false;
 		shadingEnabled = true;
-		modelHeight = -252;
+		dummyMagicNumber = -252;
 		isModified = false;
 		isPriorityPicking = false;
 		instanceCount++;
@@ -291,7 +291,7 @@ public class Model extends Entity {
 		dummVar2 = 426;
 		isClickable = false;
 		shadingEnabled = true;
-		modelHeight = -252;
+		dummyMagicNumber = -252;
 		isModified = false;
 		isPriorityPicking = false;
 		instanceCount++;
@@ -411,7 +411,7 @@ public class Model extends Entity {
 		dummVar2 = 426;
 		isClickable = false;
 		shadingEnabled = true;
-		modelHeight = -252;
+		dummyMagicNumber = -252;
 		isModified = false;
 		isPriorityPicking = false;
 		instanceCount++;
@@ -421,7 +421,7 @@ public class Model extends Entity {
 
 
 		if (flag1)
-			modelHeight = 498;
+			dummyMagicNumber = 498;
 		if (flag) {
 			verticesX = model.verticesX;
 			verticesY = model.verticesY;
@@ -477,7 +477,7 @@ public class Model extends Entity {
 		dummVar2 = 426;
 		isClickable = false;
 		shadingEnabled = true;
-		modelHeight = -252;
+		dummyMagicNumber = -252;
 		isModified = false;
 		isPriorityPicking = false;
 		instanceCount++;
@@ -571,7 +571,7 @@ public class Model extends Entity {
 	public int dummVar2;
 	public boolean isClickable;
 	public boolean shadingEnabled;
-	public int modelHeight;
+	public int dummyMagicNumber;
 	public boolean isModified;
 	public static int instanceCount;
 	public static Model SCRATCH_MODEL = new Model(852);
@@ -619,7 +619,7 @@ public class Model extends Entity {
 	public int maxBottomExtent;
 	public int totalDepthSortingRange;
 	public int modelBoundingSphere;
-	public int anInt1675;
+	public int modelHeight;
 	public int[] vertexBoneIds;
 	public int[] faceBoneIds;
 	public int[][] vertexIndicesByBone;
