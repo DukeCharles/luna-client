@@ -286,7 +286,15 @@ public class Model extends Entity {
 
 	}
 
-	public Model(int i, boolean flag, int j, Model[] modelsTable) {
+	/**
+	 * Assembles multiple models into a single combined model.
+	 *
+	 * @param modelCount    The number of models from the table to merge.
+	 * @param dummyFlag     A dummy boolean (unused in this implementation). //TODO REMOVE DUMMY
+	 * @param dummyInt A validation integer (expected to be 0). //TODO REMOVE DUMMY
+	 * @param sourceModels  An array of models to be merged into this instance.
+	 */
+	public Model(int modelCount, boolean dummyFlag, int dummyInt, Model[] sourceModels) {
 		dummyVar = 932;
 		dummVar2 = 426;
 		isClickable = false;
@@ -295,34 +303,45 @@ public class Model extends Entity {
 		isModified = false;
 		isPriorityPicking = false;
 		instanceCount++;
-		boolean flag1 = false;
-		boolean flag2 = false;
-		boolean flag3 = false;
-		boolean flag4 = false;
+
+		boolean anyHasRenderTypes = false;
+		boolean anyHasFacePriorities = false;
+		boolean anyHasTransparency = false;
+		boolean anyHasColors = false;
+
 		verticesCount = 0;
 		faceCount = 0;
 		textureVertexCount = 0;
 		defaultPriority = -1;
-		for (int k = 0; k < i; k++) {
-			Model model = modelsTable[k];
+
+		// --- Pass 1: Analysis ---
+		// Calculate total size and detect which attribute arrays need allocation.
+		for (int m = 0; m < modelCount; m++) {
+			Model model = sourceModels[m];
 			if (model != null) {
 				verticesCount += model.verticesCount;
 				faceCount += model.faceCount;
 				textureVertexCount += model.textureVertexCount;
-				flag1 |= model.faceRenderTypes != null;
+
+				anyHasRenderTypes |= model.faceRenderTypes != null;
+
 				if (model.facePriorities != null) {
-					flag2 = true;
+					anyHasFacePriorities = true;
 				} else {
-					if (defaultPriority == -1)
+					if (defaultPriority == -1) {
 						defaultPriority = model.defaultPriority;
-					if (defaultPriority != model.defaultPriority)
-						flag2 = true;
+					}
+					if (defaultPriority != model.defaultPriority) {
+						anyHasFacePriorities = true;
+					}
 				}
-				flag3 |= model.faceTransparency != null;
-				flag4 |= model.colors != null;
+
+				anyHasTransparency |= model.faceTransparency != null;
+				anyHasColors |= model.colors != null;
 			}
 		}
 
+		// Allocate merged arrays
 		verticesX = new int[verticesCount];
 		verticesY = new int[verticesCount];
 		verticesZ = new int[verticesCount];
@@ -335,70 +354,93 @@ public class Model extends Entity {
 		textureVertexIndicesA = new int[textureVertexCount];
 		textureVertexIndicesB = new int[textureVertexCount];
 		textureVertexIndicesC = new int[textureVertexCount];
-		if (flag1)
-			faceRenderTypes = new int[faceCount];
-		if (flag2)
-			facePriorities = new int[faceCount];
-		if (flag3)
-			faceTransparency = new int[faceCount];
-		if (flag4)
-			colors = new int[faceCount];
+
+		if (anyHasRenderTypes) faceRenderTypes = new int[faceCount];
+		if (anyHasFacePriorities) facePriorities = new int[faceCount];
+		if (anyHasTransparency) faceTransparency = new int[faceCount];
+		if (anyHasColors) colors = new int[faceCount];
+
+		// Reset counters for the copy pass
 		verticesCount = 0;
-		if (j != 0)
-			throw new NullPointerException();
 		faceCount = 0;
 		textureVertexCount = 0;
-		int l = 0;
-		for (int i1 = 0; i1 < i; i1++) {
-			Model class50_sub1_sub4_sub4_1 = modelsTable[i1];
-			if (class50_sub1_sub4_sub4_1 != null) {
-				int j1 = verticesCount;
-				for (int k1 = 0; k1 < class50_sub1_sub4_sub4_1.verticesCount; k1++) {
-					verticesX[verticesCount] = class50_sub1_sub4_sub4_1.verticesX[k1];
-					verticesY[verticesCount] = class50_sub1_sub4_sub4_1.verticesY[k1];
-					verticesZ[verticesCount] = class50_sub1_sub4_sub4_1.verticesZ[k1];
+
+		//TODO REMOVE
+		if (dummyInt != 0)
+			throw new NullPointerException();
+
+		int textureOffset = 0;
+
+		// --- Pass 2: Merging ---
+		for (int m = 0; m < modelCount; m++) {
+			Model source = sourceModels[m];
+			if (source != null) {
+				int baseVertexIndex = verticesCount;
+				for (int v = 0; v < source.verticesCount; v++) {
+					verticesX[verticesCount] = source.verticesX[v];
+					verticesY[verticesCount] = source.verticesY[v];
+					verticesZ[verticesCount] = source.verticesZ[v];
 					verticesCount++;
 				}
 
-				for (int l1 = 0; l1 < class50_sub1_sub4_sub4_1.faceCount; l1++) {
-					faceIndicesX[faceCount] = class50_sub1_sub4_sub4_1.faceIndicesX[l1] + j1;
-					faceIndicesY[faceCount] = class50_sub1_sub4_sub4_1.faceIndicesY[l1] + j1;
-					faceIndicesZ[faceCount] = class50_sub1_sub4_sub4_1.faceIndicesZ[l1] + j1;
-					faceColorsA[faceCount] = class50_sub1_sub4_sub4_1.faceColorsA[l1];
-					faceColorsB[faceCount] = class50_sub1_sub4_sub4_1.faceColorsB[l1];
-					faceColorsC[faceCount] = class50_sub1_sub4_sub4_1.faceColorsC[l1];
-					if (flag1)
-						if (class50_sub1_sub4_sub4_1.faceRenderTypes == null) {
+				// Copy Faces
+				for (int f = 0; f < source.faceCount; f++) {
+					// Offset the face indices so they point to the new vertex positions
+					faceIndicesX[faceCount] = source.faceIndicesX[f] + baseVertexIndex;
+					faceIndicesY[faceCount] = source.faceIndicesY[f] + baseVertexIndex;
+					faceIndicesZ[faceCount] = source.faceIndicesZ[f] + baseVertexIndex;
+
+					faceColorsA[faceCount] = source.faceColorsA[f];
+					faceColorsB[faceCount] = source.faceColorsB[f];
+					faceColorsC[faceCount] = source.faceColorsC[f];
+
+					if (anyHasRenderTypes) {
+						if (source.faceRenderTypes == null) {
 							faceRenderTypes[faceCount] = 0;
 						} else {
-							int i2 = class50_sub1_sub4_sub4_1.faceRenderTypes[l1];
-							if ((i2 & 2) == 2)
-								i2 += l << 2;
-							faceRenderTypes[faceCount] = i2;
+							int renderType = source.faceRenderTypes[f];
+							// If it's a textured face, offset the texture index bits
+							if ((renderType & 2) == 2) {
+								renderType += textureOffset << 2;
+							}
+							faceRenderTypes[faceCount] = renderType;
 						}
-					if (flag2)
-						if (class50_sub1_sub4_sub4_1.facePriorities == null)
-							facePriorities[faceCount] = class50_sub1_sub4_sub4_1.defaultPriority;
-						else
-							facePriorities[faceCount] = class50_sub1_sub4_sub4_1.facePriorities[l1];
-					if (flag3)
-						if (class50_sub1_sub4_sub4_1.faceTransparency == null)
+					}
+
+					if (anyHasFacePriorities) {
+						if (source.facePriorities == null) {
+							facePriorities[faceCount] = source.defaultPriority;
+						}
+						else {
+							facePriorities[faceCount] = source.facePriorities[f];
+						}
+					}
+
+					if (anyHasTransparency) {
+						if (source.faceTransparency == null) {
 							faceTransparency[faceCount] = 0;
-						else
-							faceTransparency[faceCount] = class50_sub1_sub4_sub4_1.faceTransparency[l1];
-					if (flag4 && class50_sub1_sub4_sub4_1.colors != null)
-						colors[faceCount] = class50_sub1_sub4_sub4_1.colors[l1];
+						}
+						else {
+							faceTransparency[faceCount] = source.faceTransparency[f];
+							}
+					}
+
+					if (anyHasColors && source.colors != null) {
+						colors[faceCount] = source.colors[f];
+					}
+
 					faceCount++;
 				}
 
-				for (int j2 = 0; j2 < class50_sub1_sub4_sub4_1.textureVertexCount; j2++) {
-					textureVertexIndicesA[textureVertexCount] = class50_sub1_sub4_sub4_1.textureVertexIndicesA[j2] + j1;
-					textureVertexIndicesB[textureVertexCount] = class50_sub1_sub4_sub4_1.textureVertexIndicesB[j2] + j1;
-					textureVertexIndicesC[textureVertexCount] = class50_sub1_sub4_sub4_1.textureVertexIndicesC[j2] + j1;
+				// Copy Textures
+				for (int t = 0; t < source.textureVertexCount; t++) {
+					textureVertexIndicesA[textureVertexCount] = source.textureVertexIndicesA[t] + baseVertexIndex;
+					textureVertexIndicesB[textureVertexCount] = source.textureVertexIndicesB[t] + baseVertexIndex;
+					textureVertexIndicesC[textureVertexCount] = source.textureVertexIndicesC[t] + baseVertexIndex;
 					textureVertexCount++;
 				}
 
-				l += class50_sub1_sub4_sub4_1.textureVertexCount;
+				textureOffset += source.textureVertexCount;
 			}
 		}
 
