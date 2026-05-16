@@ -2,23 +2,89 @@
 // Jad home page: http://www.kpdus.com/jad.html
 // Decompiler options: packimports(3) 
 
+/**
+ * Represents a single animation frame for skeletal animation in the Model system.
+ *
+ * <p>Each AnimationFrame contains a set of transformation instructions to be applied
+ * to bone groups within a model. The frame stores references to the associated skeleton,
+ * a list of bone group indices that have transformations, and the transformation values
+ * (translation, rotation, or scaling) for each instruction.</p>
+ *
+ * <p>Animation frames are loaded in bulk from the cache and pooled globally for efficient
+ * reuse across multiple animated entities.</p>
+ */
 public class AnimationFrame {
 
+	/**
+	 * Constructs a new AnimationFrame instance with default state.
+	 *
+	 * <p>This is typically called during deserialization from cache data.</p>
+	 */
 	public AnimationFrame() {
 	}
 
+	/**
+	 * Placeholder/dummy static value used for internal state management.
+	 */
 	public static int dummyValue = 217;
+	/**
+	 * Placeholder/dummy static boolean flag.
+	 */
 	public static boolean dummyBoolean;
+	/**
+	 * Global array containing all loaded animation frames, indexed by frame ID.
+	 * This pool is initialized with {@link #initFrames(int)} and populated by {@link #unpackFrames(byte[], boolean)}.
+	 */
 	public static AnimationFrame[] animationFrames;
+	/**
+	 * Duration of this animation frame in game ticks.
+	 * Determines how long this frame is displayed during playback.
+	 */
 	public int frameDuration;
+	/**
+	 * Reference to the skeleton structure that defines the bone hierarchy and opcodes
+	 * for this frame. Shared across all frames of the same animation sequence.
+	 */
 	public Skeleton skeleton;
+	/**
+	 * Number of transformation instructions in this frame.
+	 */
 	public int instructionCount;
+	/**
+	 * Array of bone/group indices indicating which bones have transformations in this frame.
+	 * Used to efficiently apply only the necessary transformations without scanning all bones.
+	 */
 	public int[] instructionIndices;
+	/**
+	 * X-axis transformation values corresponding to each instruction.
+	 * Interpretation depends on the opcode: translation delta, rotation angle, or scale factor.
+	 */
 	public int[] transformationX;
+	/**
+	 * Y-axis transformation values corresponding to each instruction.
+	 * Interpretation depends on the opcode: translation delta, rotation angle, or scale factor.
+	 */
 	public int[] transformationY;
+	/**
+	 * Z-axis transformation values corresponding to each instruction.
+	 * Interpretation depends on the opcode: translation delta, rotation angle, or scale factor.
+	 */
 	public int[] transformationZ;
+	/**
+	 * Global array tracking which frames contain transparency modifications (opcode 5).
+	 * Indexed by frame ID; false indicates the frame does not modify face transparency.
+	 */
 	public static boolean[] hasTransparency;
 
+	/**
+	 * Initializes the global animation frame system.
+	 *
+	 * <p>This method allocates the global {@link #animationFrames} pool and initializes
+	 * the {@link #hasTransparency} tracking array. All animation frames will be loaded
+	 * later via {@link #unpackFrames(byte[], boolean)}.</p>
+	 *
+	 * @param maxAnimationId The maximum frame ID that will be used (array size = maxAnimationId + 1).
+	 */
 	public static void initFrames(int maxAnimationId) {
 		animationFrames = new AnimationFrame[maxAnimationId + 1];
 		hasTransparency = new boolean[maxAnimationId + 1];
@@ -27,6 +93,21 @@ public class AnimationFrame {
 
 	}
 
+	/**
+	 * Deserializes animation frame data from a raw byte array and populates the global frame pool.
+	 *
+	 * <p>This method performs multiple deserialization passes to reconstruct animation frames:
+	 * <ul>
+	 *   <li><b>Header Parsing:</b> Reads frame data length, transformation data length, and skeleton data length from the file header.</li>
+	 *   <li><b>Buffer Positioning:</b> Creates separate JagBuffer instances pointing at different sections of the raw data.</li>
+	 *   <li><b>Frame Iteration:</b> For each frame, reads frame ID, duration, and instruction count.</li>
+	 *   <li><b>Instruction Parsing:</b> Reads transformation flags and values for each bone instruction, handling default values.</li>
+	 *   <li><b>Array Sizing:</b> Allocates appropriately-sized arrays for each frame's instruction data.</li>
+	 * </ul></p>
+	 *
+	 * @param animationData   The raw byte array containing all animation frame data, headers, and skeleton definitions.
+	 * @param shouldProcess   If false, only reads and validates the header without processing frames. Allows lazy loading.
+	 */
 	public static void unpackFrames(byte[] animationData, boolean shouldProcess) {
 		JagBuffer headerBuffer = new JagBuffer(animationData);
 		headerBuffer.position = animationData.length - 8;
@@ -121,12 +202,30 @@ public class AnimationFrame {
 
 	}
 
+	/**
+	 * Clears the global animation frame pool to assist garbage collection.
+	 *
+	 * <p>This method nullifies the global {@link #animationFrames} array, allowing the
+	 * previously loaded frames to be reclaimed by the garbage collector. If animation
+	 * data is needed again, it must be reloaded via {@link #unpackFrames(byte[], boolean)}.</p>
+	 *
+	 * @param shouldClear If true, additionally sets {@link #dummyValue} to 189 for internal state management.
+	 */
 	public static void clearFrames(boolean shouldClear) {
 		if (shouldClear)
 			dummyValue = 189;
 		animationFrames = null;
 	}
 
+	/**
+	 * Retrieves an animation frame by its ID.
+	 *
+	 * <p>If the frame pool has not been initialized or if the requested frame has not been
+	 * loaded, this method returns null. The caller should check for null before using the result.</p>
+	 *
+	 * @param frameId The unique identifier of the animation frame to retrieve.
+	 * @return The AnimationFrame instance if loaded; otherwise null.
+	 */
 	public static AnimationFrame forId(int frameId) {
 		if (animationFrames == null)
 			return null;
@@ -134,6 +233,14 @@ public class AnimationFrame {
 			return animationFrames[frameId];
 	}
 
+	/**
+	 * Checks if an animation frame ID represents a "no animation" state.
+	 *
+	 * <p>A frame ID of -1 is used as a sentinel value to indicate that no animation should be applied.</p>
+	 *
+	 * @param frameId The frame ID to check.
+	 * @return True if frameId is -1 (no animation); otherwise false.
+	 */
 	public static boolean isFrameTransparent(int frameId) {
 		return frameId == -1;
 	}
