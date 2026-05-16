@@ -15,6 +15,19 @@
  */
 public class Model extends Entity {
 
+	/**
+	 * Constructs a "blank" or placeholder Model instance with default state flags.
+	 *
+	 * <p>This constructor does not load geometry data from the cache. It is primarily
+	 * used for internal engine markers or as a base for models that will have their
+	 * data assigned manually (e.g., procedurally generated meshes or scratchpad models).</p>
+	 *
+	 * <p>If the provided ID is invalid (<= 0), the {@code dummyMagicNumber} is shifted
+	 * to a specific sentinel value (-110) to identify this as a system-level or
+	 * null-model object.</p>
+	 *
+	 * @param id The unique identifier for this model instance.
+	 */
 	public Model(int id) {
 		dummyVar = 932;
 		dummVar2 = 426;
@@ -27,6 +40,28 @@ public class Model extends Entity {
 			dummyMagicNumber = -110;
 	}
 
+	/**
+	 * Constructs a new Model by deserializing raw data from the cache based on a header.
+	 *
+	 * <p>This constructor acts as the primary loader for model assets. it performs several
+	 * complex decompression tasks to reconstruct the mesh:
+	 * <ul>
+	 *   <li><b>Delta Decoding:</b> Vertex coordinates are stored as relative offsets from
+	 *       the previous vertex to save space. This constructor accumulates those offsets
+	 *       into absolute 3D coordinates.</li>
+	 *   <li><b>Topology Reconstruction:</b> Face indices are parsed using specific opcodes
+	 *       (1-4) to determine if a face is an independent triangle, a triangle strip,
+	 *        or a triangle fan.</li>
+	 *   <li><b>Buffer Recycling:</b> To minimize memory overhead, it repositions existing
+	 *       {@link JagBuffer} instances to point at different data segments (colors,
+	 *       render types, priorities) within the same raw byte array.</li>
+	 * </ul></p>
+	 *
+	 * @param modelId    The index of the model to load from the global {@link #modelHeaders} cache.
+	 * @param dummyInt   A validation or toggle integer. If this value is greater than or
+	 *                   equal to 0, the {@link #isModified} flag is toggled, signaling
+	 *                   the engine that this model's geometry differs from the base cache version.
+	 */
 	public Model(int modelId, int dummyInt) {
 		dummyVar = 932;
 		dummVar2 = 426;
