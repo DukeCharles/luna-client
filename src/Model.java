@@ -721,104 +721,354 @@ public class Model extends Entity {
 	 * 8192^2 * 3 is approx 201M, well under the 2.1B integer limit.
 	 */
 	private static final int MAX_NORMAL_COMPONENT = 8192;
+	/**
+	 * Maximum number of transformation/bone groups that can be defined in a model.
+	 */
 	private static final int MAX_TRANSFORMATION_GROUPS = 256;
 
 	/**
 	 * The standard unit length for normalized vectors in this engine.
 	 */
 	private static final int NORMAL_SCALING_FACTOR = 256;
+	/**
+	 * Render type flag indicating flat shading (Bit 0 check).
+	 */
 	private static final int RENDER_TYPE_FLAT_SHADING = 0x1;
 
+	/**
+	 * Placeholder/dummy integer variable. Used in model initialization.
+	 */
 	public int dummyVar;
+	/**
+	 * Placeholder/dummy integer variable. Used in model initialization.
+	 */
 	public int dummVar2;
+	/**
+	 * Indicates whether this model is clickable for mouse interaction.
+	 */
 	public boolean isClickable;
+	/**
+	 * Flag to enable or disable shading calculations for this model.
+	 */
 	public boolean shadingEnabled;
+	/**
+	 * Placeholder/dummy magic number used for internal model state management.
+	 */
 	public int dummyMagicNumber;
+	/**
+	 * Flag indicating whether the model geometry has been modified since loading from cache.
+	 */
 	public boolean isModified;
+	/**
+	 * Global counter tracking the total number of Model instances created.
+	 */
 	public static int instanceCount;
+	/**
+	 * A reusable/scratch model instance for temporary operations to reduce memory allocation.
+	 */
 	public static Model SCRATCH_MODEL = new Model(852);
+	/**
+	 * Static vertex X-coordinate buffer for pooled model transformation.
+	 * Reused across multiple models to minimize garbage collection.
+	 */
 	public static int[] staticVertexX = new int[2000];
+	/**
+	 * Static vertex Z-coordinate buffer for pooled model transformation.
+	 * Reused across multiple models to minimize garbage collection.
+	 */
 	public static int[] staticVertexZ = new int[2000];
+	/**
+	 * Static vertex Y-coordinate buffer for pooled model transformation.
+	 * Reused across multiple models to minimize garbage collection.
+	 */
 	public static int[] staticVertexY = new int[2000];
+	/**
+	 * Static face transparency buffer for pooled model transformation.
+	 * Reused across multiple models to minimize garbage collection.
+	 */
 	public static int[] staticTransparency = new int[2000];
+	/**
+	 * The total number of vertices in this model.
+	 */
 	public int verticesCount;
 
-	// Vertices
+	/**
+	 * Vertex X-coordinates in local model space.
+	 */
 	public int[] verticesX;
+	/**
+	 * Vertex Y-coordinates in local model space.
+	 */
 	public int[] verticesY;
+	/**
+	 * Vertex Z-coordinates in local model space.
+	 */
 	public int[] verticesZ;
 
-	//Faces Indices
+	/**
+	 * Face vertex index A (first vertex of the triangle).
+	 */
 	public int[] faceIndicesX;
+	/**
+	 * Face vertex index B (second vertex of the triangle).
+	 */
 	public int[] faceIndicesY;
+	/**
+	 * Face vertex index C (third vertex of the triangle).
+	 */
 	public int[] faceIndicesZ;
 
+	/**
+	 * The total number of faces (triangles) in this model.
+	 */
 	public int faceCount;
 
+	/**
+	 * Face color for vertex A (first vertex). Used for Gouraud shading.
+	 */
 	public int[] faceColorsA;
+	/**
+	 * Face color for vertex B (second vertex). Used for Gouraud shading.
+	 */
 	public int[] faceColorsB;
+	/**
+	 * Face color for vertex C (third vertex). Used for Gouraud shading.
+	 */
 	public int[] faceColorsC;
 	/**
+	 * Face render types controlling shading and material properties.
 	 * Bit 0 & 1 (& 3): Determines the Shading Type.
 	 * 0: Gouraud (Smooth) Shading.
 	 * 1: Flat Shading.
 	 * 2 or 3: Textured/Mapping mode.
-	 * Bit 2 (& 4): Often determines Color Behavior
+	 * Bit 2 (& 4): Often determines Color Behavior.
 	 */
 	public int[] faceRenderTypes;
+	/**
+	 * Priority level for each face, controlling z-ordering in the Painter's Algorithm.
+	 * Valid range is typically 0-11 for multi-layer rendering.
+	 */
 	public int[] facePriorities;
+	/**
+	 * Transparency/alpha value for each face (0 = opaque, 255 = fully transparent).
+	 */
 	public int[] faceTransparency;
+	/**
+	 * Packed HSL color for each face. Used as fallback when per-vertex colors are unavailable.
+	 */
 	public int[] colors;
+	/**
+	 * Default priority level for all faces when facePriorities array is null.
+	 */
 	public int defaultPriority;
+	/**
+	 * The total number of texture vertices in this model.
+	 */
 	public int textureVertexCount;
+	/**
+	 * Texture vertex index A (first texture coordinate vertex).
+	 */
 	public int[] textureVertexIndicesA;
+	/**
+	 * Texture vertex index B (second texture coordinate vertex).
+	 */
 	public int[] textureVertexIndicesB;
+	/**
+	 * Texture vertex index C (third texture coordinate vertex).
+	 */
 	public int[] textureVertexIndicesC;
+	/**
+	 * Packed lighting parameters: High 16 bits are ambient, low 16 bits are light magnitude.
+	 */
 	public int lightingParameters;
+	/**
+	 * Packed X-axis bounds for AABB culling. High 16 bits = minX, low 16 bits = maxX.
+	 */
 	public int packedXBounds;
+	/**
+	 * Packed Z-axis bounds for AABB culling. High 16 bits = maxZ, low 16 bits = minZ.
+	 */
 	public int packedZBounds;
+	/**
+	 * Squared horizontal radius from origin (X^2 + Z^2) used for culling.
+	 */
 	public int modelRadius;
+	/**
+	 * Maximum extent below the model origin (positive Y direction).
+	 */
 	public int maxBottomExtent;
+	/**
+	 * Total depth range for z-sorting bin allocation in the Painter's Algorithm.
+	 */
 	public int totalDepthSortingRange;
+	/**
+	 * Radius of the bounding sphere encompassing the entire model.
+	 */
 	public int modelBoundingSphere;
+	/**
+	 * Height of the model (maximum extent in negative Y direction).
+	 */
 	public int modelHeight;
+	/**
+	 * Bone/transformation group IDs for each vertex. Used for skeletal animation.
+	 */
 	public int[] vertexBoneIds;
+	/**
+	 * Bone/transformation group IDs for each face. Used for skeletal animation.
+	 */
 	public int[] faceBoneIds;
+	/**
+	 * 2D array mapping bone/group IDs to arrays of vertex indices within that group.
+	 * Allows efficient transformation of grouped vertices.
+	 */
 	public int[][] vertexIndicesByBone;
+	/**
+	 * 2D array mapping bone/group IDs to arrays of face indices within that group.
+	 * Allows efficient transformation of grouped faces.
+	 */
 	public int[][] faceIndicesByBone;
+	/**
+	 * Flag indicating whether priority-based mouse picking is enabled for this model.
+	 */
 	public boolean isPriorityPicking;
+	/**
+	 * Array of vertex normals used for Gouraud/smooth shading calculations.
+	 * Stored separately after lighting is baked for deferred shading.
+	 */
 	public VertexNormal[] vertexNormalsTable;
+	/**
+	 * Global array of model headers containing metadata about all loaded models.
+	 */
 	public static ModelHeader[] modelHeaders;
+	/**
+	 * Global provider instance responsible for asynchronously loading model data.
+	 */
 	public static ModelProvider modelProvider;
+	/**
+	 * Flags indicating which faces are completely off-screen (outside viewport).
+	 */
 	public static boolean[] faceIsOffScreen = new boolean[4096];
+	/**
+	 * Flags indicating which faces need near-plane clipping (cross the near-plane boundary).
+	 */
 	public static boolean[] faceNeedsClipping = new boolean[4096];
+	/**
+	 * Projected screen X-coordinates for all vertices after viewport transformation.
+	 */
 	public static int[] projectedX = new int[4096];
+	/**
+	 * Projected screen Y-coordinates for all vertices after viewport transformation.
+	 */
 	public static int[] projectedY = new int[4096];
+	/**
+	 * Projected screen Z-coordinates (depth) for all vertices after viewport transformation.
+	 */
 	public static int[] projectedZ = new int[4096];
+	/**
+	 * Camera-space X-coordinates for all vertices. Used for texture mapping and clipping.
+	 */
 	public static int[] cameraX = new int[4096];
+	/**
+	 * Camera-space Y-coordinates for all vertices. Used for texture mapping and clipping.
+	 */
 	public static int[] cameraY = new int[4096];
+	/**
+	 * Camera-space Z-coordinates (depth) for all vertices. Used for texture mapping and clipping.
+	 */
 	public static int[] cameraZ = new int[4096];
+	/**
+	 * Counter tracking the number of faces at each depth level in the Painter's Algorithm.
+	 */
 	public static int[] faceDepthCounts = new int[1500];
+	/**
+	 * 2D array storing face indices binned by their depth for the Painter's Algorithm.
+	 * Each depth level can contain up to 512 faces.
+	 */
 	public static int[][] faceDepthBins = new int[1500][512];
+	/**
+	 * Counter tracking the number of faces at each priority level (0-11).
+	 */
 	public static int[] priorityCounts = new int[12];
+	/**
+	 * 2D array storing face indices binned by their priority level (0-11).
+	 * Each priority level can contain up to 2000 faces.
+	 */
 	public static int[][] priorityBins = new int[12][2000];
+	/**
+	 * Depth values for high-priority faces (priority level 10) used in interleaved rendering.
+	 */
 	public static int[] priorityDepthX = new int[2000];
+	/**
+	 * Depth values for highest-priority faces (priority level 11) used in interleaved rendering.
+	 */
 	public static int[] priorityDepthY = new int[2000];
+	/**
+	 * Accumulated depth values for priority levels 0-9 to calculate average depth thresholds.
+	 */
 	public static int[] priorityAverages = new int[12];
+	/**
+	 * Clipped projected X-coordinates for near-plane clipped polygons (up to 4 vertices per face).
+	 */
 	public static int[] clippedProjectedX = new int[10];
+	/**
+	 * Clipped projected Y-coordinates for near-plane clipped polygons (up to 4 vertices per face).
+	 */
 	public static int[] clippedProjectedY = new int[10];
+	/**
+	 * Vertex colors for clipped polygon vertices after near-plane intersection calculations.
+	 */
 	public static int[] clippedVertexColors = new int[10];
+	/**
+	 * X-coordinate of the current transformation pivot point (used for rotation/scaling centers).
+	 */
 	public static int transformationPivotX;
+	/**
+	 * Y-coordinate of the current transformation pivot point (used for rotation/scaling centers).
+	 */
 	public static int transformationPivotY;
+	/**
+	 * Z-coordinate of the current transformation pivot point (used for rotation/scaling centers).
+	 */
 	public static int transformationPivotZ;
+	/**
+	 * Global flag enabling/disabling mouse-based model picking functionality.
+	 */
 	public static boolean isPickingEnabled;
+	/**
+	 * Current mouse X-coordinate on screen (used for picking detection).
+	 */
 	public static int mouseX;
+	/**
+	 * Current mouse Y-coordinate on screen (used for picking detection).
+	 */
 	public static int mouseY;
+	/**
+	 * Number of models currently under the mouse cursor (hovered count).
+	 */
 	public static int hoveredCount;
+	/**
+	 * Array storing the IDs of all models currently hovered by the mouse.
+	 */
 	public static int[] hoveredModels = new int[1000];
+	/**
+	 * Pre-calculated sine values table indexed by angle (0-2047).
+	 * Shared across all engine components for performance.
+	 */
 	public static int[] sineTable;
+	/**
+	 * Pre-calculated cosine values table indexed by angle (0-2047).
+	 * Shared across all engine components for performance.
+	 */
 	public static int[] cosineTable;
+	/**
+	 * Lookup table converting packed HSL colors to RGB values.
+	 * Shared across all engine components for color conversion.
+	 */
 	public static int[] colorLookupTable;
+	/**
+	 * Pre-calculated reciprocal (1/x) values table for fast division in fixed-point arithmetic.
+	 * Used in clipping calculations and perspective division.
+	 */
 	public static int[] reciprocalTable;
 
 	static {
