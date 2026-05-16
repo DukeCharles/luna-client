@@ -221,7 +221,7 @@ public class NpcDefinition {
 		if (i != -1 && j != -1)
 			class50_sub1_sub4_sub4_1.applyBlendedAnimation(j, 0, i, ai);
 		else if (i != -1)
-			class50_sub1_sub4_sub4_1.method585(i, (byte) 6);
+			class50_sub1_sub4_sub4_1.applyAnimation(i, (byte) 6);
 		if (anInt632 != 128 || anInt630 != 128)
 			class50_sub1_sub4_sub4_1.resizeModel(anInt632, anInt630, anInt632);
 		class50_sub1_sub4_sub4_1.calculateRadius();

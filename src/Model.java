@@ -1130,26 +1130,50 @@ public class Model extends Entity {
 		}
 	}
 
-	public void method585(int i, byte byte0) {
-		if (vertexIndicesByBone == null)
+	/**
+	 * Applies a single animation frame to the model.
+	 *
+	 * <p>This method iterates through all transformation instructions stored in the
+	 * specified frame and applies them to the corresponding vertex/bone groups.</p>
+	 *
+	 * @param frameId        The ID of the {@link AnimationFrame} to apply.
+	 * @param validationByte A dummy validation byte (expected to be 6) used to ensure
+	 *                       internal calling consistency.
+	 */
+	public void applyAnimation(int frameId, byte validationByte) {
+		// Cannot animate if the model hasn't been grouped by bones
+		if (vertexIndicesByBone == null) {
 			return;
-		if (i == -1)
+		}
+
+		if (frameId == -1) {
 			return;
-		AnimationFrame class21 = AnimationFrame.forId(i);
-		if (class21 == null)
+		}
+
+		AnimationFrame frame = AnimationFrame.forId(frameId);
+		if (frame == null) {
 			return;
-		Skeleton skeleton = class21.skeleton;
-		if (byte0 == 6)
-			byte0 = 0;
-		else
+		}
+
+		Skeleton skeleton = frame.skeleton;
+
+		// Standard engine-specific validation check
+		if (validationByte == 6) {
+			validationByte = 0;
+		}
+		else {
 			return;
+		}
+
+		// Reset pivots before starting a new frame application
 		transformationPivotX = 0;
 		transformationPivotY = 0;
 		transformationPivotZ = 0;
-		for (int j = 0; j < class21.instructionCount; j++) {
-			int k = class21.instructionIndices[j];
-			applyTransformation(skeleton.opcodes[k], skeleton.boneGroups[k], class21.transformationX[j],
-					class21.transformationY[j], class21.transformationZ[j]);
+
+		for (int i = 0; i < frame.instructionCount; i++) {
+			int instructionIdx = frame.instructionIndices[i];
+			applyTransformation(skeleton.opcodes[instructionIdx], skeleton.boneGroups[instructionIdx], frame.transformationX[i],
+					frame.transformationY[i], frame.transformationZ[i]);
 		}
 
 	}
@@ -1168,7 +1192,7 @@ public class Model extends Entity {
 
 		// If no mask is provided or no secondary frame exists, default to standard animation
 		if (mask == null || secondaryFrameId == -1) {
-			method585(primaryFrameId, (byte) 6);
+			applyAnimation(primaryFrameId, (byte) 6);
 			return;
 		}
 
@@ -1179,7 +1203,7 @@ public class Model extends Entity {
 
 		AnimationFrame secondaryFrame = AnimationFrame.forId(secondaryFrameId);
 		if (secondaryFrame == null) {
-			method585(primaryFrameId, (byte) 6);
+			applyAnimation(primaryFrameId, (byte) 6);
 			return;
 		}
 

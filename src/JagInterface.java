@@ -340,9 +340,9 @@ public class JagInterface {
 		if (i != -1 || j != -1)
 			class50_sub1_sub4_sub4_1.groupIndicesByTransform();
 		if (i != -1)
-			class50_sub1_sub4_sub4_1.method585(i, (byte) 6);
+			class50_sub1_sub4_sub4_1.applyAnimation(i, (byte) 6);
 		if (j != -1)
-			class50_sub1_sub4_sub4_1.method585(j, (byte) 6);
+			class50_sub1_sub4_sub4_1.applyAnimation(j, (byte) 6);
 		class50_sub1_sub4_sub4_1.initLighting(anInt280, anInt243, -50, -10, -50, true);
 		return class50_sub1_sub4_sub4_1;
 	}

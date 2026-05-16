@@ -35,7 +35,7 @@ public class Npc extends Actor {
 						class50_sub1_sub4_sub4_1, AnimationFrame.isFrameTransparent(i));
 				class50_sub1_sub4_sub4_2.translate(0, -super.anInt1618, 0);
 				class50_sub1_sub4_sub4_2.groupIndicesByTransform();
-				class50_sub1_sub4_sub4_2.method585(i, (byte) 6);
+				class50_sub1_sub4_sub4_2.applyAnimation(i, (byte) 6);
 				class50_sub1_sub4_sub4_2.faceIndicesByBone = null;
 				class50_sub1_sub4_sub4_2.vertexIndicesByBone = null;
 				if (class27.anInt561 != 128 || class27.anInt562 != 128)

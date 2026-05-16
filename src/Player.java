@@ -190,7 +190,7 @@ public class Player extends Actor {
 		if (j != -1 && k != -1)
 			class50_sub1_sub4_sub4_2.applyBlendedAnimation(k, 0, j, Animation.animations[super.currentAnimation].anIntArray299);
 		else if (j != -1)
-			class50_sub1_sub4_sub4_2.method585(j, (byte) 6);
+			class50_sub1_sub4_sub4_2.applyAnimation(j, (byte) 6);
 		class50_sub1_sub4_sub4_2.calculateRadius();
 		class50_sub1_sub4_sub4_2.faceIndicesByBone = null;
 		class50_sub1_sub4_sub4_2.vertexIndicesByBone = null;
@@ -221,7 +221,7 @@ public class Player extends Actor {
 						class50_sub1_sub4_sub4_2, AnimationFrame.isFrameTransparent(super.anInt1615));
 				class50_sub1_sub4_sub4_3.translate(0, -super.anInt1618, 0);
 				class50_sub1_sub4_sub4_3.groupIndicesByTransform();
-				class50_sub1_sub4_sub4_3.method585(class27.animation.anIntArray295[super.anInt1615], (byte) 6);
+				class50_sub1_sub4_sub4_3.applyAnimation(class27.animation.anIntArray295[super.anInt1615], (byte) 6);
 				class50_sub1_sub4_sub4_3.faceIndicesByBone = null;
 				class50_sub1_sub4_sub4_3.vertexIndicesByBone = null;
 				if (class27.anInt561 != 128 || class27.anInt562 != 128)

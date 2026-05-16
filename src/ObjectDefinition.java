@@ -210,7 +210,7 @@ public class ObjectDefinition {
             anInt768 = 487;
         if (j != -1) {
             class50_sub1_sub4_sub4_3.groupIndicesByTransform();
-            class50_sub1_sub4_sub4_3.method585(j, (byte) 6);
+            class50_sub1_sub4_sub4_3.applyAnimation(j, (byte) 6);
             class50_sub1_sub4_sub4_3.faceIndicesByBone = null;
             class50_sub1_sub4_sub4_3.vertexIndicesByBone = null;
         }

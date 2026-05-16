@@ -7364,7 +7364,7 @@ public class client extends JagApplet {
                     }
 
                 class50_sub1_sub4_sub4.groupIndicesByTransform();
-                class50_sub1_sub4_sub4.method585(
+                class50_sub1_sub4_sub4.applyAnimation(
                         Animation.animations[((Actor) (thisPlayer)).anInt1634].anIntArray295[0], (byte) 6);
                 class50_sub1_sub4_sub4.initLighting(64, 850, -30, -50, -30, true);
                 class13.anInt283 = 5;

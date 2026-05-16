@@ -46,7 +46,7 @@ public class Graphic extends Entity {
 				class50_sub1_sub4_sub4, AnimationFrame.isFrameTransparent(i));
 		if (!aBoolean1736) {
 			class50_sub1_sub4_sub4_1.groupIndicesByTransform();
-			class50_sub1_sub4_sub4_1.method585(i, (byte) 6);
+			class50_sub1_sub4_sub4_1.applyAnimation(i, (byte) 6);
 			class50_sub1_sub4_sub4_1.faceIndicesByBone = null;
 			class50_sub1_sub4_sub4_1.vertexIndicesByBone = null;
 		}
