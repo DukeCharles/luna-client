@@ -5561,7 +5561,7 @@ public class client extends JagApplet {
                 if (class50_sub1_sub3 == null)
                     return;
                 if (class50_sub1_sub3.type == 0) {
-                    Model.method575(class50_sub1_sub3.buf, class50_sub1_sub3.id, (byte) 7);
+                    Model.unpackModelHeader(class50_sub1_sub3.buf, class50_sub1_sub3.id, (byte) 7);
                     if ((fileFetcher.method325(class50_sub1_sub3.id, -493) & 0x62) != 0) {
                         aBoolean1181 = true;
                         if (anInt988 != -1 || anInt1191 != -1)

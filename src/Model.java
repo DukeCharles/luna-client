@@ -714,74 +714,126 @@ public class Model extends Entity {
 		modelProvider = provider;
 	}
 
-	public static void method575(byte[] abyte0, int i, byte byte0) {
-		if (byte0 != 7)
+	/**
+	 * Unpacks raw byte data into a {@link ModelHeader} object.
+	 *
+	 * <p>This method reads metadata and data block offsets from the provided byte array
+	 * and populates a {@code ModelHeader} instance, which then describes the structure
+	 * of the model's raw data. This header is crucial for the {@link Model} constructor
+	 * to correctly interpret and load the model's vertices, faces, and other attributes.</p>
+	 *
+	 * @param modelDataBytes The raw byte array containing the model's header and data.
+	 * @param modelId        The unique identifier for the model being unpacked.
+	 * @param dummyByte a dummy Byte (expected to be 7) to ensure proper method invocation.
+	 */
+	public static void unpackModelHeader(byte[] modelDataBytes, int modelId, byte dummyByte) {
+		// Validate the invocation byte
+		if (dummyByte != 7)
 			return;
-		if (abyte0 == null) {
-			ModelHeader modelHeader = Model.modelHeaders[i] = new ModelHeader();
+
+		// If no data is provided, create an empty model header
+		if (modelDataBytes == null) {
+			ModelHeader modelHeader = Model.modelHeaders[modelId] = new ModelHeader();
 			modelHeader.vertexCount = 0;
 			modelHeader.faceCount = 0;
 			modelHeader.textureVertexCount = 0;
 			return;
 		}
-		JagBuffer class50_sub1_sub2 = new JagBuffer(abyte0);
-		class50_sub1_sub2.position = abyte0.length - 18;
-		ModelHeader modelHeader_1 = modelHeaders[i] = new ModelHeader();
-		modelHeader_1.rawModelData = abyte0;
-		modelHeader_1.vertexCount = class50_sub1_sub2.getShort();
-		modelHeader_1.faceCount = class50_sub1_sub2.getShort();
-		modelHeader_1.textureVertexCount = class50_sub1_sub2.getByte();
-		int j = class50_sub1_sub2.getByte();
-		int k = class50_sub1_sub2.getByte();
-		int l = class50_sub1_sub2.getByte();
-		int i1 = class50_sub1_sub2.getByte();
-		int j1 = class50_sub1_sub2.getByte();
-		int k1 = class50_sub1_sub2.getShort();
-		int l1 = class50_sub1_sub2.getShort();
-		int i2 = class50_sub1_sub2.getShort();
-		int j2 = class50_sub1_sub2.getShort();
-		int k2 = 0;
-		modelHeader_1.vertexFlagsOffset = k2;
-		k2 += modelHeader_1.vertexCount;
-		modelHeader_1.faceTypeOffset = k2;
-		k2 += modelHeader_1.faceCount;
-		modelHeader_1.facePriorityOffset = k2;
-		if (k == 255)
-			k2 += modelHeader_1.faceCount;
-		else
-			modelHeader_1.facePriorityOffset = -k - 1;
-		modelHeader_1.faceBoneOffset = k2;
-		if (i1 == 1)
-			k2 += modelHeader_1.faceCount;
-		else
-			modelHeader_1.faceBoneOffset = -1;
-		modelHeader_1.faceRenderTypeOffset = k2;
-		if (j == 1)
-			k2 += modelHeader_1.faceCount;
-		else
-			modelHeader_1.faceRenderTypeOffset = -1;
-		modelHeader_1.vertexBoneOffset = k2;
-		if (j1 == 1)
-			k2 += modelHeader_1.vertexCount;
-		else
-			modelHeader_1.vertexBoneOffset = -1;
-		modelHeader_1.faceTransparencyOffset = k2;
-		if (l == 1)
-			k2 += modelHeader_1.faceCount;
-		else
-			modelHeader_1.faceTransparencyOffset = -1;
-		modelHeader_1.faceIndicesOffset = k2;
-		k2 += j2;
-		modelHeader_1.faceColorOffset = k2;
-		k2 += modelHeader_1.faceCount * 2;
-		modelHeader_1.textureMappingOffset = k2;
-		k2 += modelHeader_1.textureVertexCount * 6;
-		modelHeader_1.vertexXOffset = k2;
-		k2 += k1;
-		modelHeader_1.vertexYOffset = k2;
-		k2 += l1;
-		modelHeader_1.vertexZOffset = k2;
-		k2 += i2;
+
+		// Create a buffer to read from the model data bytes
+		JagBuffer dataBuffer = new JagBuffer(modelDataBytes);
+		// Position the buffer to read the header information, which is typically at the end
+		dataBuffer.position = modelDataBytes.length - 18;
+
+		// Create and store the new ModelHeader in the global cache
+		ModelHeader modelHeader = modelHeaders[modelId] = new ModelHeader();
+		modelHeader.rawModelData = modelDataBytes;
+
+		// Read fundamental counts
+		modelHeader.vertexCount = dataBuffer.getShort();
+		modelHeader.faceCount = dataBuffer.getShort();
+		modelHeader.textureVertexCount = dataBuffer.getByte();
+
+		// Read flags indicating the presence of optional data blocks
+		int hasFaceRenderTypesFlag = dataBuffer.getByte();
+		int facePriorityFlag = dataBuffer.getByte();
+		int hasFaceTransparencyFlag = dataBuffer.getByte();
+		int hasFaceBoneIdsFlag = dataBuffer.getByte();
+		int hasVertexBoneIdsFlag = dataBuffer.getByte();
+
+		// Read lengths of various data blocks
+		int vertexXDataLength = dataBuffer.getShort();
+		int vertexYDataLength = dataBuffer.getShort();
+		int vertexZDataLength = dataBuffer.getShort();
+		int faceIndicesDataLength = dataBuffer.getShort();
+
+		// Calculate and assign offsets for each data block
+		int currentOffset = 0;
+		modelHeader.vertexFlagsOffset = currentOffset;
+		currentOffset += modelHeader.vertexCount;
+
+		modelHeader.faceTypeOffset = currentOffset;
+		currentOffset += modelHeader.faceCount;
+
+		modelHeader.facePriorityOffset = currentOffset;
+		// If 255, it means there's a dedicated priority block
+		if (facePriorityFlag == 255) {
+			currentOffset += modelHeader.faceCount;
+		}
+		// Otherwise, the flag itself indicates a default priority
+		else {
+			modelHeader.facePriorityOffset = -facePriorityFlag - 1;
+		}
+
+		modelHeader.faceBoneOffset = currentOffset;
+		if (hasFaceBoneIdsFlag == 1) {
+			currentOffset += modelHeader.faceCount;
+		}
+		else {
+			modelHeader.faceBoneOffset = -1;
+		}
+
+		modelHeader.faceRenderTypeOffset = currentOffset;
+		if (hasFaceRenderTypesFlag == 1) {
+			currentOffset += modelHeader.faceCount;
+		}
+		else {
+			modelHeader.faceRenderTypeOffset = -1;
+		}
+
+		modelHeader.vertexBoneOffset = currentOffset;
+		if (hasVertexBoneIdsFlag == 1) {
+			currentOffset += modelHeader.vertexCount;
+		}
+		else {
+			modelHeader.vertexBoneOffset = -1;
+		}
+
+		modelHeader.faceTransparencyOffset = currentOffset;
+		if (hasFaceTransparencyFlag == 1) {
+			currentOffset += modelHeader.faceCount;
+		}
+		else {
+			modelHeader.faceTransparencyOffset = -1;
+		}
+
+		modelHeader.faceIndicesOffset = currentOffset;
+		currentOffset += faceIndicesDataLength;
+
+		modelHeader.faceColorOffset = currentOffset;
+		currentOffset += modelHeader.faceCount * 2; // 2 bytes per color (short)
+
+		modelHeader.textureMappingOffset = currentOffset;
+		currentOffset += modelHeader.textureVertexCount * 6; // 6 bytes per texture vertex (3 shorts)
+
+		modelHeader.vertexXOffset = currentOffset;
+		currentOffset += vertexXDataLength;
+
+		modelHeader.vertexYOffset = currentOffset;
+		currentOffset += vertexYDataLength;
+
+		modelHeader.vertexZOffset = currentOffset;
+		currentOffset += vertexZDataLength; // Final offset, no need to increment further
 	}
 
 	/**
@@ -1137,10 +1189,10 @@ public class Model extends Entity {
 	 * specified frame and applies them to the corresponding vertex/bone groups.</p>
 	 *
 	 * @param frameId        The ID of the {@link AnimationFrame} to apply.
-	 * @param validationByte A dummy validation byte (expected to be 6) used to ensure
+	 * @param dummyByte A dummy byte (expected to be 6) used to ensure
 	 *                       internal calling consistency.
 	 */
-	public void applyAnimation(int frameId, byte validationByte) {
+	public void applyAnimation(int frameId, byte dummyByte) {
 		// Cannot animate if the model hasn't been grouped by bones
 		if (vertexIndicesByBone == null) {
 			return;
@@ -1158,8 +1210,8 @@ public class Model extends Entity {
 		Skeleton skeleton = frame.skeleton;
 
 		// Standard engine-specific validation check
-		if (validationByte == 6) {
-			validationByte = 0;
+		if (dummyByte == 6) {
+			dummyByte = 0;
 		}
 		else {
 			return;
