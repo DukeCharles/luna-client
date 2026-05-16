@@ -18,25 +18,25 @@ public class Model extends Entity {
 	public Model(int id) {
 		dummyVar = 932;
 		dummVar2 = 426;
-		aBoolean1638 = false;
-		aBoolean1639 = true;
-		anInt1640 = -252;
-		aBoolean1641 = false;
+		isClickable = false;
+		shadingEnabled = true;
+		modelHeight = -252;
+		isModified = false;
 		isPriorityPicking = false;
 		if (id <= 0)
-			anInt1640 = -110;
+			modelHeight = -110;
 	}
 
 	public Model(int i, int j) {
 		dummyVar = 932;
 		dummVar2 = 426;
 
-		aBoolean1638 = false;
-		aBoolean1639 = true;
-		anInt1640 = -252;
-		aBoolean1641 = false;
+		isClickable = false;
+		shadingEnabled = true;
+		modelHeight = -252;
+		isModified = false;
 		isPriorityPicking = false;
-		anInt1642++;
+		instanceCount++;
 
 		ModelHeader modelHeader = Model.modelHeaders[i];
 		verticesCount = modelHeader.vertexCount;
@@ -73,7 +73,7 @@ public class Model extends Entity {
 
 
 		if (j >= 0)
-			aBoolean1641 = !aBoolean1641;
+			isModified = !isModified;
 		JagBuffer class50_sub1_sub2_3 = new JagBuffer(modelHeader.rawModelData);
 		class50_sub1_sub2_3.position = modelHeader.vertexZOffset;
 		JagBuffer class50_sub1_sub2_4 = new JagBuffer(modelHeader.rawModelData);
@@ -178,12 +178,12 @@ public class Model extends Entity {
 	public Model(int i, Model subModels[]) {
 		dummyVar = 932;
 		dummVar2 = 426;
-		aBoolean1638 = false;
-		aBoolean1639 = true;
-		anInt1640 = -252;
-		aBoolean1641 = false;
+		isClickable = false;
+		shadingEnabled = true;
+		modelHeight = -252;
+		isModified = false;
 		isPriorityPicking = false;
-		anInt1642++;
+		instanceCount++;
 		boolean flag = false;
 		boolean flag1 = false;
 		boolean flag2 = false;
@@ -289,12 +289,12 @@ public class Model extends Entity {
 	public Model(int i, boolean flag, int j, Model[] modelsTable) {
 		dummyVar = 932;
 		dummVar2 = 426;
-		aBoolean1638 = false;
-		aBoolean1639 = true;
-		anInt1640 = -252;
-		aBoolean1641 = false;
+		isClickable = false;
+		shadingEnabled = true;
+		modelHeight = -252;
+		isModified = false;
 		isPriorityPicking = false;
-		anInt1642++;
+		instanceCount++;
 		boolean flag1 = false;
 		boolean flag2 = false;
 		boolean flag3 = false;
@@ -409,19 +409,19 @@ public class Model extends Entity {
 				 Model model, boolean flag3) {
 		dummyVar = 932;
 		dummVar2 = 426;
-		aBoolean1638 = false;
-		aBoolean1639 = true;
-		anInt1640 = -252;
-		aBoolean1641 = false;
+		isClickable = false;
+		shadingEnabled = true;
+		modelHeight = -252;
+		isModified = false;
 		isPriorityPicking = false;
-		anInt1642++;
+		instanceCount++;
 		verticesCount = model.verticesCount;
 		faceCount = model.faceCount;
 		textureVertexCount = model.textureVertexCount;
 
 
 		if (flag1)
-			anInt1640 = 498;
+			modelHeight = 498;
 		if (flag) {
 			verticesX = model.verticesX;
 			verticesY = model.verticesY;
@@ -475,12 +475,12 @@ public class Model extends Entity {
 	public Model(boolean flag, boolean flag1, int i, Model model) {
 		dummyVar = 932;
 		dummVar2 = 426;
-		aBoolean1638 = false;
-		aBoolean1639 = true;
-		anInt1640 = -252;
-		aBoolean1641 = false;
+		isClickable = false;
+		shadingEnabled = true;
+		modelHeight = -252;
+		isModified = false;
 		isPriorityPicking = false;
-		anInt1642++;
+		instanceCount++;
 		verticesCount = model.verticesCount;
 		faceCount = model.faceCount;
 		textureVertexCount = model.textureVertexCount;
@@ -532,7 +532,7 @@ public class Model extends Entity {
 		verticesX = model.verticesX;
 		verticesZ = model.verticesZ;
 		if (i != 0)
-			aBoolean1638 = !aBoolean1638;
+			isClickable = !isClickable;
 		colors = model.colors;
 		faceTransparency = model.faceTransparency;
 		facePriorities = model.facePriorities;
@@ -569,12 +569,12 @@ public class Model extends Entity {
 
 	public int dummyVar;
 	public int dummVar2;
-	public boolean aBoolean1638;
-	public boolean aBoolean1639;
-	public int anInt1640;
-	public boolean aBoolean1641;
-	public static int anInt1642;
-	public static Model anotherModel = new Model(852);
+	public boolean isClickable;
+	public boolean shadingEnabled;
+	public int modelHeight;
+	public boolean isModified;
+	public static int instanceCount;
+	public static Model SCRATCH_MODEL = new Model(852);
 	public static int[] staticVertexX = new int[2000];
 	public static int[] staticVertexZ = new int[2000];
 	public static int[] staticVertexY = new int[2000];
@@ -1263,7 +1263,7 @@ public class Model extends Entity {
 		transformationPivotX = 0;
 
 		if (dummy != 0)
-			aBoolean1641 = !aBoolean1641;
+			isModified = !isModified;
 
 		transformationPivotY = 0;
 		transformationPivotZ = 0;

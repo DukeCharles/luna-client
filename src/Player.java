@@ -184,7 +184,7 @@ public class Player extends Actor {
 		}
 		if (aBoolean1763)
 			return class50_sub1_sub4_sub4_1;
-		Model class50_sub1_sub4_sub4_2 = Model.anotherModel;
+		Model class50_sub1_sub4_sub4_2 = Model.SCRATCH_MODEL;
 		class50_sub1_sub4_sub4_2.copyFrom(AnimationFrame.isFrameTransparent(j) & AnimationFrame.isFrameTransparent(k),
 				class50_sub1_sub4_sub4_1);
 		if (j != -1 && k != -1)
