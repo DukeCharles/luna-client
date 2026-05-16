@@ -188,7 +188,7 @@ public class Player extends Actor {
 		class50_sub1_sub4_sub4_2.copyFrom(AnimationFrame.isFrameTransparent(j) & AnimationFrame.isFrameTransparent(k),
 				class50_sub1_sub4_sub4_1);
 		if (j != -1 && k != -1)
-			class50_sub1_sub4_sub4_2.method586(k, 0, j, Animation.animations[super.currentAnimation].anIntArray299);
+			class50_sub1_sub4_sub4_2.applyBlendedAnimation(k, 0, j, Animation.animations[super.currentAnimation].anIntArray299);
 		else if (j != -1)
 			class50_sub1_sub4_sub4_2.method585(j, (byte) 6);
 		class50_sub1_sub4_sub4_2.calculateRadius();

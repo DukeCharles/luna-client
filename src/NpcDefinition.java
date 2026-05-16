@@ -219,7 +219,7 @@ public class NpcDefinition {
 		class50_sub1_sub4_sub4_1.copyFrom(AnimationFrame.isFrameTransparent(i) & AnimationFrame.isFrameTransparent(j),
 				class50_sub1_sub4_sub4);
 		if (i != -1 && j != -1)
-			class50_sub1_sub4_sub4_1.method586(j, 0, i, ai);
+			class50_sub1_sub4_sub4_1.applyBlendedAnimation(j, 0, i, ai);
 		else if (i != -1)
 			class50_sub1_sub4_sub4_1.method585(i, (byte) 6);
 		if (anInt632 != 128 || anInt630 != 128)

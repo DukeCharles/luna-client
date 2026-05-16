@@ -1154,48 +1154,77 @@ public class Model extends Entity {
 
 	}
 
-	public void method586(int i, int j, int k, int[] ai) {
-		if (k == -1)
+	/**
+	 * Applies a blend of two animation frames based on a mask.
+	 *
+	 * @param secondaryFrameId The ID of the frame to apply to masked bones.
+	 * @param dummy            A dummy value used to toggle internal state.
+	 * @param primaryFrameId   The ID of the frame to apply to unmasked bones.
+	 * @param mask             An array of instruction indices that should use the secondary frame.
+	 */
+	public void applyBlendedAnimation(int secondaryFrameId, int dummy, int primaryFrameId, int[] mask) {
+		if (primaryFrameId == -1)
 			return;
-		if (ai == null || i == -1) {
-			method585(k, (byte) 6);
+
+		// If no mask is provided or no secondary frame exists, default to standard animation
+		if (mask == null || secondaryFrameId == -1) {
+			method585(primaryFrameId, (byte) 6);
 			return;
-		}
-		AnimationFrame class21 = AnimationFrame.forId(k);
-		if (class21 == null)
-			return;
-		AnimationFrame class21_1 = AnimationFrame.forId(i);
-		if (class21_1 == null) {
-			method585(k, (byte) 6);
-			return;
-		}
-		Skeleton skeleton = class21.skeleton;
-		transformationPivotX = 0;
-		if (j != 0)
-			aBoolean1641 = !aBoolean1641;
-		transformationPivotY = 0;
-		transformationPivotZ = 0;
-		int l = 0;
-		int i1 = ai[l++];
-		for (int j1 = 0; j1 < class21.instructionCount; j1++) {
-			int k1;
-			for (k1 = class21.instructionIndices[j1]; k1 > i1; i1 = ai[l++]);
-			if (k1 != i1 || skeleton.opcodes[k1] == 0)
-				applyTransformation(skeleton.opcodes[k1], skeleton.boneGroups[k1], class21.transformationX[j1],
-						class21.transformationY[j1], class21.transformationZ[j1]);
 		}
 
+		AnimationFrame primaryFrame = AnimationFrame.forId(primaryFrameId);
+		if (primaryFrame == null) {
+			return;
+		}
+
+		AnimationFrame secondaryFrame = AnimationFrame.forId(secondaryFrameId);
+		if (secondaryFrame == null) {
+			method585(primaryFrameId, (byte) 6);
+			return;
+		}
+
+		Skeleton skeleton = primaryFrame.skeleton;
+		transformationPivotX = 0;
+
+		if (dummy != 0)
+			aBoolean1641 = !aBoolean1641;
+
+		transformationPivotY = 0;
+		transformationPivotZ = 0;
+
+		int maskPtr = 0;
+		int maskValue = mask[maskPtr++];
+
+		// --- Part 1: Apply Primary Frame to UNMASKED bones ---
+		for (int i = 0; i < primaryFrame.instructionCount; i++) {
+			int instructionIdx;
+			// Advance the mask pointer until it reaches or exceeds the current instruction
+			for (instructionIdx = primaryFrame.instructionIndices[i]; instructionIdx > maskValue; maskValue = mask[maskPtr++]);
+
+			// If this instruction is NOT in the mask, or it is a pivot opcode (0), apply it
+			if (instructionIdx != maskValue || skeleton.opcodes[instructionIdx] == 0) {
+				applyTransformation(skeleton.opcodes[instructionIdx], skeleton.boneGroups[instructionIdx], primaryFrame.transformationX[i],
+						primaryFrame.transformationY[i], primaryFrame.transformationZ[i]);
+			}
+		}
+
+		// Reset pivot for the second pass
 		transformationPivotX = 0;
 		transformationPivotY = 0;
 		transformationPivotZ = 0;
-		l = 0;
-		i1 = ai[l++];
-		for (int l1 = 0; l1 < class21_1.instructionCount; l1++) {
-			int i2;
-			for (i2 = class21_1.instructionIndices[l1]; i2 > i1; i1 = ai[l++]);
-			if (i2 == i1 || skeleton.opcodes[i2] == 0)
-				applyTransformation(skeleton.opcodes[i2], skeleton.boneGroups[i2], class21_1.transformationX[l1],
-						class21_1.transformationY[l1], class21_1.transformationZ[l1]);
+		maskPtr = 0;
+		maskValue = mask[maskPtr++];
+
+		// --- Part 2: Apply Secondary Frame to MASKED bones ---
+		for (int i = 0; i < secondaryFrame.instructionCount; i++) {
+			int instructionIdx;
+			// Advance the mask pointer until it reaches or exceeds the current instruction
+			for (instructionIdx = secondaryFrame.instructionIndices[i]; instructionIdx > maskValue; maskValue = mask[maskPtr++]);
+
+			// If this instruction IS in the mask, or it is a pivot opcode (0), apply it
+			if (instructionIdx == maskValue || skeleton.opcodes[instructionIdx] == 0)
+				applyTransformation(skeleton.opcodes[instructionIdx], skeleton.boneGroups[instructionIdx], secondaryFrame.transformationX[i],
+						secondaryFrame.transformationY[i], secondaryFrame.transformationZ[i]);
 		}
 
 	}
