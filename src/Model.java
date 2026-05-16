@@ -1148,7 +1148,7 @@ public class Model extends Entity {
 		transformationPivotZ = 0;
 		for (int j = 0; j < class21.instructionCount; j++) {
 			int k = class21.instructionIndices[j];
-			method587(skeleton.opcodes[k], skeleton.boneGroups[k], class21.transformationX[j],
+			applyTransformation(skeleton.opcodes[k], skeleton.boneGroups[k], class21.transformationX[j],
 					class21.transformationY[j], class21.transformationZ[j]);
 		}
 
@@ -1181,7 +1181,7 @@ public class Model extends Entity {
 			int k1;
 			for (k1 = class21.instructionIndices[j1]; k1 > i1; i1 = ai[l++]);
 			if (k1 != i1 || skeleton.opcodes[k1] == 0)
-				method587(skeleton.opcodes[k1], skeleton.boneGroups[k1], class21.transformationX[j1],
+				applyTransformation(skeleton.opcodes[k1], skeleton.boneGroups[k1], class21.transformationX[j1],
 						class21.transformationY[j1], class21.transformationZ[j1]);
 		}
 
@@ -1194,56 +1194,150 @@ public class Model extends Entity {
 			int i2;
 			for (i2 = class21_1.instructionIndices[l1]; i2 > i1; i1 = ai[l++]);
 			if (i2 == i1 || skeleton.opcodes[i2] == 0)
-				method587(skeleton.opcodes[i2], skeleton.boneGroups[i2], class21_1.transformationX[l1],
+				applyTransformation(skeleton.opcodes[i2], skeleton.boneGroups[i2], class21_1.transformationX[l1],
 						class21_1.transformationY[l1], class21_1.transformationZ[l1]);
 		}
 
 	}
 
-	public void method587(int i, int ai[], int j, int k, int l) {
-		int i1 = ai.length;
-		if (i == 0) {
-			int j1 = 0;
+
+
+	/**
+	 * Applies a specific transformation to grouped vertices or faces based on a provided opcode.
+	 *
+	 * <p>This method is the core of the skeletal animation system. It manipulates the model's
+	 * geometry or attributes by targeting specific "bone groups" (sets of indices). It handles
+	 * pivot calculation, translation, rotation, scaling, and transparency modifications using
+	 * fixed-point arithmetic.</p>
+	 *
+	 * <p>The behavior depends on the {@code opcode}:</p>
+	 * <ul>
+	 *   <li><b>Opcode 0 (Pivot Calculation):</b> Calculates the centroid (average position) of
+	 *       all vertices in the specified bone groups and stores it in the global
+	 *       {@code transformationPivot} variables. This pivot is used for subsequent rotations and scales.</li>
+	 *   <li><b>Opcode 1 (Translation):</b> Offsets the X, Y, and Z coordinates of the targeted vertices.</li>
+	 *   <li><b>Opcode 2 (Rotation):</b> Rotates targeted vertices around the current
+	 *       {@code transformationPivot}. Angles are provided as 8-bit values (0-255) and
+	 *       internalized using fixed-point sine/cosine tables.</li>
+	 *   <li><b>Opcode 3 (Scaling):</b> Resizes targeted vertices relative to the
+	 *       {@code transformationPivot}. The transformation values represent a percentage
+	 *       multiplier where 128 is 100% scale.</li>
+	 *   <li><b>Opcode 5 (Transparency):</b> Modifies the alpha transparency of faces assigned
+	 *       to the specified bone groups.</li>
+	 * </ul>
+	 *
+	 * @param opcode         The transformation type to perform (0, 1, 2, 3, or 5).
+	 * @param boneGroupIds   An array of bone/group identifiers defining which part of the
+	 *                       mesh is affected.
+	 * @param transformX     The X-axis transformation value (translation delta, rotation angle,
+	 *                       scale factor, or transparency delta).
+	 * @param transformY     The Y-axis transformation value.
+	 * @param transformZ     The Z-axis transformation value.
+	 */
+	public void applyTransformation(int opcode, int[] boneGroupIds, int transformX, int transformY, int transformZ) {
+		int groupCount = boneGroupIds.length;
+
+		//TODO COULD BE A SWITCH OF OPCODES INSTEAD OF IF-ELSES;
+
+		// OPCODE 0: Calculate Transformation Pivot (Centroid of specified bones)
+		if (opcode == 0) {
+			int totalVertices = 0;
 			transformationPivotX = 0;
 			transformationPivotY = 0;
 			transformationPivotZ = 0;
-			for (int k2 = 0; k2 < i1; k2++) {
-				int l3 = ai[k2];
-				if (l3 < vertexIndicesByBone.length) {
-					int ai5[] = vertexIndicesByBone[l3];
-					for (int i5 = 0; i5 < ai5.length; i5++) {
-						int j6 = ai5[i5];
-						transformationPivotX += verticesX[j6];
-						transformationPivotY += verticesY[j6];
-						transformationPivotZ += verticesZ[j6];
-						j1++;
+			for (int i = 0; i < groupCount; i++) {
+				int boneId = boneGroupIds[i];
+				if (boneId < vertexIndicesByBone.length) {
+					int[] vertexIndices = vertexIndicesByBone[boneId];
+					for (int v = 0; v < vertexIndices.length; v++) {
+						int vertexId = vertexIndices[v];
+						transformationPivotX += verticesX[vertexId];
+						transformationPivotY += verticesY[vertexId];
+						transformationPivotZ += verticesZ[vertexId];
+						totalVertices++;
 					}
-
 				}
 			}
 
-			if (j1 > 0) {
-				transformationPivotX = transformationPivotX / j1 + j;
-				transformationPivotY = transformationPivotY / j1 + k;
-				transformationPivotZ = transformationPivotZ / j1 + l;
+			if (totalVertices > 0) {
+				transformationPivotX = transformationPivotX / totalVertices + transformX;
+				transformationPivotY = transformationPivotY / totalVertices + transformY;
+				transformationPivotZ = transformationPivotZ / totalVertices + transformZ;
 				return;
 			} else {
-				transformationPivotX = j;
-				transformationPivotY = k;
-				transformationPivotZ = l;
+				transformationPivotX = transformX;
+				transformationPivotY = transformY;
+				transformationPivotZ = transformZ;
 				return;
 			}
 		}
-		if (i == 1) {
-			for (int k1 = 0; k1 < i1; k1++) {
-				int l2 = ai[k1];
-				if (l2 < vertexIndicesByBone.length) {
-					int ai1[] = vertexIndicesByBone[l2];
-					for (int i4 = 0; i4 < ai1.length; i4++) {
-						int j5 = ai1[i4];
-						verticesX[j5] += j;
-						verticesY[j5] += k;
-						verticesZ[j5] += l;
+
+		// OPCODE 1: Translation (Movement)
+		if (opcode == 1) {
+			for (int i = 0; i < groupCount; i++) {
+				int boneId = boneGroupIds[i];
+				if (boneId < vertexIndicesByBone.length) {
+					int[] vertexIndices = vertexIndicesByBone[boneId];
+					for (int v = 0; v < vertexIndices.length; v++) {
+						int vertexId = vertexIndices[v];
+						verticesX[vertexId] += transformX;
+						verticesY[vertexId] += transformY;
+						verticesZ[vertexId] += transformZ;
+					}
+				}
+			}
+			return;
+		}
+
+		// OPCODE 2: Rotation (Relative to pivot)
+		if (opcode == 2) {
+			for (int i = 0; i < groupCount; i++) {
+				int boneId = boneGroupIds[i];
+				if (boneId < vertexIndicesByBone.length) {
+					int[] vertexIndices = vertexIndicesByBone[boneId];
+					for (int v = 0; v < vertexIndices.length; v++) {
+						int vertexId = vertexIndices[v];
+
+						// Move to local pivot space
+						verticesX[vertexId] -= transformationPivotX;
+						verticesY[vertexId] -= transformationPivotY;
+						verticesZ[vertexId] -= transformationPivotZ;
+
+						int angleX = (transformX & 0xff) * 8;
+						int angleY = (transformY & 0xff) * 8;
+						int angleZ = (transformZ & 0xff) * 8;
+
+						// Rotate around Z axis
+						if (angleZ != 0) {
+							int sin = sineTable[angleZ];
+							int cos = cosineTable[angleZ];
+							int rotatedX = verticesY[vertexId] * sin + verticesX[vertexId] * cos >> 16;
+							verticesY[vertexId] = verticesY[vertexId] * cos - verticesX[vertexId] * sin >> 16;
+							verticesX[vertexId] = rotatedX;
+						}
+
+						// Rotate around X axis
+						if (angleX != 0) {
+							int sine = sineTable[angleX];
+							int cos = cosineTable[angleX];
+							int rotatedY = verticesY[vertexId] * cos - verticesZ[vertexId] * sine >> 16;
+							verticesZ[vertexId] = verticesY[vertexId] * sine + verticesZ[vertexId] * cos >> 16;
+							verticesY[vertexId] = rotatedY;
+						}
+
+						// Rotate around Y axis
+						if (angleY != 0) {
+							int sine = sineTable[angleY];
+							int cos = cosineTable[angleY];
+							int rotatedX = verticesZ[vertexId] * sine + verticesX[vertexId] * cos >> 16;
+							verticesZ[vertexId] = verticesZ[vertexId] * cos - verticesX[vertexId] * sine >> 16;
+							verticesX[vertexId] = rotatedX;
+						}
+
+						// Return to world space
+						verticesX[vertexId] += transformationPivotX;
+						verticesY[vertexId] += transformationPivotY;
+						verticesZ[vertexId] += transformationPivotZ;
 					}
 
 				}
@@ -1251,43 +1345,24 @@ public class Model extends Entity {
 
 			return;
 		}
-		if (i == 2) {
-			for (int l1 = 0; l1 < i1; l1++) {
-				int i3 = ai[l1];
-				if (i3 < vertexIndicesByBone.length) {
-					int ai2[] = vertexIndicesByBone[i3];
-					for (int j4 = 0; j4 < ai2.length; j4++) {
-						int k5 = ai2[j4];
-						verticesX[k5] -= transformationPivotX;
-						verticesY[k5] -= transformationPivotY;
-						verticesZ[k5] -= transformationPivotZ;
-						int k6 = (j & 0xff) * 8;
-						int l6 = (k & 0xff) * 8;
-						int i7 = (l & 0xff) * 8;
-						if (i7 != 0) {
-							int j7 = sineTable[i7];
-							int i8 = cosineTable[i7];
-							int l8 = verticesY[k5] * j7 + verticesX[k5] * i8 >> 16;
-							verticesY[k5] = verticesY[k5] * i8 - verticesX[k5] * j7 >> 16;
-							verticesX[k5] = l8;
-						}
-						if (k6 != 0) {
-							int k7 = sineTable[k6];
-							int j8 = cosineTable[k6];
-							int i9 = verticesY[k5] * j8 - verticesZ[k5] * k7 >> 16;
-							verticesZ[k5] = verticesY[k5] * k7 + verticesZ[k5] * j8 >> 16;
-							verticesY[k5] = i9;
-						}
-						if (l6 != 0) {
-							int l7 = sineTable[l6];
-							int k8 = cosineTable[l6];
-							int j9 = verticesZ[k5] * l7 + verticesX[k5] * k8 >> 16;
-							verticesZ[k5] = verticesZ[k5] * k8 - verticesX[k5] * l7 >> 16;
-							verticesX[k5] = j9;
-						}
-						verticesX[k5] += transformationPivotX;
-						verticesY[k5] += transformationPivotY;
-						verticesZ[k5] += transformationPivotZ;
+
+		// OPCODE 3: Scaling (Relative to pivot)
+		if (opcode == 3) {
+			for (int i = 0; i < groupCount; i++) {
+				int boneId = boneGroupIds[i];
+				if (boneId < vertexIndicesByBone.length) {
+					int[] vertexIndices = vertexIndicesByBone[boneId];
+					for (int v = 0; v < vertexIndices.length; v++) {
+						int vertexId = vertexIndices[v];
+						verticesX[vertexId] -= transformationPivotX;
+						verticesY[vertexId] -= transformationPivotY;
+						verticesZ[vertexId] -= transformationPivotZ;
+						verticesX[vertexId] = (verticesX[vertexId] * transformX) / 128;
+						verticesY[vertexId] = (verticesY[vertexId] * transformY) / 128;
+						verticesZ[vertexId] = (verticesZ[vertexId] * transformZ) / 128;
+						verticesX[vertexId] += transformationPivotX;
+						verticesY[vertexId] += transformationPivotY;
+						verticesZ[vertexId] += transformationPivotZ;
 					}
 
 				}
@@ -1295,46 +1370,23 @@ public class Model extends Entity {
 
 			return;
 		}
-		if (i == 3) {
-			for (int i2 = 0; i2 < i1; i2++) {
-				int j3 = ai[i2];
-				if (j3 < vertexIndicesByBone.length) {
-					int ai3[] = vertexIndicesByBone[j3];
-					for (int k4 = 0; k4 < ai3.length; k4++) {
-						int l5 = ai3[k4];
-						verticesX[l5] -= transformationPivotX;
-						verticesY[l5] -= transformationPivotY;
-						verticesZ[l5] -= transformationPivotZ;
-						verticesX[l5] = (verticesX[l5] * j) / 128;
-						verticesY[l5] = (verticesY[l5] * k) / 128;
-						verticesZ[l5] = (verticesZ[l5] * l) / 128;
-						verticesX[l5] += transformationPivotX;
-						verticesY[l5] += transformationPivotY;
-						verticesZ[l5] += transformationPivotZ;
-					}
 
+		// OPCODE 5: Alpha/Transparency modification
+		if (opcode == 5 && faceIndicesByBone != null && faceTransparency != null) {
+			for (int i = 0; i < groupCount; i++) {
+				int boneId = boneGroupIds[i];
+				if (boneId < faceIndicesByBone.length) {
+					int[] vertexIndices = faceIndicesByBone[boneId];
+					for (int v = 0; v < vertexIndices.length; v++) {
+						int vertexId = vertexIndices[v];
+						faceTransparency[vertexId] += transformX * 8;
+						if (faceTransparency[vertexId] < 0)
+							faceTransparency[vertexId] = 0;
+						if (faceTransparency[vertexId] > 255)
+							faceTransparency[vertexId] = 255;
+					}
 				}
 			}
-
-			return;
-		}
-		if (i == 5 && faceIndicesByBone != null && faceTransparency != null) {
-			for (int j2 = 0; j2 < i1; j2++) {
-				int k3 = ai[j2];
-				if (k3 < faceIndicesByBone.length) {
-					int ai4[] = faceIndicesByBone[k3];
-					for (int l4 = 0; l4 < ai4.length; l4++) {
-						int i6 = ai4[l4];
-						faceTransparency[i6] += j * 8;
-						if (faceTransparency[i6] < 0)
-							faceTransparency[i6] = 0;
-						if (faceTransparency[i6] > 255)
-							faceTransparency[i6] = 255;
-					}
-
-				}
-			}
-
 		}
 	}
 
