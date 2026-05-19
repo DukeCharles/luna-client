@@ -4,6 +4,13 @@
 
 public class LruHashTable {
 
+	public int misses;
+	public int hits;
+	public int capacity;
+	public int remaining;
+	public HashTable table;
+	public LinkedQueue queue;
+
 	public LruHashTable(int size) {
 		queue = new LinkedQueue();
 		capacity = size;
@@ -46,12 +53,5 @@ public class LruHashTable {
 			}
 		} while (true);
 	}
-
-	public int misses;
-	public int hits;
-	public int capacity;
-	public int remaining;
-	public HashTable table;
-	public LinkedQueue queue;
 
 }

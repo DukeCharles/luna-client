@@ -4,6 +4,79 @@
 
 public class NpcDefinition {
 
+	public NpcDefinition() {
+		anInt621 = -1;
+		aBoolean623 = true;
+		anInt624 = 932;
+		anInt627 = -1;
+		id = -1L;
+		anInt630 = 128;
+		aBoolean631 = true;
+		anInt632 = 128;
+		anInt633 = -1;
+		aBoolean636 = true;
+		anInt637 = -1;
+		anInt638 = -1;
+		anInt639 = -1;
+		anInt640 = 7;
+		anInt641 = -1;
+		aByte642 = 1;
+		anInt643 = -1;
+		aBoolean644 = false;
+		anInt645 = -1;
+		aBoolean647 = false;
+		anInt648 = -1;
+		anInt651 = 32;
+		aString652 = "null";
+		anInt654 = -1;
+		anInt659 = -1;
+		aBoolean662 = false;
+	}
+
+	public int anInt621;
+	public int anIntArray622[];
+	public boolean aBoolean623;
+	public int anInt624;
+	public int anIntArray625[];
+	public int anIntArray626[];
+	public int anInt627;
+	public long id;
+	public static client aClient629;
+	public int anInt630;
+	public boolean aBoolean631;
+	public int anInt632;
+	public int anInt633;
+	public int[] anIntArray634;
+	public static LruHashTable modelCache = new LruHashTable(30);
+	public boolean aBoolean636;
+	public int anInt637;
+	public int anInt638;
+	public int anInt639;
+	public int anInt640;
+	public int anInt641;
+	public byte aByte642;
+	public int anInt643;
+	public boolean aBoolean644;
+	public int anInt645;
+	public String aStringArray646[];
+	public boolean aBoolean647;
+	public int anInt648;
+	public static int anInt649;
+	public static int offsets[];
+	public int anInt651;
+	public String aString652;
+	public static byte aByte653 = 6;
+	public int anInt654;
+	public static NpcDefinition cache[];
+	public int anIntArray656[];
+	public static JagBuffer dataBuffer;
+	public int anInt658;
+	public int anInt659;
+	public byte aByteArray660[];
+	public static int anInt661;
+	public boolean aBoolean662;
+	public int anInt663;
+
 	public void init(byte byte0, JagBuffer class50_sub1_sub2) {
 		if(byte0 != 6)
 			throw new NullPointerException();
@@ -98,14 +171,15 @@ public class NpcDefinition {
 		} while (true);
 	}
 
-	public static void method358(boolean flag) {
-		aClass33_635 = null;
-		anIntArray650 = null;
-		aClass37Array655 = null;
-		aClass50_Sub1_Sub2_657 = null;
-		if (flag) {
-			for (int i = 1; i > 0; i++);
-		}
+	/**
+	 * Disposes of the static NPC definition data by nullifying caches and buffers.
+	 * This is typically called when the client is cleaning up resources or shutting down.
+	 */
+	public static void dispose() {
+		modelCache = null; // The LRU cache for NPC models
+		offsets = null; // The array containing offsets for npc.dat
+		cache = null; // The static cache of NpcDefinition instances
+		dataBuffer = null; // The raw data buffer for npc.dat
 	}
 
 	public Model getHeadModel() {
@@ -162,19 +236,19 @@ public class NpcDefinition {
 	}
 
 	public static void unpack(Archive class2) {
-		aClass50_Sub1_Sub2_657 = new JagBuffer(class2.get("npc.dat"));
+		dataBuffer = new JagBuffer(class2.get("npc.dat"));
 		JagBuffer class50_sub1_sub2 = new JagBuffer(class2.get("npc.idx"));
 		anInt649 = class50_sub1_sub2.getShort();
-		anIntArray650 = new int[anInt649];
+		offsets = new int[anInt649];
 		int i = 2;
 		for (int j = 0; j < anInt649; j++) {
-			anIntArray650[j] = i;
+			offsets[j] = i;
 			i += class50_sub1_sub2.getShort();
 		}
 
-		aClass37Array655 = new NpcDefinition[20];
+		cache = new NpcDefinition[20];
 		for (int k = 0; k < 20; k++)
-			aClass37Array655[k] = new NpcDefinition();
+			cache[k] = new NpcDefinition();
 
 	}
 
@@ -186,7 +260,7 @@ public class NpcDefinition {
 			else
 				return class37.method362(i, j, 0, ai);
 		}
-		Model class50_sub1_sub4_sub4 = (Model) aClass33_635.get(id);
+		Model class50_sub1_sub4_sub4 = (Model) modelCache.get(id);
 		if (class50_sub1_sub4_sub4 == null) {
 			boolean flag = false;
 			for (int l = 0; l < anIntArray626.length; l++)
@@ -211,7 +285,7 @@ public class NpcDefinition {
 			}
 			class50_sub1_sub4_sub4.groupIndicesByTransform();
 			class50_sub1_sub4_sub4.initLighting(64 + anInt663, 850 + anInt658, -30, -50, -30, true);
-			aClass33_635.put(class50_sub1_sub4_sub4, id);
+			modelCache.put(class50_sub1_sub4_sub4, id);
 		}
 		Model class50_sub1_sub4_sub4_1 = Model.SCRATCH_MODEL;
 		if (k != 0)
@@ -253,88 +327,15 @@ public class NpcDefinition {
 
 	public static NpcDefinition forId(int id) {
 		for (int j = 0; j < 20; j++)
-			if (aClass37Array655[j].id == id)
-				return aClass37Array655[j];
+			if (cache[j].id == id)
+				return cache[j];
 
 		anInt661 = (anInt661 + 1) % 20;
-		NpcDefinition def = aClass37Array655[anInt661] = new NpcDefinition();
-		aClass50_Sub1_Sub2_657.position = anIntArray650[id];
+		NpcDefinition def = cache[anInt661] = new NpcDefinition();
+		dataBuffer.position = offsets[id];
 		def.id = id;
-		def.init(aByte653, aClass50_Sub1_Sub2_657);
+		def.init(aByte653, dataBuffer);
 		return def;
 	}
-
-	public NpcDefinition() {
-		anInt621 = -1;
-		aBoolean623 = true;
-		anInt624 = 932;
-		anInt627 = -1;
-		id = -1L;
-		anInt630 = 128;
-		aBoolean631 = true;
-		anInt632 = 128;
-		anInt633 = -1;
-		aBoolean636 = true;
-		anInt637 = -1;
-		anInt638 = -1;
-		anInt639 = -1;
-		anInt640 = 7;
-		anInt641 = -1;
-		aByte642 = 1;
-		anInt643 = -1;
-		aBoolean644 = false;
-		anInt645 = -1;
-		aBoolean647 = false;
-		anInt648 = -1;
-		anInt651 = 32;
-		aString652 = "null";
-		anInt654 = -1;
-		anInt659 = -1;
-		aBoolean662 = false;
-	}
-
-	public int anInt621;
-	public int anIntArray622[];
-	public boolean aBoolean623;
-	public int anInt624;
-	public int anIntArray625[];
-	public int anIntArray626[];
-	public int anInt627;
-	public long id;
-	public static client aClient629;
-	public int anInt630;
-	public boolean aBoolean631;
-	public int anInt632;
-	public int anInt633;
-	public int anIntArray634[];
-	public static LruHashTable aClass33_635 = new LruHashTable(30);
-	public boolean aBoolean636;
-	public int anInt637;
-	public int anInt638;
-	public int anInt639;
-	public int anInt640;
-	public int anInt641;
-	public byte aByte642;
-	public int anInt643;
-	public boolean aBoolean644;
-	public int anInt645;
-	public String aStringArray646[];
-	public boolean aBoolean647;
-	public int anInt648;
-	public static int anInt649;
-	public static int anIntArray650[];
-	public int anInt651;
-	public String aString652;
-	public static byte aByte653 = 6;
-	public int anInt654;
-	public static NpcDefinition aClass37Array655[];
-	public int anIntArray656[];
-	public static JagBuffer aClass50_Sub1_Sub2_657;
-	public int anInt658;
-	public int anInt659;
-	public byte aByteArray660[];
-	public static int anInt661;
-	public boolean aBoolean662;
-	public int anInt663;
 
 }

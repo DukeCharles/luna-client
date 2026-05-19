@@ -351,7 +351,7 @@ public class client extends JagApplet {
         aClass6_1261 = null;
         method141();
         ObjectDefinition.method433(false);
-        NpcDefinition.method358(false);
+        NpcDefinition.dispose();
         ItemDefinition.method222(false);
         JagInterface.method202(false);
         TileDefinition.tiles = null;
@@ -3410,7 +3410,7 @@ public class client extends JagApplet {
         if (i <= 0) {
             for (int j = 1; j > 0; j++) ;
         }
-        NpcDefinition.aClass33_635.clear();
+        NpcDefinition.modelCache.clear();
         ItemDefinition.aClass33_337.clear();
         ItemDefinition.spriteCache.clear();
         Player.aClass33_1761.clear();
