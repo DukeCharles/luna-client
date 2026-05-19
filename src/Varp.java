@@ -1,7 +1,15 @@
-// Decompiled by Jad v1.5.8f. Copyright 2001 Pavel Kouznetsov.
-// Jad home page: http://www.kpdus.com/jad.html
-// Decompiler options: packimports(3) 
-
+/**
+ * VarpDefinition (Variable Player) represents a player-specific variable
+ * used to track state between the client and the server.
+ *
+ * Varps are 32-bit integers stored in an array (historically size 4000).
+ * They are used for:
+ * 1. Configs: Transforming objects, NPCs, or hitmarks (e.g., farming patches).
+ * 2. Client Scripts: Toggling interface buttons.
+ * 3. Direct Code: Triggering internal client logic like volume or brightness.
+ *
+ * Varbits are bit-packed subsets of these Varps.
+ */
 public class Varp {
 
 	public Varp() {
@@ -13,9 +21,9 @@ public class Varp {
 		aBoolean718 = true;
 	}
 
-	public static int count;
-	public static Varp varpTable[];
-	public static int anInt705;
+	public static int totalCount;
+	public static Varp[] varpTable;
+	public static int clientCodeCount;
 	public static int[] anIntArray706;
 	public String aString707;
 	public int anInt708;
@@ -30,18 +38,21 @@ public class Varp {
 	public int anInt717;
 	public boolean aBoolean718;
 
+	/**
+	 * Unpacks the varp.dat archive and populates the definitions table.
+	 */
 	public static void unpack(Archive archive) {
 		JagBuffer buf = new JagBuffer(archive.get("varp.dat"));
-		anInt705 = 0;
-		count = buf.getShort();
+		clientCodeCount = 0;
+		totalCount = buf.getShort();
 
 		if (varpTable == null)
-			varpTable = new Varp[count];
+			varpTable = new Varp[totalCount];
 
 		if (anIntArray706 == null)
-			anIntArray706 = new int[count];
+			anIntArray706 = new int[totalCount];
 
-		for (int j = 0; j < count; j++) {
+		for (int j = 0; j < totalCount; j++) {
 			if (varpTable[j] == null)
 				varpTable[j] = new Varp();
 			varpTable[j].init(j, buf);
@@ -51,9 +62,13 @@ public class Varp {
 			System.out.println("varptype load mismatch");
 	}
 
-	public void init(int j, JagBuffer buf) {
+	/**
+	 * Parses attributes from the data buffer.
+	 */
+	public void init(int id, JagBuffer buf) {
 		do {
 			int attribute = buf.getByte();
+
 			if (attribute == 0)
 				return;
 			if (attribute == 1)
@@ -62,7 +77,7 @@ public class Varp {
 				anInt709 = buf.getByte();
 			else if (attribute == 3) {
 				aBoolean710 = true;
-				anIntArray706[anInt705++] = j;
+				anIntArray706[clientCodeCount++] = id;
 			} else if (attribute == 4)
 				aBoolean711 = false;
 			else if (attribute == 5)
