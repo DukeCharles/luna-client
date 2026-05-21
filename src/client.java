@@ -6046,7 +6046,7 @@ public class client extends JagApplet {
             groundItems = null;
         if (anInt1183 >= 400)
             return;
-        if (class37.anIntArray622 != null)
+        if (class37.transformations != null)
             class37 = class37.method363(false);
         if (class37 == null)
             return;
@@ -6458,7 +6458,7 @@ public class client extends JagApplet {
             Npc class50_sub1_sub4_sub3_sub1 = npcs[anIntArray1134[j6]];
             if (class50_sub1_sub4_sub3_sub1 != null && class50_sub1_sub4_sub3_sub1.isVisible()) {
                 NpcDefinition class37 = class50_sub1_sub4_sub3_sub1.def;
-                if (class37.anIntArray622 != null)
+                if (class37.transformations != null)
                     class37 = class37.method363(false);
                 if (class37 != null && class37.aBoolean636 && class37.aBoolean631) {
                     int j1 = ((Actor) (class50_sub1_sub4_sub3_sub1)).unitX / 32
@@ -8847,7 +8847,7 @@ public class client extends JagApplet {
             Npc class50_sub1_sub4_sub3_sub1_6 = npcs[id];
             if (class50_sub1_sub4_sub3_sub1_6 != null) {
                 NpcDefinition class37 = class50_sub1_sub4_sub3_sub1_6.def;
-                if (class37.anIntArray622 != null)
+                if (class37.transformations != null)
                     class37 = class37.method363(false);
                 if (class37 != null) {
                     String s10;
@@ -9054,7 +9054,7 @@ public class client extends JagApplet {
                 continue;
             if (obj instanceof Npc) {
                 NpcDefinition class37 = ((Npc) obj).def;
-                if (class37.anIntArray622 != null)
+                if (class37.transformations != null)
                     class37 = class37.method363(false);
                 if (class37 == null)
                     continue;

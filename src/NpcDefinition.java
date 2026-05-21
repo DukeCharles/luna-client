@@ -34,11 +34,11 @@ public class NpcDefinition {
 	}
 
 	public int anInt621;
-	public int anIntArray622[];
+	public int[] transformations;
 	public boolean aBoolean623;
 	public int anInt624;
-	public int anIntArray625[];
-	public int anIntArray626[];
+	public int[] headModelIds;
+	public int[] anIntArray626;
 	public int anInt627;
 	public long id;
 	public static client aClient629;
@@ -123,9 +123,9 @@ public class NpcDefinition {
 
 			} else if (i == 60) {
 				int l = class50_sub1_sub2.getByte();
-				anIntArray625 = new int[l];
+				headModelIds = new int[l];
 				for (int l1 = 0; l1 < l; l1++)
-					anIntArray625[l1] = class50_sub1_sub2.getShort();
+					headModelIds[l1] = class50_sub1_sub2.getShort();
 
 			} else if (i == 90)
 				anInt648 = class50_sub1_sub2.getShort();
@@ -159,11 +159,11 @@ public class NpcDefinition {
 				if (anInt659 == 65535)
 					anInt659 = -1;
 				int i1 = class50_sub1_sub2.getByte();
-				anIntArray622 = new int[i1 + 1];
+				transformations = new int[i1 + 1];
 				for (int i2 = 0; i2 <= i1; i2++) {
-					anIntArray622[i2] = class50_sub1_sub2.getShort();
-					if (anIntArray622[i2] == 65535)
-						anIntArray622[i2] = -1;
+					transformations[i2] = class50_sub1_sub2.getShort();
+					if (transformations[i2] == 65535)
+						transformations[i2] = -1;
 				}
 
 			} else if (i == 107)
@@ -182,26 +182,40 @@ public class NpcDefinition {
 		dataBuffer = null; // The raw data buffer for npc.dat
 	}
 
+	/**
+	 * Retrieves the 3D model for this NPC's head, typically used in chat dialogues.
+	 *
+	 * @return The constructed {@link Model} of the head, or {@code null} if not available or downloaded.
+	 */
 	public Model getHeadModel() {
-		if (anIntArray622 != null) {
-			NpcDefinition class37 = method363(false);
-			if (class37 == null)
+		// Handle NPC transformations (e.g., morphing NPCs or those dependent on player state)
+		if (transformations != null) {
+			NpcDefinition transformedDef = method363(false);
+			if (transformedDef == null)
 				return null;
 			else
-				return class37.getHeadModel();
+				return transformedDef.getHeadModel();
 		}
-		if (anIntArray625 == null)
-			return null;
-		boolean flag = false;
-		for (int k = 0; k < anIntArray625.length; k++)
-			if (!Model.isDownloaded(anIntArray625[k]))
-				flag = true;
 
-		if (flag)
+		// If no head models are defined for this NPC, return null
+		if (headModelIds == null)
 			return null;
-		Model aclass50_sub1_sub4_sub4[] = new Model[anIntArray625.length];
-		for (int l = 0; l < anIntArray625.length; l++)
-			aclass50_sub1_sub4_sub4[l] = Model.forId(anIntArray625[l]);
+
+		// Ensure all model parts are downloaded before attempting to construct
+		boolean flag = false;
+		for (int i = 0; i < headModelIds.length; i++) {
+			if (!Model.isDownloaded(headModelIds[i])) {
+				flag = true;
+			}
+		}
+
+		if (flag) {
+			return null;
+		}
+
+		Model aclass50_sub1_sub4_sub4[] = new Model[headModelIds.length];
+		for (int l = 0; l < headModelIds.length; l++)
+			aclass50_sub1_sub4_sub4[l] = Model.forId(headModelIds[l]);
 
 		Model class50_sub1_sub4_sub4;
 		if (aclass50_sub1_sub4_sub4.length == 1)
@@ -220,7 +234,8 @@ public class NpcDefinition {
 	public boolean method360(int i) {
 		while (i >= 0)
 			aBoolean662 = !aBoolean662;
-		if (anIntArray622 == null)
+
+		if (transformations == null)
 			return true;
 		int packedValue = -1;
 		if (anInt654 != -1) {
@@ -232,7 +247,7 @@ public class NpcDefinition {
 			packedValue = aClient629.localVarps[k] >> l & j1;
 		} else if (anInt659 != -1)
 			packedValue = aClient629.localVarps[anInt659];
-		return packedValue >= 0 && packedValue < anIntArray622.length && anIntArray622[packedValue] != -1;
+		return packedValue >= 0 && packedValue < transformations.length && transformations[packedValue] != -1;
 	}
 
 	public static void unpack(Archive class2) {
@@ -253,7 +268,7 @@ public class NpcDefinition {
 	}
 
 	public Model method362(int i, int j, int k, int ai[]) {
-		if (anIntArray622 != null) {
+		if (transformations != null) {
 			NpcDefinition class37 = method363(false);
 			if (class37 == null)
 				return null;
@@ -319,10 +334,10 @@ public class NpcDefinition {
 			i = aClient629.localVarps[j] >> k & i1;
 		} else if (anInt659 != -1)
 			i = aClient629.localVarps[anInt659];
-		if (i < 0 || i >= anIntArray622.length || anIntArray622[i] == -1)
+		if (i < 0 || i >= transformations.length || transformations[i] == -1)
 			return null;
 		else
-			return forId(anIntArray622[i]);
+			return forId(transformations[i]);
 	}
 
 	public static NpcDefinition forId(int id) {
