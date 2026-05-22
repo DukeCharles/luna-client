@@ -1,8 +1,8 @@
-// Decompiled by Jad v1.5.8f. Copyright 2001 Pavel Kouznetsov.
+package com.jagex.runescape;// Decompiled by Jad v1.5.8f. Copyright 2001 Pavel Kouznetsov.
 // Jad home page: http://www.kpdus.com/jad.html
 // Decompiler options: packimports(3) 
 
-public class LruHashTable {
+public class Cache {
 
 	public int misses;
 	public int hits;
@@ -11,7 +11,7 @@ public class LruHashTable {
 	public HashTable table;
 	public LinkedQueue queue;
 
-	public LruHashTable(int size) {
+	public Cache(int size) {
 		queue = new LinkedQueue();
 		capacity = size;
 		remaining = size;
