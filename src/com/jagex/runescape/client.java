@@ -21,6 +21,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.zip.CRC32;
 
+import com.jagex.runescape.audio.Sound;
 import com.jagex.runescape.definition.NpcDefinition;
 import com.jagex.runescape.isaac.IsaacRandom;
 import luna.Constants;
