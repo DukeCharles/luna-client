@@ -3128,14 +3128,14 @@ public class client extends JagApplet {
             }
             if (j1 == 1) {
                 Npc class50_sub1_sub4_sub3_sub1 = npcs[k1];
-                if (class50_sub1_sub4_sub3_sub1.def.aByte642 == 1
+                if (class50_sub1_sub4_sub3_sub1.def.size == 1
                         && (((Actor) (class50_sub1_sub4_sub3_sub1)).unitX & 0x7f) == 64
                         && (((Actor) (class50_sub1_sub4_sub3_sub1)).unitY & 0x7f) == 64) {
                     for (int i2 = 0; i2 < localNpcCount; i2++) {
                         Npc class50_sub1_sub4_sub3_sub1_1 = npcs[anIntArray1134[i2]];
                         if (class50_sub1_sub4_sub3_sub1_1 != null
                                 && class50_sub1_sub4_sub3_sub1_1 != class50_sub1_sub4_sub3_sub1
-                                && class50_sub1_sub4_sub3_sub1_1.def.aByte642 == 1
+                                && class50_sub1_sub4_sub3_sub1_1.def.size == 1
                                 && ((Actor) (class50_sub1_sub4_sub3_sub1_1)).unitX == ((Actor) (class50_sub1_sub4_sub3_sub1)).unitX
                                 && ((Actor) (class50_sub1_sub4_sub3_sub1_1)).unitY == ((Actor) (class50_sub1_sub4_sub3_sub1)).unitY)
                             method82(class50_sub1_sub4_sub3_sub1_1.def, y, x, anIntArray1134[i2], (byte) -76);
@@ -3159,7 +3159,7 @@ public class client extends JagApplet {
                     for (int j2 = 0; j2 < localNpcCount; j2++) {
                         Npc class50_sub1_sub4_sub3_sub1_2 = npcs[anIntArray1134[j2]];
                         if (class50_sub1_sub4_sub3_sub1_2 != null
-                                && class50_sub1_sub4_sub3_sub1_2.def.aByte642 == 1
+                                && class50_sub1_sub4_sub3_sub1_2.def.size == 1
                                 && ((Actor) (class50_sub1_sub4_sub3_sub1_2)).unitX == ((Actor) (class50_sub1_sub4_sub3_sub2)).unitX
                                 && ((Actor) (class50_sub1_sub4_sub3_sub1_2)).unitY == ((Actor) (class50_sub1_sub4_sub3_sub2)).unitY)
                             method82(class50_sub1_sub4_sub3_sub1_2.def, y, x, anIntArray1134[j2], (byte) -76);
@@ -3732,7 +3732,7 @@ public class client extends JagApplet {
             int k = 0x20000000 + (anIntArray1134[j] << 14);
             if (class50_sub1_sub4_sub3_sub1 == null || !class50_sub1_sub4_sub3_sub1.isVisible()
                     || class50_sub1_sub4_sub3_sub1.def.priorityRender != flag
-                    || !class50_sub1_sub4_sub3_sub1.def.method360(-993))
+                    || !class50_sub1_sub4_sub3_sub1.def.isVisible())
                 continue;
             int l = ((Actor) (class50_sub1_sub4_sub3_sub1)).unitX >> 7;
             int i1 = ((Actor) (class50_sub1_sub4_sub3_sub1)).unitY >> 7;
@@ -4021,13 +4021,13 @@ public class client extends JagApplet {
             // Update NPC com.jagex.runescape.com.jagex.runescape.definition
             if ((updateMask & 1) != 0) {
                 npc.def = NpcDefinition.getDefinition(buf.getShortAdded());
-                npc.anInt1601 = npc.def.aByte642;
+                npc.anInt1601 = npc.def.size;
                 npc.anInt1600 = npc.def.degreesToTurn;
-                npc.anInt1619 = npc.def.anInt645;
-                npc.anInt1620 = npc.def.anInt643;
-                npc.anInt1621 = npc.def.anInt641;
-                npc.anInt1622 = npc.def.anInt633;
-                npc.anInt1634 = npc.def.anInt621;
+                npc.anInt1619 = npc.def.walkAnimationId;
+                npc.anInt1620 = npc.def.rotate180Animation;
+                npc.anInt1621 = npc.def.rotate90LeftAnimation;
+                npc.anInt1622 = npc.def.rotate90RightAnimation;
+                npc.anInt1634 = npc.def.standAnimationId;
             }
             // Update NPC transformation
             if ((updateMask & 0x40) != 0) {
@@ -4909,7 +4909,7 @@ public class client extends JagApplet {
             int k = anIntArray1134[j];
             Npc class50_sub1_sub4_sub3_sub1 = npcs[k];
             if (class50_sub1_sub4_sub3_sub1 != null)
-                method68(class50_sub1_sub4_sub3_sub1.def.aByte642, (byte) -97, class50_sub1_sub4_sub3_sub1);
+                method68(class50_sub1_sub4_sub3_sub1.def.size, (byte) -97, class50_sub1_sub4_sub3_sub1);
         }
 
         if (i != -37214)
@@ -9729,13 +9729,13 @@ public class client extends JagApplet {
                 deltaX -= 32;
             int discardWalkingQueue = buf.getBits(1);
             npc.def = NpcDefinition.getDefinition(buf.getBits(13));
-            npc.anInt1601 = npc.def.aByte642;
+            npc.anInt1601 = npc.def.size;
             npc.anInt1600 = npc.def.degreesToTurn;
-            npc.anInt1619 = npc.def.anInt645;
-            npc.anInt1620 = npc.def.anInt643;
-            npc.anInt1621 = npc.def.anInt641;
-            npc.anInt1622 = npc.def.anInt633;
-            npc.anInt1634 = npc.def.anInt621;
+            npc.anInt1619 = npc.def.walkAnimationId;
+            npc.anInt1620 = npc.def.rotate180Animation;
+            npc.anInt1621 = npc.def.rotate90LeftAnimation;
+            npc.anInt1622 = npc.def.rotate90RightAnimation;
+            npc.anInt1634 = npc.def.standAnimationId;
             npc.teleport(thisPlayer.walkingQueueX[0] + deltaX, thisPlayer.walkingQueueY[0] + deltaY, discardWalkingQueue == 1);
         }
         buf.finishBitAccess();

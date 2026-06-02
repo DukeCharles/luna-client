@@ -47,7 +47,7 @@ public class Npc extends Actor {
 				class50_sub1_sub4_sub4 = new Model(2, true, 0, aclass50_sub1_sub4_sub4);
 			}
 		}
-		if (def.aByte642 == 1)
+		if (def.size == 1)
 			class50_sub1_sub4_sub4.isPriorityPicking = true;
 		return class50_sub1_sub4_sub4;
 	}

@@ -4,78 +4,102 @@ package com.jagex.runescape.definition;// Decompiled by Jad v1.5.8f. Copyright 2
 
 import com.jagex.runescape.*;
 
-
-import static com.jagex.runescape.opcodes.NpcOpcode.*;
-
 public class NpcDefinition {
 
+	/**
+	 * Constructs a new {@code NpcDefinition} and initializes it with default values.
+	 *
+	 * <p>Initial values include standard scaling (128), a default tile size of 1,
+	 * and setting interaction properties (clickable and minimap visibility) to {@code true}.
+	 * Animation IDs, transformation IDs, and the NPC identifier are initialized to
+	 * -1 to indicate they are unset until populated by {@link #loadDefinition(JagBuffer)}.</p>
+	 */
 	public NpcDefinition() {
-		anInt621 = -1;
-		aBoolean623 = true;
-		anInt624 = 932;
-		anInt627 = -1;
-		id = -1L;
+		standAnimationId = -1;
+		dummyBool3 = true; //dummy
+		dummyInt2 = 932; //dummy
+		opcode91 = -1; //opcode 91
+		id = -1L; //
 		modelHeight = 128;
 		isClickable = true;
 		modelWidth = 128;
-		anInt633 = -1;
+		rotate90RightAnimation = -1;
 		hasMinimapDot = true;
-		anInt637 = -1;
+		opcode92 = -1; //opcode 92
 		headIcon = -1;
 		combatLevel = -1;
-		anInt640 = 7;
-		anInt641 = -1;
-		aByte642 = 1;
-		anInt643 = -1;
+		dummyInt = 7;
+		rotate90LeftAnimation = -1;
+		size = 1;
+		rotate180Animation = -1;
 		priorityRender = false;
-		anInt645 = -1;
-		aBoolean647 = false;
-		anInt648 = -1;
+		walkAnimationId = -1;
+		aBoolean647 = false; //dummy
+		opcode90 = -1; //opcode 90
 		degreesToTurn = 32;
 		name = "null";
 		varbitId = -1;
 		varpId = -1;
-		aBoolean662 = false;
+		dummyBool2 = false; //dummy
 	}
 
-	public int anInt621; // The ID of the animation played when the NPC is standing still
+	//Dummy variables
+	public static byte dummyByte = 6;
+	public boolean aBoolean647;
+	public boolean dummyBool2;
+	public boolean dummyBool3;
+	public int dummyInt;
+	public int dummyInt2;
+
+	//UnknownOpcodes
+	public int opcode90; // Unknown (Opcode 90)
+	public int opcode91; // Unknown (Opcode 91)
+	public int opcode92; // Unknown (Opcode 92)
+
+	public int standAnimationId; // The ID of the animation played when the NPC is standing still
 
 	/**
 	 * An array of NPC IDs that this NPC can transform into, depending on the
 	 * value of the associated com.jagex.runescape.Varp or com.jagex.runescape.Varbit.
 	 */
 	public int[] transformations;
-	public boolean aBoolean623;
-	public int anInt624;
+
+
 	public int[] headModelIds;
 	public int[] modelIds;
-	public int anInt627;
+
 	public long id;
 	public static client clientInstance;
 	public int modelHeight;
 	public boolean isClickable;
 	public int modelWidth;
-	public int anInt633;
+	public int rotate90RightAnimation;
 	public int[] originalColors;
 	public static Cache modelCache = new Cache(30);
 	public boolean hasMinimapDot;
-	public int anInt637;
+
 	public int headIcon;
 	public int combatLevel;
-	public int anInt640;
-	public int anInt641;
-	public byte aByte642;
-	public int anInt643;
+
+	public int rotate90LeftAnimation;
+	public byte size;
+	public int rotate180Animation;
 	public boolean priorityRender;
-	public int anInt645;
+	public int walkAnimationId;
 	public String[] actions;
-	public boolean aBoolean647;
-	public int anInt648;
+
+
 	public static int anInt649;
 	public static int[] offsets;
 	public int degreesToTurn;
+
+	/**
+	 * The name of the NPC, as displayed in-game. This is typically used in chat dialogues,
+	 */
 	public String name;
-	public static byte dummyByte = 6;
+
+
+
 
 	/**
 	 * The ID of the {@link Varbit} used to determine which transformation index
@@ -94,7 +118,7 @@ public class NpcDefinition {
 	public int varpId;
 	public byte[] description;
 	public static int bufferIndex;
-	public boolean aBoolean662;
+
 	public int lightDiffusion;
 
 	/**
@@ -141,129 +165,107 @@ public class NpcDefinition {
 	 */
 	public void loadDefinition(JagBuffer buffer) {
 
-
 		do {
 			int opcode = buffer.getByte();
 
-			//System.out.println("NPC Config Opcode: " + opcode); //TODO REMOVE
-
-			if(opcode == 0) {
+			//Exit condition for the opcode stream - opcode 0 indicates the end of this NPC's data
+			if (opcode == 0) {
 				return;
 			}
 
-			switch(opcode) {
-				case MODEL_IDS:
-					int modelCount = buffer.getByte();
-					modelIds = new int[modelCount];
-					for (int index = 0; index < modelCount; index++) {
-						modelIds[index] = buffer.getShort();
+			if (opcode == 1) {
+				int modelCount = buffer.getByte();
+				this.modelIds = new int[modelCount];
+
+				for (int index = 0; index < modelCount; index++) {
+					this.modelIds[index] = buffer.getShort();
+				}
+			} else if (opcode == 2)
+				this.name = buffer.getString();
+			else if (opcode == 3)
+				description = buffer.getStringBytes();
+			else if (opcode == 12)
+				size = buffer.getSignedByte();
+			else if (opcode == 13)
+				standAnimationId = buffer.getShort();
+			else if (opcode == 14)
+				walkAnimationId = buffer.getShort();
+			else if (opcode == 17) {
+				walkAnimationId = buffer.getShort();
+				rotate180Animation = buffer.getShort();
+				rotate90LeftAnimation = buffer.getShort();
+				rotate90RightAnimation = buffer.getShort();
+			} else if (opcode >= 30 && opcode < 40) {
+				if (actions == null) {
+					actions = new String[5];
+				}
+				actions[opcode - 30] = buffer.getString();
+				if (actions[opcode - 30].equalsIgnoreCase("hidden")) {
+					actions[opcode - 30] = null;
+				}
+			} else if (opcode == 40) {
+				int colorCount = buffer.getByte();
+				originalColors = new int[colorCount];
+				modifiedColors = new int[colorCount];
+				for (int index = 0; index < colorCount; index++) {
+					originalColors[index] = buffer.getShort();
+					modifiedColors[index] = buffer.getShort();
+				}
+			} else if (opcode == 60) {
+				int headModelCount = buffer.getByte();
+				headModelIds = new int[headModelCount];
+				for (int index = 0; index < headModelCount; index++) {
+					headModelIds[index] = buffer.getShort();
+				}
+			} else if (opcode == 90)
+				opcode90 = buffer.getShort();
+			else if (opcode == 91)
+				opcode91 = buffer.getShort();
+			else if (opcode == 92)
+				opcode92 = buffer.getShort();
+			else if (opcode == 93)
+				hasMinimapDot = false;
+			else if (opcode == 95)
+				combatLevel = buffer.getShort();
+			else if (opcode == 97)
+				modelWidth = buffer.getShort();
+			else if (opcode == 98)
+				modelHeight = buffer.getShort();
+			else if (opcode == 99)
+				priorityRender = true;
+			else if (opcode == 100)
+				lightDiffusion = buffer.getSignedByte();
+			else if (opcode == 101)
+				lightIntensity = buffer.getSignedByte() * 5;
+			else if (opcode == 102)
+				headIcon = buffer.getShort();
+			else if (opcode == 103)
+				degreesToTurn = buffer.getShort();
+			else if (opcode == 106) {
+				varbitId = buffer.getShort();
+				if (varbitId == 65535) {
+					varbitId = -1;
+				}
+				varpId = buffer.getShort();
+				if (varpId == 65535) {
+					varpId = -1;
+				}
+				int transformationCount = buffer.getByte();
+				transformations = new int[transformationCount + 1];
+				for (int index = 0; index <= transformationCount; index++) {
+					transformations[index] = buffer.getShort();
+					if (transformations[index] == 65535) {
+						transformations[index] = -1;
 					}
-					break;
-					case NAME:
-						name = buffer.getString();
-						break;
-					case DESCRIPTION:
-						description = buffer.getStringBytes();
-						break;
-					case SIZE:
-						aByte642 = buffer.getSignedByte();
-						break;
-					case STAND_ANIMATION:
-						anInt621 = buffer.getShort();
-						break;
-					case WALK_ANIMATION:
-						anInt645 = buffer.getShort();
-						break;
-					case WALK_ANIMATIONS:
-						anInt645 = buffer.getShort();
-						anInt643 = buffer.getShort();
-						anInt641 = buffer.getShort();
-						anInt633 = buffer.getShort();
-						break;
-					case ACTIONS: //Was i >= 30 && i < 40
-						if (actions == null) {
-							actions = new String[5];
-						}
-						actions[opcode - 30] = buffer.getString();
-						if (actions[opcode - 30].equalsIgnoreCase("hidden")) {
-							actions[opcode - 30] = null;
-						}
-						break;
-					case RECOLOR:
-						int colorCount = buffer.getByte();
-						originalColors = new int[colorCount];
-						modifiedColors = new int[colorCount];
-						for (int index = 0; index < colorCount; index++) {
-							originalColors[index] = buffer.getShort();
-							modifiedColors[index] = buffer.getShort();
-						}
-						break;
-					case HEAD_MODEL_IDS:
-						int headModelCount = buffer.getByte();
-						headModelIds = new int[headModelCount];
-						for (int index = 0; index < headModelCount; index++) {
-							headModelIds[index] = buffer.getShort();
-						}
-						break;
-					case UNKNOWN_SHORT_90:
-						anInt648 = buffer.getShort();
-						break;
-					case UNKNOWN_SHORT_91:
-						anInt627 = buffer.getShort();
-						break;
-					case UNKNOWN_SHORT_92:
-						anInt637 = buffer.getShort();
-						break;
-					case NO_MINIMAP_DOT:
-						hasMinimapDot = false;
-						break;
-					case COMBAT_LEVEL:
-						combatLevel = buffer.getShort();
-						break;
-					case MODEL_WIDTH:
-						modelWidth = buffer.getShort();
-						break;
-					case MODEL_HEIGHT:
-						modelHeight = buffer.getShort();
-						break;
-					case PRIORITY_RENDER:
-						priorityRender = true;
-						break;
-					case LIGHT_DIFFUSION:
-						lightDiffusion = buffer.getSignedByte();
-						break;
-					case LIGHT_INTENSITY:
-						lightIntensity = buffer.getSignedByte() * 5;
-						break;
-					case HEAD_ICON:
-						headIcon = buffer.getShort();
-						break;
-					case DEGREES_TO_TURN:
-						degreesToTurn = buffer.getShort();
-						break;
-					case TRANSFORMATIONS:
-						varbitId = buffer.getShort();
-						if (varbitId == 65535)
-							varbitId = -1;
-						varpId = buffer.getShort();
-						if (varpId == 65535)
-							varpId = -1;
-						int transformationCount = buffer.getByte();
-						transformations = new int[transformationCount + 1];
-						for (int index = 0; index <= transformationCount; index++) {
-							transformations[index] = buffer.getShort();
-							if (transformations[index] == 65535)
-								transformations[index] = -1;
-						}
-						break;
-					case NOT_CLICKABLE:
-						isClickable = false;
-						break;
-					default:
-						System.out.println("Error unrecognised npc config code: " + opcode);
-						break;
+				}
+			} else if (opcode == 107) {
+				isClickable = false;
+			}
+			else {
+				System.out.println("Error unrecognised NPC config code: " + opcode + " in NPC ID: " + id);
 			}
 		} while (true);
+
 	}
 
 	/**
@@ -280,59 +282,85 @@ public class NpcDefinition {
 	/**
 	 * Retrieves the 3D model for this NPC's head, typically used in chat dialogues.
 	 *
-	 * @return The constructed {@link Model} of the head, or {@code null} if not available or downloaded.
+	 * <p>This method handles morphing NPCs by delegating to the current transformed
+	 * definition. It verifies that all required model parts are downloaded from the
+	 * cache before assembling them. If multiple model parts exist, they are merged into
+	 * a single mesh. Finally, any NPC-specific color overrides are applied.</p>
+	 *
+	 * @return The constructed and recolored {@link Model} of the head,
+	 *         or {@code null} if the NPC has no head models or if the required assets
+	 *         are still downloading.
 	 */
 	public Model getHeadModel() {
-		// Handle NPC transformations (e.g., morphing NPCs or those dependent on player state)
+		// Handle NPC transformations (morphing NPCs like quest-dependent characters)
 		if (transformations != null) {
-			NpcDefinition transformedDef = getTransformedDefinition();
-			if (transformedDef == null)
+			NpcDefinition transformedDefinition = getTransformedDefinition();
+			if (transformedDefinition == null) {
 				return null;
-			else
-				return transformedDef.getHeadModel();
-		}
-
-		// If no head models are defined for this NPC, return null
-		if (headModelIds == null)
-			return null;
-
-		// Ensure all model parts are downloaded before attempting to construct
-		boolean flag = false;
-		for (int i = 0; i < headModelIds.length; i++) {
-			if (!Model.isDownloaded(headModelIds[i])) {
-				flag = true;
+			}
+			else {
+				return transformedDefinition.getHeadModel();
 			}
 		}
 
-		if (flag) {
+		// Early exit if no head models are defined for this NPC config
+		if (headModelIds == null)
+			return null;
+
+		// Ensure all model parts are available in memory before construction
+		boolean assetsMissing = false;
+        for (int headModelId : headModelIds) {
+            if (!Model.isDownloaded(headModelId)) {
+                assetsMissing = true;
+            }
+        }
+
+		if (assetsMissing) {
 			return null;
 		}
 
-		Model aclass50_sub1_sub4_sub4[] = new Model[headModelIds.length];
-		for (int l = 0; l < headModelIds.length; l++)
-			aclass50_sub1_sub4_sub4[l] = Model.forId(headModelIds[l]);
+		// Fetch the individual model parts from the model cache/provider
+		Model[] partModels = new Model[headModelIds.length];
+		for (int index = 0; index < headModelIds.length; index++) {
+			partModels[index] = Model.forId(headModelIds[index]);
+		}
 
-		Model class50_sub1_sub4_sub4;
-		if (aclass50_sub1_sub4_sub4.length == 1)
-			class50_sub1_sub4_sub4 = aclass50_sub1_sub4_sub4[0];
-		else
-			class50_sub1_sub4_sub4 = new Model(aclass50_sub1_sub4_sub4.length,
-					aclass50_sub1_sub4_sub4);
+		// Combine parts into a single model instance
+		Model headModel;
+		if (partModels.length == 1) {
+			headModel = partModels[0];
+		}
+		else {
+			headModel = new Model(partModels.length, partModels);
+		}
+
+		// Apply HSL color overrides (e.g., changing basic human models into unique NPCs)
 		if (originalColors != null) {
-			for (int i1 = 0; i1 < originalColors.length; i1++)
-				class50_sub1_sub4_sub4.replaceColor(originalColors[i1], modifiedColors[i1]);
+			for (int i = 0; i < originalColors.length; i++)
+				headModel.replaceColor(originalColors[i], modifiedColors[i]);
 
 		}
-		return class50_sub1_sub4_sub4;
+		return headModel;
 	}
 
-	public boolean method360(int i) {
-		while (i >= 0)
-			aBoolean662 = !aBoolean662;
+	/**
+	 * Determines if this NPC is currently visible based on its transformation settings.
+	 *
+	 * <p>For NPCs that change appearance (e.g., based on quest progress), this checks
+	 * the current value of the associated {@link Varbit} or {@link Varp}. If the
+	 * transformation results in an ID of -1, the NPC is considered invisible.</p>
+	 *
+	 * @return {@code true} if the NPC has no transformations or transforms into a
+	 *         valid NPC ID; {@code false} if it currently transforms into an empty slot.
+	 */
+	public boolean isVisible() {
 
-		if (transformations == null)
+		if (transformations == null) {
 			return true;
+		}
+
 		int packedValue = -1;
+
 		if (varbitId != -1) {
 			Varbit varbit = Varbit.varbitTable[varbitId];
 			int k = varbit.varpId;
@@ -411,7 +439,7 @@ public class NpcDefinition {
 		class50_sub1_sub4_sub4_1.calculateRadius();
 		class50_sub1_sub4_sub4_1.faceIndicesByBone = null;
 		class50_sub1_sub4_sub4_1.vertexIndicesByBone = null;
-		if (aByte642 == 1)
+		if (size == 1)
 			class50_sub1_sub4_sub4_1.isPriorityPicking = true;
 		return class50_sub1_sub4_sub4_1;
 	}
