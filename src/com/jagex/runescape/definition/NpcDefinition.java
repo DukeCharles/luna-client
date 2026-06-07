@@ -363,11 +363,11 @@ public class NpcDefinition {
 
 		if (varbitId != -1) {
 			Varbit varbit = Varbit.varbitTable[varbitId];
-			int k = varbit.varpId;
-			int l = varbit.leastSignificantBit;
-			int i1 = varbit.mostSignificantBit;
-			int j1 = client.BITFIELD_MAX_VALUES[i1 - l];
-			packedValue = clientInstance.localVarps[k] >> l & j1;
+			int varpId = varbit.varpId;
+			int leastSignificantBit = varbit.leastSignificantBit;
+			int mostSignificantBit = varbit.mostSignificantBit;
+			int bitfieldMaxValue = client.BITFIELD_MAX_VALUES[mostSignificantBit - leastSignificantBit];
+			packedValue = clientInstance.localVarps[varpId] >> leastSignificantBit & bitfieldMaxValue;
 		} else if (varpId != -1)
 			packedValue = clientInstance.localVarps[varpId];
 		return packedValue >= 0 && packedValue < transformations.length && transformations[packedValue] != -1;
